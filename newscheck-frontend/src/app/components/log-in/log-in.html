@@ -1,0 +1,66 @@
+<div class="min-h-screen flex">
+
+    <!-- Top Panel for mobile -->
+    <div class="fixed lg:hidden top-0 left-0 w-full bg-gray-900 pt-1 text-white">
+        <div class="flex flex-col items-center text-center">
+            <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-40 mb-6">
+        </div> 
+    </div>
+
+    <!-- Left panel -->
+    <div class="hidden lg:flex w-1/2 bg-gray-900 text-white flex-col justify-center items-center">
+        <div class="flex flex-col items-center px-8 text-center">
+            <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-80 mb-6">
+            <p class="italic text-5xl text-gray-300">Welcome to NewsCheck</p>
+        </div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="flex w-full lg:w-1/2 justify-center items-center bg-white">
+        <div class="w-full max-w-sm px-8">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
+                Sign in to your account
+            </h1>
+
+            <form name="form" (ngSubmit)="onSubmit()" #f="ngForm" novalidate class="space-y-5">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-600 mb-1">Username</label>
+                    <input
+                        required
+                        type="text"
+                        name="username"
+                        [(ngModel)]="form.username"
+                        #username="ngModel"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-600 mb-1">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        [(ngModel)]="form.password"
+                        required
+                        #password="ngModel"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                    <div class="flex justify-end mt-2">
+                        <a href="#" class="text-sm text-blue-600 hover:underline">Forgot your password?</a>
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-semibold">
+                    Login now
+                </button>
+
+                <p class="text-sm text-center text-gray-500">
+                    Don’t have an account?
+                    <a routerLink="/register" class="text-blue-600 hover:underline">Sign Up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
