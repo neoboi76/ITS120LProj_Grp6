@@ -46,8 +46,9 @@ public class UserModel {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<VerificationModel> verifications;
 
+    /*
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<AuditLogModel> auditLogs;
+    private List<AuditLogModel> auditLogs;*/
 
 }
 

@@ -23,6 +23,10 @@ public class VerdictModel {
     @Column(nullable = false)
     private VerdictType verdictType;
 
+    @OneToOne
+    @JoinColumn(name = "verificationId")
+    private VerificationModel verification;
+
     @Lob
     @Column(columnDefinition = "TEXT")
     private String reasoning;
