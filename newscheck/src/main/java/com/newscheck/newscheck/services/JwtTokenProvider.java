@@ -5,8 +5,8 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import lombok.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
 import java.util.Date;
@@ -14,13 +14,12 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    //@Value("${jwt.secret}")
-    private static final String SECRET_KEY = "Y8b7K9z4LpR3sVwXqT2yM1nQ6uA0jD4f";
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
 
-    //@Value("${jwt.expiration}")
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
+    @Value("${jwt.expiration}")
+    private long EXPIRATION_TIME;
 
-    // Generate a JWT token
     public String generateToken(String email) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
@@ -35,7 +34,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // Validate a JWT token
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -49,7 +47,6 @@ public class JwtTokenProvider {
         }
     }
 
-    // Extract the email (subject) from the JWT token
     public String getEmailFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))

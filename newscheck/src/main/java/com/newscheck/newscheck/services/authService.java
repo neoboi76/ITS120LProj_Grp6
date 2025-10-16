@@ -2,6 +2,7 @@ package com.newscheck.newscheck.services;
 
 import com.newscheck.newscheck.models.*;
 import com.newscheck.newscheck.repositories.UserRepository;
+import com.newscheck.newscheck.config.SecurityConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,10 @@ public class authService {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
+   // @Autowired
     //private AuditLogService auditLogService;
 
-    public LoginResponse register(RegisterModel request) {
+    public RegisterResponse register(RegisterModel request) {
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             try {
@@ -34,24 +35,17 @@ public class authService {
             }
         }
 
-
         UserModel user = new UserModel();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER);
-
         UserModel savedUser = userRepository.save(user);
+
         //auditLogService.log(savedUser, "REGISTER", "User registered");
 
-        LoginModel logUser = new LoginModel(savedUser.getEmail(), savedUser.getPasswordHash());
-
-        try {
-            return login(logUser);
-        } catch (BadRequestException e) {
-            throw new RuntimeException(e);
-        }
+        return new RegisterResponse("Account Created!", savedUser.getEmail(), savedUser.getUserId());
     }
 
     public LoginResponse login(LoginModel request) throws BadRequestException {
@@ -69,9 +63,7 @@ public class authService {
         String token = jwtTokenProvider.generateToken(user.getEmail());
         //auditLogService.log(user, "LOGIN", "User logged in");
 
-        LoginResponse response = new LoginResponse(token, user.getEmail(), "User has been logged in");
-
-        return response;
+        return new LoginResponse("Login Successfull!", token, user.getEmail(), user.getUserId());
     }
 
 /*

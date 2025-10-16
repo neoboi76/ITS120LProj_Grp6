@@ -8,10 +8,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponse {
 
+public class RegisterResponse {
     private String message;
-    private String token;
     private String email;
-    private long id;
+    private Long id;
 }

@@ -8,6 +8,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.css'
 })
 export class Home {
+logOut() {
+throw new Error('Method not implemented.');
+}
 
   isMenuOpen = false;
 
