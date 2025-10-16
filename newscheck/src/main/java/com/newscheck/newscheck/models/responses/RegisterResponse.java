@@ -1,9 +1,8 @@
-package com.newscheck.newscheck.models;
+package com.newscheck.newscheck.models.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @AllArgsConstructor
@@ -11,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class RegisterResponse {
     private String message;
+    private String token;
     private String email;
     private Long id;
 }

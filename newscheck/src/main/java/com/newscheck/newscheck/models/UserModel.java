@@ -1,5 +1,6 @@
 package com.newscheck.newscheck.models;
 
+import com.newscheck.newscheck.models.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

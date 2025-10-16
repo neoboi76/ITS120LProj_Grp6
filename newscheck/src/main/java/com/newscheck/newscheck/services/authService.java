@@ -1,38 +1,42 @@
 package com.newscheck.newscheck.services;
 
-import com.newscheck.newscheck.models.*;
+import com.newscheck.newscheck.models.enums.Role;
+import com.newscheck.newscheck.models.RegisterModel;
+import com.newscheck.newscheck.models.ResetModel;
+import com.newscheck.newscheck.models.UserModel;
+import com.newscheck.newscheck.models.responses.RegisterResponse;
+import com.newscheck.newscheck.models.responses.ResetResponse;
 import com.newscheck.newscheck.repositories.UserRepository;
-import com.newscheck.newscheck.config.SecurityConfig;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 @Service
-@Slf4j
-public class authService {
+public class authService implements UserDetailsService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    private UserRepository userRepository;
+    public authService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       JwtTokenProvider jwtTokenProvider) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
-   // @Autowired
-    //private AuditLogService auditLogService;
-
+    // Register logic stays in the service
     public RegisterResponse register(RegisterModel request) {
-
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            try {
-                throw new BadRequestException("Email already exists");
-            } catch (BadRequestException e) {
-                throw new RuntimeException(e);
-            }
+            throw new IllegalStateException("Email already exists");
         }
 
         UserModel user = new UserModel();
@@ -43,41 +47,32 @@ public class authService {
         user.setRole(Role.USER);
         UserModel savedUser = userRepository.save(user);
 
-        //auditLogService.log(savedUser, "REGISTER", "User registered");
+        String token = jwtTokenProvider.generateToken(savedUser.getEmail());
 
-        return new RegisterResponse("Account Created!", savedUser.getEmail(), savedUser.getUserId());
+        return new RegisterResponse("Account Created!", token, savedUser.getEmail(), savedUser.getUserId());
     }
 
-    public LoginResponse login(LoginModel request) throws BadRequestException {
+    // Password reset logic stays in the service
+    public ResetResponse resetPassword(ResetModel request) {
         UserModel user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BadRequestException("Invalid credentials"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            try {
-                throw new BadRequestException("Invalid credentials");
-            } catch (BadRequestException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        String token = jwtTokenProvider.generateToken(user.getEmail());
-        //auditLogService.log(user, "LOGIN", "User logged in");
-
-        return new LoginResponse("Login Successfull!", token, user.getEmail(), user.getUserId());
-    }
-
-/*
-    public void logout(User user) {
-        auditLogService.log(user, "LOGOUT", "User logged out");
-    }
-*/
-
-    /*
-    public void resetPassword(User user, ResetPasswordRequest request) {
         user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
-        user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        auditLogService.log(user, "PASSWORD_RESET", "Password reset");
-    }*/
+        return new ResetResponse("Password has been reset successfully.");
+    }
+
+    // This method is required by Spring Security and stays here
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserModel user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPasswordHash(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
+        );
+    }
 }

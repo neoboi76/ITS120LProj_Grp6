@@ -1,9 +1,8 @@
-package com.newscheck.newscheck.models;
+package com.newscheck.newscheck.models.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @AllArgsConstructor
