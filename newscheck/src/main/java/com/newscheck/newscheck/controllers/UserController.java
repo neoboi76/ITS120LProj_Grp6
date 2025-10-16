@@ -7,6 +7,7 @@ import com.newscheck.newscheck.services.JwtTokenProvider;
 import com.newscheck.newscheck.services.LogoutService;
 import com.newscheck.newscheck.services.authService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,47 +34,65 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginModel request) {
-        // The controller triggers the authentication. If it fails, an exception is thrown automatically.
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+    public ResponseEntity<?> login(@RequestBody LoginModel request) {
 
-        // This code only runs if authentication is successful
-        UserModel user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found after successful authentication."));
-        String token = jwtTokenProvider.generateToken(user.getEmail());
-        return ResponseEntity.ok(new LoginResponse("Login Successful!", token, user.getEmail(), user.getUserId()));
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken
+                            (request.getEmail(), request.getPassword())
+            );
+
+            LoginResponse response = authService.login(request);
+
+           return ResponseEntity.ok(response);
+
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body("User does not exist");
+        }
+
+
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterModel request) {
+    public ResponseEntity<?> register(@RequestBody RegisterModel request) {
+
+        RegisterResponse response = authService.register(request);
+
+        if (response != null) {
+            return ResponseEntity.badRequest().body("Invalid signup");
+        }
+
         return ResponseEntity.ok(authService.register(request));
+
     }
 
     @PutMapping("/reset-password")
-    public ResponseEntity<ResetResponse> resetPassword(@RequestBody ResetModel request) {
-        // First, verify the user's old password is correct
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getOldPassword())
-        );
+    public ResponseEntity<?> resetPassword(@RequestBody ResetModel request) {
 
-        // If successful, call the service to perform the update
-        ResetResponse response = authService.resetPassword(request);
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getOldPassword())
+            );
 
-        // Also log out the user by blacklisting any existing tokens
-        // (This is an optional but good security practice)
-        // You would need to implement a way to get all active tokens for a user if you want this feature.
-        // For now, we will just reset the password.
+            ResetResponse response = authService.resetPassword(request);
 
-        return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Password reset failed");
+        }
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<LogoutResponse> logout(HttpServletRequest request) {
-        String token = getTokenFromRequest(request);
-        logoutService.blacklistToken(token);
-        return ResponseEntity.ok(new LogoutResponse("Logout successful. Token has been invalidated."));
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        try {
+            String token = getTokenFromRequest(request);
+            logoutService.blacklistToken(token);
+            return ResponseEntity.ok(new LogoutResponse("Logout successful. Token has been invalidated."));
+
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body("Logout unsuccessful");
+        }
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {

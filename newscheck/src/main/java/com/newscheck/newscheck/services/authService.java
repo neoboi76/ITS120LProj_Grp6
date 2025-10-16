@@ -1,13 +1,16 @@
 package com.newscheck.newscheck.services;
 
+import com.newscheck.newscheck.models.LoginModel;
 import com.newscheck.newscheck.models.enums.Role;
 import com.newscheck.newscheck.models.RegisterModel;
 import com.newscheck.newscheck.models.ResetModel;
 import com.newscheck.newscheck.models.UserModel;
+import com.newscheck.newscheck.models.responses.LoginResponse;
 import com.newscheck.newscheck.models.responses.RegisterResponse;
 import com.newscheck.newscheck.models.responses.ResetResponse;
 import com.newscheck.newscheck.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,7 +36,6 @@ public class authService implements UserDetailsService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // Register logic stays in the service
     public RegisterResponse register(RegisterModel request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalStateException("Email already exists");
@@ -52,7 +54,15 @@ public class authService implements UserDetailsService {
         return new RegisterResponse("Account Created!", token, savedUser.getEmail(), savedUser.getUserId());
     }
 
-    // Password reset logic stays in the service
+    public LoginResponse login(LoginModel request) {
+
+        UserModel user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found after successful authentication."));
+        String token = jwtTokenProvider.generateToken(user.getEmail());
+
+        return new LoginResponse("Login Successful!", token, user.getEmail(), user.getUserId());
+    }
+
     public ResetResponse resetPassword(ResetModel request) {
         UserModel user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
@@ -63,7 +73,6 @@ public class authService implements UserDetailsService {
         return new ResetResponse("Password has been reset successfully.");
     }
 
-    // This method is required by Spring Security and stays here
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserModel user = userRepository.findByEmail(email)

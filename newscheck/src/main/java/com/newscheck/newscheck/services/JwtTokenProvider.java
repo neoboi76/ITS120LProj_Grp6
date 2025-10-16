@@ -27,10 +27,10 @@ public class JwtTokenProvider {
         Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
         return Jwts.builder()
-                .setSubject(email)              // identifies the user
-                .setIssuedAt(now)               // token creation time
-                .setExpiration(expiryDate)      // token expiry
-                .signWith(key, SignatureAlgorithm.HS256) // signing algorithm
+                .setSubject(email)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 

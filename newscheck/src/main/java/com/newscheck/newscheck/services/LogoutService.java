@@ -12,7 +12,7 @@ import java.util.Date;
 public class LogoutService {
 
     private final TokenRepository tokenRepository;
-    private final JwtTokenProvider jwtTokenProvider; // To get the token's expiry date
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     public LogoutService(TokenRepository tokenRepository, JwtTokenProvider jwtTokenProvider) {
@@ -20,7 +20,7 @@ public class LogoutService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // Adds a token to the blocklist table
+
     public void blacklistToken(String token) {
         if (token != null) {
             Date expiryDate = jwtTokenProvider.getExpirationDateFromToken(token);
@@ -29,12 +29,10 @@ public class LogoutService {
         }
     }
 
-    // Checks if a token is in the blocklist
     public boolean isTokenBlacklisted(String token) {
         return tokenRepository.existsByToken(token);
     }
 
-    // This scheduled task runs every hour to clean up the database
     @Scheduled(fixedRate = 3600000)
     public void purgeExpiredTokens() {
         tokenRepository.deleteByExpiryDateBefore(Instant.now());
