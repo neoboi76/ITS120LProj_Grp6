@@ -1,97 +1,167 @@
-<title>Register</title>
+<title>Create your account</title>
 
-<div class="min-h-screen flex">
+<div class="min-h-screen flex bg-white">
 
-    <!-- Top Panel for mobile -->
-    <div class="fixed lg:hidden top-0 left-0 w-full bg-gray-900 pt-1 text-white">
+    <!-- Appearing Header for mobile screens -->
+    <div class="fixed lg:hidden top-0 left-0 w-full bg-gray-900 pt-4 text-white">
         <div class="flex flex-col items-center text-center">
-            <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-40 mb-6">
-        </div> 
+            <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-4 5 mb-6">
+        </div>
     </div>
 
-    <!-- Left panel -->
-    <div class="hidden lg:flex w-1/2 bg-gray-900 text-white flex-col justify-center items-center">
-        <div class="flex flex-col items-center px-8 text-center">
-            <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-80 mb-6">
-
-            <div class="italic text-6xl text-gray-300 text-left align-bottom" >
-            <p>Join NewsCheck</p>
-            <p>Detect fake news.</p>
-            <p class="font-semibold bg-gradient-to-r from-green-400 via-green-500 to-green-300 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(34,197,94,0.7)]">
-                Trust real facts.
-            </p>
+    <!-- Full screen left panel -->
+    <div class="hidden lg:flex w-1/2 bg-gray-900 flex-col justify-center items-center text-white">
+        <div class="flex flex-col text-center items-center">
+            <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-80">
+            <div class="italic text-6xl text-left text-gray-300 align-bottom">
+                <p>Join NewsCheck</p>
+                <p>Detect fake news.</p>
+                <p class="font-semibold bg-gradient-to-r from-green-400 via-green-500 to-green-300 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(34,197,94,0.7)]">
+                    Trust real facts.
             </div>
         </div>
     </div>
 
-    <!-- Right panel -->
-    <div class="flex mt-30 w-full lg:w-1/2 justify-center items-center bg-white lg:mt-0">
+   <!--  Right Form Panel -->
+    <div class="flex w-full lg:w-1/2 justify-center items-center bg-white">
+
         <div class="w-full max-w-lg px-8">
+
             <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
                 Create your account
             </h1>
 
-            <form name="form" (ngSubmit)="onSubmit()" #f="ngForm" novalidate class="space-y-5">
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()"
+            novalidate class="space-y-5">
 
                 <div>
-                    <label for="firstName" class="block text-sm font-medium text-gray-600 mb-1">First Name</label>
-                    <input
-                        type="text"
-                        name="firstName"
-                        [(ngModel)]="form.firstName"
-                        required
-                        #firstName="ngModel"
+                    <label for="firstName" class="block text-sem font-medium text-gray-600 mb-1">First Name</label>
+                    
+                    <input 
+                        type="text" 
+                        id="firstName"
+                        formControlName="firstName"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        placeholder="Enter your first name"
                     />
+
+                    @if (submitted && f['firstName'].errors) {
+                        <div class="text-red-500 text-sm mt-1 font-semibold">
+                            @if (f['firstName'].errors['required']) {
+                                <span>First name is required.</span>
+                            }
+                            @if (f['firstName'].errors['minlength']) {
+                                <span>First name be at least three characters </span>
+                            }
+                        </div>
+                    }
                 </div>
 
                 <div>
-                    <label for="lastName" class="block text-sm font-medium text-gray-600 mb-1">Last Name</label>
-                    <input
-                        type="text"
-                        name="lastName"
-                        [(ngModel)]="form.lastName"
-                        required
-                        #lastName="ngModel"
+                    <label for="lastName" class="block text-sem font-medium text-gray-600 mb-1">Last Name</label>
+                    
+                    <input 
+                        type="text" 
+                        id="lastName"
+                        formControlName="lastName"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        placeholder="Enter your last name"
                     />
+
+                    @if (submitted && f['lastName'].errors) {
+                        <div class="text-red-500 text-sm mt-1 font-semibold">
+                            @if (f['lastName'].errors['required']) {
+                                <span>Last name is required.</span>
+                            }
+                            @if (f['lastName'].errors['minlength']) {
+                                <span>Last name must be at least three characters </span>
+                            }
+                        </div>
+                    }
                 </div>
 
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
-                    <input
-                        required
-                        type="email"
-                        name="email"
-                        [(ngModel)]="form.username"
-                        #email="ngModel"
+                    <label for="email" class="block text-sem font-medium text-gray-600 mb-1">Email</label>
+                    
+                    <input 
+                        type="email" 
+                        id="email"
+                        formControlName="email"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        placeholder="Enter your email"
                     />
+
+                    @if (submitted && f['email'].errors) {
+                        <div class="text-red-500 text-sm mt-1 font-semibold">
+                            @if (f['email'].errors['required']) {
+                                <span>Email is required.</span>
+                            }
+                            @if (f['email'].errors['minlength']) {
+                                <span>Email must be at least six characters </span>
+                            }
+                        </div>
+                    }
                 </div>
 
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-600 mb-1">Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        [(ngModel)]="form.password"
-                        required
-                        #password="ngModel"
+                <div class="relative">
+                    <label for="password" class="block text-sem font-medium text-gray-600 mb-1">Password</label>
+                    
+                    <input 
+                        [type]="showPassword ? 'text' : 'password'"
+                        type="password" 
+                        id="password"
+                        formControlName="password"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        placeholder="Enter your password"
                     />
+
+                    <button
+                        type="button"
+                        (click)="togglePassword()"
+                        class="absolute right-3 top-13.5 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                        <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+
+                    @if (submitted && f['password'].errors) {
+                        <div class="text-red-500 text-sm mt-1 font-semibold">
+                            @if (f['password'].errors['required']) {
+                                <span>Password is required.</span>
+                            }
+                            @if (f['password'].errors['minlength']) {
+                                <span>Password must be at least six characters </span>
+                            }
+                        </div>
+                    }
+
                 </div>
+
+                @if(errorMessage) {
+                    <div class="text-red-500 text-center text-sm">
+                        {{ errorMessage }}
+                    </div>
+                }
+                @if(successMessage) {
+                    <div class="text-green-600 text-center text-sm">
+                        {{ successMessage }}
+                    </div>
+                }
 
                 <button
                     type="submit"
-                    class="cursor-pointer w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-semibold">
+                    [disabled]="registerForm.invalid"
+                    class="cursor-pointer w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all disabled:cursor-not-allowed font-semibold"
+                >
                     Sign up now
                 </button>
 
                 <p class="cursor-pointer text-sm text-center text-gray-500">
                     Already have an account?
-                    <a href="" class="text-blue-600 hover:underline">Sign in</a>
+                    <a routerLink="/login" class="text-blue-700 hover:underline">Sign in</a>
                 </p>
+
             </form>
+            
         </div>
     </div>
 </div>

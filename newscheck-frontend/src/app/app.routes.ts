@@ -1,12 +1,14 @@
 import { Routes } from '@angular/router';
-import { Home } from './home/home';
-import { LogIn } from './components/log-in/log-in';
-import { Register } from './components/register/register';
-import { ResetPassword } from './components/reset-password/reset-password';
+import { HomeComponent } from './home/home';
+import { LoginComponent } from './components/log-in/log-in';
+import { RegisterComponent } from './components/register/register';
+import { ResetPasswordComponent } from './components/reset-password/reset-password';
+import { AuthGaurd } from './services/auth-gaurd';
 
 export const routes: Routes = [
-    { path: '', component: LogIn},
-    { path: 'register', component: Register },
-    { path: 'home', component: Home },
-    { path: 'reset-password', component: ResetPassword }
+    { path: '', component: LoginComponent}, 
+    { path: 'login', component: LoginComponent},
+    { path: 'register', component: RegisterComponent },
+    { path: 'home', component: HomeComponent, }, //canActivate: [AuthGaurd]
+    { path: 'reset-password', component: ResetPasswordComponent }
 ];

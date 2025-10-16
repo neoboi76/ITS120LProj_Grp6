@@ -1,68 +1,119 @@
 <title>Sign in</title>
 
-<div class="min-h-screen flex">
+<div class="min-h-screen flex bg-white">
 
-    <!-- Top Panel for mobile -->
-    <div class="fixed lg:hidden top-0 left-0 w-full bg-gray-900 pt-1 text-white">
+    <!-- Appearing Header for mobile screens -->
+    <div class="fixed lg:hidden top-0 left-0 w-full bg-gray-900 pt-4 text-white">
         <div class="flex flex-col items-center text-center">
-            <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-40 mb-6">
-        </div> 
+            <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-25 mb-6">
+        </div>
     </div>
 
-    <!-- Left panel -->
-    <div class="hidden lg:flex w-1/2 bg-gray-900 text-white flex-col justify-center items-center">
-        <div class="flex flex-col items-center px-8 text-center">
-            <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-80 mb-6">
+    <!-- Full screen left panel -->
+    <div class="hidden lg:flex w-1/2 bg-gray-900 flex-col justify-center items-center text-white">
+        <div class="flex flex-col text-center items-center">
+            <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-80">
             <p class="italic text-5xl text-gray-300">Welcome to NewsCheck</p>
         </div>
     </div>
 
-    <!-- Right panel -->
+   <!--  Right Form Panel -->
     <div class="flex w-full lg:w-1/2 justify-center items-center bg-white">
+
         <div class="w-full max-w-lg px-8">
+
             <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
                 Sign in to your account
             </h1>
 
-            <form name="form" (ngSubmit)="onSubmit()" #f="ngForm" novalidate class="space-y-5">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
+            novalidate class="space-y-5">
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
-                    <input
-                        required
-                        type="email"
-                        name="email"
-                        [(ngModel)]="form.email"
-                        #email="ngModel"
+                    <label for="email" class="block text-sem font-medium text-gray-600 mb-1">Email</label>
+                    
+                    <input 
+            
+                        id="email"
+                        formControlName="email"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        placeholder="Enter your email"
                     />
+
+                    @if (submitted && f['email'].errors) {
+                        <div class="text-red-500 text-sm mt-1 font-semibold">
+                            @if (f['email'].errors['required']) {
+                                <span>Email is required.</span>
+                            }
+                            @if (f['email'].errors['minlength']) {
+                                <span>Email must be at least six characters </span>
+                            }
+                        </div>
+                    }
                 </div>
 
-                <div>
-                    <label for="password" class="block text-4 font-medium text-gray-600 mb-1">Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        [(ngModel)]="form.password"
-                        required
-                        #password="ngModel"
+                <div class="relative">
+                    <label for="password" class="block text-sem font-medium text-gray-600 mb-1">Password</label>
+                    
+                    <input 
+                        [type]="showPassword ? 'text' : 'password'"
+                        type="password" 
+                        id="password"
+                        formControlName="password"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        placeholder="Enter your password"
                     />
+
+                    <button
+                        type="button"
+                        (click)="togglePassword()"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                        <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+
                     <div class="cursor-pointer flex justify-end mt-2">
                         <a routerLink="/reset-password" class="text-sm text-blue-600 hover:underline">Forgot your password?</a>
                     </div>
+
+                    @if (submitted && f['password'].errors) {
+                        <div class="text-red-500 text-sm mt-1 font-semibold">
+                            @if (f['password'].errors['required']) {
+                                <span>Password is required.</span>
+                            }
+                            @if (f['password'].errors['minlength']) {
+                                <span>Password must be at least six characters </span>
+                            }
+                        </div>
+                    }
                 </div>
+
+                @if(errorMessage) {
+                    <div class="text-red-500 text-center text-sm">
+                        {{ errorMessage }}
+                    </div>
+                }
+
+                @if(successMessage) {
+                    <div class="text-green-600 text-center text-sm">
+                        {{ successMessage }}
+                    </div>
+                }
 
                 <button
                     type="submit"
-                    class="cursor-pointer w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-semibold">
+                    [disabled]="loginForm.invalid"
+                    class="cursor-pointer w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all disabled:cursor-not-allowed font-semibold"
+                >
                     Login now
                 </button>
 
                 <p class="cursor-pointer text-sm text-center text-gray-500">
-                    Don’t have an account?
-                    <a routerLink="/register" class="text-blue-600 hover:underline">Sign Up</a>
+                    Don't have an account?
+                    <a routerLink="/register" class="text-blue-700 hover:underline">Sign up</a>
                 </p>
+
             </form>
+            
         </div>
     </div>
 </div>

@@ -9,6 +9,7 @@ import com.newscheck.newscheck.services.authService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,7 +45,10 @@ public class UserController {
 
             LoginResponse response = authService.login(request);
 
-           return ResponseEntity.ok(response);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
+
 
         } catch(Exception e) {
             return ResponseEntity.badRequest().body("User does not exist");
@@ -58,11 +62,13 @@ public class UserController {
 
         RegisterResponse response = authService.register(request);
 
-        if (response != null) {
+        if (response == null) {
             return ResponseEntity.badRequest().body("Invalid signup");
         }
 
-        return ResponseEntity.ok(authService.register(request));
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
 
     }
 

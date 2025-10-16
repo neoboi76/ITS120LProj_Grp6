@@ -1,21 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { NavComponent } from "../components/nav/nav";
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  standalone: true,
+  imports: [RouterLink, NavComponent],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
-export class Home {
-logOut() {
-throw new Error('Method not implemented.');
-}
+export class HomeComponent {
 
-  isMenuOpen = false;
-
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
 
 }
