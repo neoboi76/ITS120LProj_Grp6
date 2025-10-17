@@ -24,7 +24,10 @@ export class NavComponent {
   }
 
   logout() {
+    this.authService.logout().subscribe({
+      next: (res) => console.log('Logout successful:', res),
+      error: (err) => console.error('Logout failed:', err)
+    });
     setTimeout(() => this.route.navigate(['/login']), 1000);
-    this.authService.logout();
   }
 }

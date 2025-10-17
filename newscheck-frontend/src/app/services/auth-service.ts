@@ -4,6 +4,8 @@ import { LoginModel } from '../models/login-model';
 import { RegisterModel } from '../models/register-model';
 import { TokenStorageService } from './token-storage-service';
 import { LogoutModel } from '../models/logout-model';
+import { Observable, tap } from 'rxjs';
+import { ResetPasswordModel } from '../models/reset-model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,19 +34,25 @@ export class AuthService {
   }
 
 
-
-  logout() {
-
+  logout(): Observable<any> {
     const token = this.tokenStorageService.getToken(); 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
-    this.http.post<LogoutModel>("http://localhost:8080/logout", null, { headers });
-
-    this.tokenStorageService.logout();
-
-    this.isLoggedIn = false;
+    return this.http.post("http://localhost:8080/logout", null, { headers }).pipe(
+      tap(() => {
+        this.tokenStorageService.logout(); 
+        this.isLoggedIn = false;
+      })
+    );
   }
+
+  resetPassword(email: string, oldPassword: string, newPassword: string) {
+    return this.http.put("http://localhost:8080/reset-password", 
+      { email, oldPassword, newPassword }
+    )
+  }
+
   
 }
