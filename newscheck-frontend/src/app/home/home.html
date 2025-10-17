@@ -2,20 +2,160 @@
 
 <app-nav></app-nav>
 
+<section> 
+  <div class="bg-[url('/assets/hero.png')] h-[75vh] flex flex-col bg-fixed bg-no-repeat bg-center bg-cover items-center justify-center text-center">
+    <h1 class="font-extrabold bg-gradient-to-r from-cyan-300 to-blue-500 bg-clip-text text-transparent text-3xl sm:text-4xl md:text-6xl drop-shadow-[0_0_8px_rgba(56,189,248,0.7)] mb-0">
+      Powered by AI — Detecting fake news, <br> one claim at a time.
+    </h1>
+  </div>
+  <div class="bg-[#1f1f1f] bg-[url('/assets/Underhero.png')] h-[14vh] bg-no-repeat bg-center bg-cover items-center justify-center text-center mb-0"></div>
+</section>
+
 <section>
-  <div >
-    <div class="bg-[url('/assets/hero.png')] flex flex-col bg-no-repeat bg-center bg-fixed bg-cover h-[75vh] items-center text-center justify-center">
-          <h1 class="flex flex-col font-extrabold bg-gradient-to-r from-cyan-300 to-blue-500 bg-clip-text text-transparent text-center text-3xl sm:text-4xl md:text-6xl drop-shadow-[0_0_8px_rgba(56,189,248,0.7)]">Powered by AI — Detecting fake <br> news, one claim at a time.</h1>
+    <div
+        class="relative bg-[url('/assets/main.png')] min-h-[100vh] flex flex-col xl:flex-row justify-around items-center bg-no-repeat bg-center bg-cover before:absolute before:inset-0 before:bg-black/60 text-white px-6 md:px-10 py-10 md:py-0 gap-8"
+    >
+        <div class="xl:w-[40%] mt-10 flex flex-col space-y-5 text-left z-10">
+            <h1 class="text-3xl md:text-4xl font-semibold leading-snug">
+                Driven by AI — Exposing fake news and confirming facts through
+                <span
+                    class="bg-gradient-to-r from-green-400 via-green-500 to-green-300 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(34,197,94,0.7)]"
+                >
+                    trusted sources
+                </span>
+            </h1>
+            <p class="text-sm md:text-base text-gray-300">
+                An AI-powered system designed to detect fake news, verify information
+                through reliable sources, and help users stay informed with accurate,
+                trustworthy, and up-to-date content that promotes responsible
+                information sharing.
+            </p>
+
+            <div
+                class="mt-6 bg-white/10 backdrop-blur-md rounded-xl p-4 shadow-lg border border-white/20 text-sm w-full md:w-[100%] max-h-[200px] overflow-y-auto"
+            >
+                <h2 class="text-lg font-semibold text-green-400 text-center mb-2">Recent History</h2>
+                <table class="w-full text-left text-gray-200">
+                    <thead class="border-b border-gray-400/40">
+                        <tr>
+                            <th class="pb-2">Date</th>
+                            <th class="pb-2">News</th>
+                            <th class="pb-2">Status</th>
+                            <th class="pb-2">Verdict</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of history; track item) {
+                            <tr class="border-b border-gray-400/20">
+                                <td class="py-1 ">{{ item.date }}</td>
+                                <td >{{ item.news }}</td>
+                                <td class="pr-3">{{ item.status }}</td>
+                                <td
+                                    [class.text-green-400]="item.verdict === 'True'"
+                                    [class.text-red-400]="item.verdict === 'False'"
+                                    [class.text-yellow-400]="item.verdict === '—'"
+                                    class="font-semibold"
+                                >
+                                    {{ item.verdict }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div
+            class="md:w-[100%] mb-10 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 space-y-6 z-10 w-full max-w-[600px]"
+        >
+            <h2 class="text-2xl font-semibold text-center text-white">
+                NewsCheck
+            </h2>
+
+            <div>
+                <textarea
+                    [(ngModel)]="inputText"
+                    rows="4"
+                    placeholder="Paste article or claim here..."
+                    class="w-full p-3 rounded-lg bg-white/90 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+                ></textarea>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-4">
+                <input
+                    type="file"
+                    class="file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-500 file:text-white hover:file:bg-green-600 text-gray-200"
+                    (change)="onFileSelected($event)"
+                />
+                <input
+                    [(ngModel)]="inputLink"
+                    type="url"
+                    placeholder="Paste article link (optional)"
+                    class="flex-1 p-3 rounded-lg bg-white/90 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+            </div>
+
+            <div class="flex justify-center">
+                <button
+                    (click)="analyzeInput()"
+                    class="px-6 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-white font-semibold transition"
+                >
+                    Scan
+                </button>
+            </div>
+
+            @if (result) {
+                <div class="mt-4 bg-blue-100 text-gray-800 rounded-lg p-4 text-sm">
+                    <h3 class="font-bold text-blue-700">Verified!</h3>
+                    <p>{{ result }}</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+
+<!-- <h1 class="text-2xl font-semibold leading-snug">
+        Driven by AI — Exposing fake news and verifying facts through 
+        <span class="bg-gradient-to-r from-green-400 via-green-500 to-green-300 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(34,197,94,0.7)]">trusted sources</span>
+ -->
+<!-- <footer class="relative dark:bg-gray-900 px-6 py-10 text-white">
+  <div class="flex flex-col justify-center text-center items-center md:flex-row md:justify-between gap-8">
+    <div class="md:w-[40%] flex flex-col space-y-3 text-left">
+      <h2 class="text-2xl font-semibold leading-snug">
+        An AI-driven platform built to identify fake news and confirm information through credible and relevant sources.
+      </h2>
+      <p class="text-sm text-gray-300">
+        Hello! Thank you for visiting our website. We use advanced AI technology to detect fake news and verify information through trusted and reliable sources. Our goal is to help you stay informed with accurate, fact-checked content and promote a safer, more trustworthy online community.
+      </p>
+    </div>
+
+    <div class="md:w-[25%] flex flex-col space-y-2 text-left">
+      <h1 class="text-2xl font-semibold mb-2">Site Links</h1>
+      <ul class="space-y-1 text-gray-300">
+        <li><a routerLink="/home" class="hover:text-blue-500 transition">Home</a></li>
+        <li><a routerLink="/history" class="hover:text-blue-500 transition">History</a></li>
+        <li><a routerLink="/settings" class="hover:text-blue-500  transition">Settings</a></li>
+      </ul>
+    </div>
+
+    <div class="md:w-[25%] flex justify-center md:justify-end items-start">
+      <a routerLink="/home" class="flex items-center space-x-3">
+        <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-60 h-auto">
+      </a>
     </div>
   </div>
 
-  <div class="bg-[url('/assets/Underhero.png')] flex flex-col bg-no-repeat bg-center bg-cover h-[10vh] items-center text-center justify-center">
-
+  <div class="mt-10 text-center text-sm font-medium text-gray-400">
+    Copyright &copy; 2025 Created by 
+    <span class="font-semibold text-cyan-400">
+      Ken Aliling, Anicia Kaela Bonayao, Carl Norbi Felonia, Cedrick Miguel Kaneko, and Dino Alfred Timbol
+    </span>
   </div>
-</section>
+</footer> -->
 
-<section>
-  <div>
-    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cupiditate, corrupti incidunt alias vero officia blanditiis ducimus quam hic nesciunt repellat voluptatibus id doloribus eius excepturi optio praesentium doloremque. Doloremque quis voluptates quam! Vitae nostrum distinctio exercitationem porro rem placeat nisi voluptates qui veritatis vel impedit velit obcaecati accusamus, quasi, esse delectus at facere cum commodi veniam, possimus neque. Voluptatum doloremque debitis iure aliquam recusandae similique, consequuntur distinctio beatae rem eveniet magnam ut, inventore animi quasi minus, dicta ipsam? Laboriosam cupiditate deserunt ab? Autem veniam ratione debitis id libero quam eos accusamus officia inventore, in quos optio ad nihil laborum cumque voluptatum expedita, delectus natus nobis consequatur corrupti ipsam neque placeat ducimus? Totam aperiam, ratione dolor repellat molestias, consectetur sunt voluptas rerum nostrum, assumenda minima. Architecto ab aliquam nulla, deleniti quo dolores itaque pariatur labore, aut vitae quia soluta unde adipisci magnam harum nostrum numquam ullam perspiciatis ea esse vel illum rem ducimus. Illum, earum? Cum, impedit quia officia esse eaque repellendus dolore sit saepe vitae velit consequatur vero rerum voluptatum suscipit quidem quo. Molestias accusamus in cumque quisquam maiores inventore, fuga eligendi, natus voluptas explicabo ullam velit ratione unde ea voluptatibus animi porro reiciendis. Nesciunt quia ab incidunt, quas, earum porro facere nam repellendus quos repudiandae voluptate fugit dicta necessitatibus autem explicabo eius voluptatum mollitia? Voluptate fuga sapiente soluta molestias ea nihil modi obcaecati aliquam debitis repudiandae possimus aspernatur a ut, odio dolor rerum delectus sint unde earum quam maiores error voluptas vitae. Aspernatur officiis, repellendus quisquam a mollitia repudiandae laborum iste omnis molestiae fuga nesciunt explicabo aliquid veniam accusamus totam? Rerum quis porro aliquid corporis accusantium numquam, dicta eius harum. Sequi vero perspiciatis quasi delectus doloribus soluta accusantium rem inventore non repellat maxime numquam adipisci deserunt nisi, atque obcaecati similique, dolor odit animi incidunt commodi pariatur eligendi earum. Facere recusandae modi atque, provident impedit fuga, magni similique voluptate alias velit possimus adipisci eius enim dignissimos. Voluptatibus, quos vero distinctio fuga magni consequuntur earum culpa accusantium quam beatae blanditiis perferendis! Beatae ullam non voluptas cupiditate perferendis recusandae voluptatem sunt laborum laboriosam quo eos numquam, nulla vitae harum voluptate dolorem fugit nisi quisquam veritatis. Repudiandae, dolor blanditiis! Reiciendis, nisi nesciunt. Omnis recusandae neque dignissimos repellendus. Vero vel commodi corporis architecto, aut reiciendis. Dignissimos inventore nobis voluptatem cumque atque velit delectus nostrum eaque tempore similique perferendis et unde accusamus, ea possimus. Mollitia tempora voluptas non vitae, nisi aliquid accusantium aspernatur autem nobis quidem sapiente aliquam unde, alias repudiandae reiciendis dolore, a ut impedit doloremque facilis consequatur delectus? Deserunt consequatur facilis, maxime, nisi magni dicta quasi rem voluptatem tempore ut quo nulla asperiores ab dolor eveniet possimus, itaque optio commodi corporis quaerat quidem harum aliquid dignissimos sint. Pariatur dolorum blanditiis atque consectetur suscipit voluptatum dolores praesentium adipisci ratione error, odio debitis perferendis totam nemo porro perspiciatis excepturi facere officia soluta quam aspernatur aut unde sed. Earum architecto veniam fugit ipsam debitis voluptatum officiis dicta aliquam, eveniet nihil explicabo est dolor maiores soluta itaque sunt enim ipsum animi pariatur porro natus eligendi. Fugiat, eius!</p>
-  </div>
-</section>
+
+<app-footer></app-footer>
+
+
