@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-footer',
@@ -8,5 +8,20 @@ import { RouterLink } from "@angular/router";
   styleUrl: './footer.css'
 })
 export class FooterComponent {
+
+  constructor(
+    private route: Router
+  ) {}
+
+  goHistory() {
+    this.route.navigate(['/history'], { fragment: 'history' });
+  }
+  goSettings() {
+    this.route.navigate(['/settings'], { fragment: 'settings' });
+  }
+  goHome() {
+    this.route.navigate(['/home'], { fragment: 'home' });
+  }
+
 
 }

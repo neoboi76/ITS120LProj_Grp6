@@ -36,16 +36,24 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
+            Claims claims = Jwts.parserBuilder()
+                    .setAllowedClockSkewSeconds(60)
                     .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
                     .build()
-                    .parseClaimsJws(token);
-            return true;
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            System.out.println("Token expires at: " + claims.getExpiration());
+            System.out.println("Current time: " + new Date());
+
+            return claims.getExpiration().after(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             System.out.println("Invalid JWT token: " + e.getMessage());
             return false;
         }
     }
+
+
 
     public String getEmailFromToken(String token) {
         Claims claims = Jwts.parserBuilder()

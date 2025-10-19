@@ -101,6 +101,30 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update-user")
+    public ResponseEntity<?> updateUser(@RequestBody SettingsModel request) {
+
+        try {
+
+           System.out.println(this.jwtTokenProvider.validateToken(request.getToken()));
+
+            if (this.jwtTokenProvider.validateToken(request.getToken())) {
+
+                SettingsResponse response = authService.updateUser(request);
+
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(response);
+            }
+
+
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body("User does not exist");
+        }
+
+        return null;
+    }
+
     private String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
@@ -108,4 +132,6 @@ public class UserController {
         }
         return null;
     }
+
+
 }

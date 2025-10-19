@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LoginModel } from '../models/login-model';
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
@@ -8,7 +9,6 @@ const USER_KEY = 'auth-user';
 })
 export class TokenStorageService {
 
-  //signout()
 
   public saveToken(token: string): void {
     window.sessionStorage.removeItem(TOKEN_KEY);
@@ -20,15 +20,16 @@ export class TokenStorageService {
     return window.sessionStorage.getItem(TOKEN_KEY);
   }
 
-  public saveUser(id: number): void {
-    let strId = id.toString();
+  public saveUser(user: LoginModel): void {
     window.sessionStorage.removeItem(USER_KEY);
-    window.sessionStorage.setItem(USER_KEY, strId);
+    console.log(JSON.stringify(user));
+    window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
   
-  public getUser(): number | null {
-    const user = window.sessionStorage.getItem(USER_KEY);
-    return user ? parseInt(user, 10): null;
+  public getUser(): any {
+    const user = JSON.parse(sessionStorage.getItem(USER_KEY) || '{}');
+
+    return user;
   }
 
   logout(): void {

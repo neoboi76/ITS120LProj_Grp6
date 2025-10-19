@@ -57,8 +57,6 @@ export class RegisterComponent implements OnInit{
 
     this.authService.register(firstName, lastName, email, password).subscribe({
       next: (data: RegisterModel) => {
-        this.tokenStorageService.saveToken(data.token);
-        this.tokenStorageService.saveUser(data.id);
         this.successMessage = 'Account was created successfully!';
         setTimeout(() => this.router.navigate(['/login']), 1000);
       },
@@ -72,17 +70,3 @@ export class RegisterComponent implements OnInit{
 
 }
 
-/*   const {firstName, lastName, userName, password} = this.registerForm.value;
-
-      this.auth.register(firstName, lastName, userName, password).subscribe({
-        next: () => {
-          this.successMessage = 'Account created successfully!';
-          setTimeout(() => this.router.navigate(['/login']), 1000);
-        },
-        error: (err) => {
-          console.error(err);
-          this.errorMessage = 'Registration failed. Please try again.';
-        }
-      });
-  } 
-  } */

@@ -63,10 +63,9 @@ export class LoginComponent implements OnInit{
     this.authService.login(email, password).subscribe({
       next: (data: LoginModel) => {
         this.tokenStorageService.saveToken(data.token);
-        this.tokenStorageService.saveUser(data.id);
+        this.tokenStorageService.saveUser(data);
         this.successMessage = 'Login was a success!';
         setTimeout(() => this.router.navigate(['/home']), 1000);
-
       },
       error: err => {
         console.log(err);

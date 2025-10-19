@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.models.responses;
+package com.newscheck.newscheck.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,15 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponse {
-
-    private String message;
+public class SettingsModel {
     private String token;
-    private String email;
+    private long id;
     private String firstName;
     private String lastName;
     private String gender;
     private String country;
     private String language;
-    private long id;
 }

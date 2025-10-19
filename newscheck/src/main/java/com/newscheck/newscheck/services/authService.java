@@ -1,15 +1,14 @@
 package com.newscheck.newscheck.services;
 
-import com.newscheck.newscheck.models.LoginModel;
+import com.newscheck.newscheck.models.*;
 import com.newscheck.newscheck.models.enums.Role;
-import com.newscheck.newscheck.models.RegisterModel;
-import com.newscheck.newscheck.models.ResetModel;
-import com.newscheck.newscheck.models.UserModel;
 import com.newscheck.newscheck.models.responses.LoginResponse;
 import com.newscheck.newscheck.models.responses.RegisterResponse;
 import com.newscheck.newscheck.models.responses.ResetResponse;
+import com.newscheck.newscheck.models.responses.SettingsResponse;
 import com.newscheck.newscheck.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,9 +48,8 @@ public class authService implements UserDetailsService {
         user.setRole(Role.USER);
         UserModel savedUser = userRepository.save(user);
 
-        String token = jwtTokenProvider.generateToken(savedUser.getEmail());
 
-        return new RegisterResponse("Account Created!", token, savedUser.getEmail(), savedUser.getUserId());
+        return new RegisterResponse("Account Created!", savedUser.getEmail(), savedUser.getUserId());
     }
 
     public LoginResponse login(LoginModel request) {
@@ -60,7 +58,8 @@ public class authService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found after successful authentication."));
         String token = jwtTokenProvider.generateToken(user.getEmail());
 
-        return new LoginResponse("Login Successful!", token, user.getEmail(), user.getUserId());
+        return new LoginResponse("Login Successful!", token, user.getEmail(), user.getFirstName(),
+                user.getLastName(), user.getGender(), user.getCountry(), user.getLanguage(), user.getUserId());
     }
 
     public ResetResponse resetPassword(ResetModel request) {
@@ -71,6 +70,24 @@ public class authService implements UserDetailsService {
         userRepository.save(user);
 
         return new ResetResponse("Password has been reset successfully.");
+    }
+
+    public SettingsResponse updateUser(SettingsModel request) {
+
+
+        UserModel user = userRepository.findById(request.getId())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setGender(request.getGender());
+        user.setCountry(request.getCountry());
+        user.setLanguage(request.getLanguage());
+
+        userRepository.save(user);
+
+        return new SettingsResponse("User information succesfully updated");
+
     }
 
     @Override

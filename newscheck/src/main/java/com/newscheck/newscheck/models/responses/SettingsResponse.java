@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class RegisterResponse {
+public class SettingsResponse {
     private String message;
-    private String email;
-    private Long id;
 }

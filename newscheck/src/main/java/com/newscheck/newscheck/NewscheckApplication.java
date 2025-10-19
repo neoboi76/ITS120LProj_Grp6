@@ -16,7 +16,7 @@ public class NewscheckApplication {
 	}
 
 
-    @Bean
+    /* @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
@@ -28,7 +28,7 @@ public class NewscheckApplication {
                         .allowCredentials(true);
             }
         };
-    }
+    }*/
 }
 
 

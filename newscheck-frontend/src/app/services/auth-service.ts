@@ -4,7 +4,7 @@ import { LoginModel } from '../models/login-model';
 import { RegisterModel } from '../models/register-model';
 import { TokenStorageService } from './token-storage-service';
 import { LogoutModel } from '../models/logout-model';
-import { Observable, tap } from 'rxjs';
+import { first, Observable, tap } from 'rxjs';
 import { ResetPasswordModel } from '../models/reset-model';
 
 @Injectable({
@@ -52,6 +52,12 @@ export class AuthService {
     return this.http.put("http://localhost:8080/reset-password", 
       { email, oldPassword, newPassword }
     )
+  }
+
+  settingsForm(token: string, firstName: string, lastName: string, id: number, gender: string, country: string, language: string) {
+    return this.http.put("http://localhost:8080/update-user",
+      {token, firstName, lastName, id, gender, country, language}
+    );
   }
 
   
