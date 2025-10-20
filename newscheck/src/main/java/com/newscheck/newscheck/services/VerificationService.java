@@ -1,0 +1,174 @@
+package com.newscheck.newscheck.services;
+
+import com.newscheck.newscheck.models.*;
+import com.newscheck.newscheck.models.requests.EvidenceDTO;
+import com.newscheck.newscheck.models.requests.VerificationRequestDTO;
+import com.newscheck.newscheck.models.responses.VerificationResponseDTO;
+import com.newscheck.newscheck.models.enums.ContentType;
+import com.newscheck.newscheck.models.enums.VerificationStatus;
+import com.newscheck.newscheck.models.Gemini.GeminiAnalysisResult;
+import com.newscheck.newscheck.repositories.EvidenceRepository;
+import com.newscheck.newscheck.repositories.UserRepository;
+import com.newscheck.newscheck.repositories.VerdictRepository;
+import com.newscheck.newscheck.repositories.VerificationRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class VerificationService implements IVerificationService {
+
+    private final VerificationRepository verificationRepository;
+    private final VerdictRepository verdictRepository;
+    private final EvidenceRepository evidenceRepository;
+    private final UserRepository userRepository;
+    private final IGeminiService geminiService;
+    private final IUrlContentExtractorService urlContentExtractorService;
+    private final IImageTextExtractorService imageTextExtractorService;
+
+    @Override
+    @Transactional
+    public VerificationResponseDTO submitVerification(VerificationRequestDTO request) throws Exception {
+        UserModel user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new Exception("User not found"));
+
+        VerificationModel verification = new VerificationModel();
+        verification.setUser(user);
+        verification.setContentType(request.getContentType());
+        verification.setStatus(VerificationStatus.PENDING);
+        verification.setSubmittedAt(LocalDateTime.now());
+
+        String contentToAnalyze = "";
+
+        try {
+            switch (request.getContentType()) {
+                case TEXT:
+                    contentToAnalyze = request.getContentText();
+                    verification.setContentText(contentToAnalyze);
+                    break;
+
+                case URL:
+                    contentToAnalyze = urlContentExtractorService.extractContent(request.getContentUrl());
+                    verification.setContentUrl(request.getContentUrl());
+                    verification.setContentText(contentToAnalyze);
+                    break;
+
+                case IMAGE:
+                    contentToAnalyze = imageTextExtractorService.extractTextFromImage(request.getImageBase64());
+                    verification.setContentText(contentToAnalyze);
+                    // In a real application, you'd save the image file and store the path
+                    verification.setImagePath("image_" + System.currentTimeMillis() + ".jpg");
+                    break;
+            }
+
+            verification = verificationRepository.save(verification);
+
+            GeminiAnalysisResult analysisResult = geminiService.analyzeContent(contentToAnalyze);
+
+            VerdictModel verdict = new VerdictModel();
+            verdict.setVerification(verification);
+            verdict.setVerdictType(analysisResult.getVerdict());
+            verdict.setReasoning(analysisResult.getReasoning());
+            verdict.setVerdictDate(LocalDateTime.now());
+            verdict.setCreatedAt(LocalDateTime.now());
+            verdict = verdictRepository.save(verdict);
+
+            List<EvidenceModel> evidences = new ArrayList<>();
+            if (analysisResult.getSources() != null) {
+                for (GeminiAnalysisResult.SourceEvidence source : analysisResult.getSources()) {
+                    EvidenceModel evidence = new EvidenceModel();
+                    evidence.setVerdict(verdict);
+                    evidence.setSourceName(source.getSourceName());
+                    evidence.setSourceUrl(source.getSourceUrl());
+                    evidence.setDescription(source.getDescription());
+                    evidence.setRelevanceScore(source.getRelevanceScore());
+                    evidences.add(evidence);
+                }
+                evidenceRepository.saveAll(evidences);
+            }
+
+            verification.setStatus(VerificationStatus.SUCCESS);
+            verification.setScore(analysisResult.getConfidenceScore());
+            verification.setVerdict(verdict);
+            verificationRepository.save(verification);
+
+            return buildVerificationResponse(verification, verdict, evidences, analysisResult.getConfidenceScore());
+
+        } catch (Exception e) {
+            verification.setStatus(VerificationStatus.FAILED);
+            verificationRepository.save(verification);
+            throw new Exception("Verification failed: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public VerificationResponseDTO getVerificationResult(Long verificationId) throws Exception {
+        VerificationModel verification = verificationRepository.findById(verificationId)
+                .orElseThrow(() -> new Exception("Verification not found"));
+
+        VerdictModel verdict = verification.getVerdict();
+        List<EvidenceModel> evidences = verdict != null ?
+                evidenceRepository.findByVerdict_VerdictId(verdict.getVerdictId()) :
+                new ArrayList<>();
+
+        return buildVerificationResponse(verification, verdict, evidences, verification.getScore());
+    }
+
+    @Override
+    public List<VerificationResponseDTO> getUserVerifications(Long userId) throws Exception {
+        List<VerificationModel> verifications = verificationRepository.findByUser_UserIdOrderBySubmittedAtDesc(userId);
+
+        return verifications.stream()
+                .map(v -> {
+                    VerdictModel verdict = v.getVerdict();
+                    List<EvidenceModel> evidences = verdict != null ?
+                            evidenceRepository.findByVerdict_VerdictId(verdict.getVerdictId()) :
+                            new ArrayList<>();
+                    return buildVerificationResponse(v, verdict, evidences, v.getScore());
+                })
+                .collect(Collectors.toList());
+    }
+
+    private VerificationResponseDTO buildVerificationResponse(VerificationModel verification,
+                                                              VerdictModel verdict,
+                                                              List<EvidenceModel> evidences,
+                                                              Double confidenceScore) {
+        VerificationResponseDTO response = new VerificationResponseDTO();
+        response.setVerificationId(verification.getVerificationId());
+        response.setStatus(verification.getStatus());
+        response.setSubmittedAt(verification.getSubmittedAt());
+
+        if (verdict != null) {
+            response.setVerdictType(verdict.getVerdictType());
+            response.setReasoning(verdict.getReasoning());
+            response.setCompletedAt(verdict.getVerdictDate());
+            response.setConfidenceScore(confidenceScore);
+
+            List<EvidenceDTO> evidenceDTOs = evidences.stream()
+                    .map(e -> new EvidenceDTO(
+                            e.getEvidenceId(),
+                            e.getSourceName(),
+                            e.getSourceUrl(),
+                            e.getDescription(),
+                            e.getRelevanceScore()
+                    ))
+                    .collect(Collectors.toList());
+            response.setEvidences(evidenceDTOs);
+        }
+
+        String message = switch (verification.getStatus()) {
+            case SUCCESS -> "Verification completed successfully";
+            case PENDING -> "Verification is in progress";
+            case FAILED -> "Verification failed";
+        };
+        response.setMessage(message);
+
+        return response;
+    }
+}
