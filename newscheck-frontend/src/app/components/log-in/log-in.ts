@@ -3,15 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TokenStorageService } from '../../services/token-storage-service';
-import { AuthService } from '../../services/auth-service';
 import { LoginModel } from '../../models/login-model';
+import { AuthService } from '../../services/auth-service';
+
 
 @Component({
   selector: 'app-log-in',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, RouterLink, NgClass],
   templateUrl: './log-in.html',
-  styleUrl: './log-in.css'
+  styleUrl: './log-in.css',
+
 })
 export class LoginComponent implements OnInit{
 

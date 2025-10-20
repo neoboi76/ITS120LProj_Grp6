@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavComponent } from "../components/nav/nav";
 import { FooterComponent } from "../components/footer/footer";
 import { HttpClient } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-settings',
-  imports: [ReactiveFormsModule, NavComponent, FooterComponent, RouterLink, NgClass],
+  imports: [ReactiveFormsModule, NavComponent, FooterComponent, RouterLink, NgClass, FormsModule],
   templateUrl: './settings.html',
   styleUrl: './settings.css'
 })
@@ -21,7 +21,7 @@ export class SettingsComponent {
   successMessage = '';
   errorMessage = '';
   submitted = false;
-  isDisabled = false;
+  isEnabled = false;
   
   constructor(
     private fb: FormBuilder,
@@ -41,9 +41,18 @@ export class SettingsComponent {
   }
 
   ngOnInit() {
+
       this.user = this.tokenStorageService.getUser();
-      console.log(this.user.firstName + "lol");
-      this.userForm.patchValue(this.user);
+      this.authService.getUser(this.user.id).subscribe(data => {
+        this.userForm.patchValue({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          gender: data.gender,
+          country: data.country,
+          language: data.language
+        });
+      })
+
       this.userForm.disable();
   }
 
@@ -54,13 +63,13 @@ export class SettingsComponent {
 
     if (!this.userForm) return;
 
-     this.isDisabled = !this.isDisabled;
+     this.isEnabled = !this.isEnabled;
 
-     if (!this.isDisabled) {
-      this.userForm.disable();
+     if (this.isEnabled) {
+      this.userForm.enable();
      }
      else {
-      this.userForm.enable();
+      this.userForm.disable();
      }
      
   }
@@ -75,17 +84,17 @@ export class SettingsComponent {
 
     const {firstName, lastName, gender, country, language} = this.userForm.value;
 
-    const token = this.tokenStorageService.getToken();
     const userId = this.user.id;
 
-    if (!token) {
+    if (!this.tokenStorageService.getToken()) {
       this.errorMessage = "You must be logged in to update settings.";
       return;
     }
 
-    this.authService.settingsForm(token, firstName, lastName, gender, country, language, userId).subscribe({
+    this.authService.settingsForm(firstName, lastName, userId, gender, country, language).subscribe({
       next: (res) => {
         this.successMessage = "User information updated successfully.";
+        this.startEdit();
       },
       error: (err) => {
         this.errorMessage = "Error! Cannot update user information at this time.";

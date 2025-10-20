@@ -42,10 +42,10 @@
                 </div>
             </div>
             <div class="flex justify-start gap-5">
-                <button (click)="startEdit()" class="cursor-pointer px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">Edit</button>
-                <button (click)="onSubmit()" class="cursor-pointer px-6 py-2 bg-blue-600 text-white rounded-xl" [ngClass]="isDisabled ? 'bg-blue-600 hover:bg-blue-800 transition' : 'bg-gray-400 cursor-not-allowed'">Submit</button>
+                <button type="button" (click)="startEdit()" class="cursor-pointer px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">Edit</button>
+                <button type="submit" (ngSubmit)="onSubmit()" class="cursor-pointer px-6 py-2 bg-blue-600 text-white rounded-xl" [ngClass]="isEnabled ? 'bg-blue-600 hover:bg-blue-800 transition' : 'bg-gray-400 cursor-not-allowed'">Save</button>
             </div>
-            @if (formSubmitted) {
+            @if (submitted) {
 
                 @if(successMessage) {
                     <p class="text-green-600 font-medium">{{ successMessage }}</p>

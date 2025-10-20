@@ -2,37 +2,26 @@ package com.newscheck.newscheck.controllers;
 
 import com.newscheck.newscheck.models.*;
 import com.newscheck.newscheck.models.responses.*;
-import com.newscheck.newscheck.repositories.UserRepository;
-import com.newscheck.newscheck.services.JwtTokenProvider;
-import com.newscheck.newscheck.services.LogoutService;
-import com.newscheck.newscheck.services.authService;
+import com.newscheck.newscheck.services.*;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.coyote.Response;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:4200")
+
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
-    private final authService authService;
+    private final IAuthService authService;
+    private final ILogoutService logoutService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
-    private final LogoutService logoutService;
-
-    @Autowired
-    public UserController(authService authService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository userRepository, LogoutService logoutService) {
-        this.authService = authService;
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userRepository = userRepository;
-        this.logoutService = logoutService;
-    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginModel request) {
@@ -102,19 +91,37 @@ public class UserController {
     }
 
     @PutMapping("/update-user")
-    public ResponseEntity<?> updateUser(@RequestBody SettingsModel request) {
+    public ResponseEntity<?> updateUser(HttpServletRequest request, @RequestBody SettingsModel usrReq) {
 
         try {
 
-           System.out.println(this.jwtTokenProvider.validateToken(request.getToken()));
+            if (this.jwtTokenProvider.validateToken(getTokenFromRequest(request))) {
 
-            if (this.jwtTokenProvider.validateToken(request.getToken())) {
-
-                SettingsResponse response = authService.updateUser(request);
+                SettingsResponse response = authService.updateUser(usrReq);
 
                 return ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(response);
+            }
+
+
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body("User does not exist");
+        }
+
+        return null;
+    }
+
+    @GetMapping("/get-user/{id}")
+    public ResponseEntity<?> getUser(HttpServletRequest request, @PathVariable long id) {
+
+        try {
+
+            if (this.jwtTokenProvider.validateToken(getTokenFromRequest(request))) {
+
+                SettingsModel response = authService.getUser(id);
+
+                return ResponseEntity.ok(response);
             }
 
 

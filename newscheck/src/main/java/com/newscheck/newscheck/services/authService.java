@@ -7,9 +7,8 @@ import com.newscheck.newscheck.models.responses.RegisterResponse;
 import com.newscheck.newscheck.models.responses.ResetResponse;
 import com.newscheck.newscheck.models.responses.SettingsResponse;
 import com.newscheck.newscheck.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,21 +19,15 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 
 @Service
-public class authService implements UserDetailsService {
+@RequiredArgsConstructor
+public class authService implements IAuthService, UserDetailsService  {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    public authService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder,
-                       JwtTokenProvider jwtTokenProvider) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
+    @Override
     public RegisterResponse register(RegisterModel request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalStateException("Email already exists");
@@ -52,6 +45,7 @@ public class authService implements UserDetailsService {
         return new RegisterResponse("Account Created!", savedUser.getEmail(), savedUser.getUserId());
     }
 
+    @Override
     public LoginResponse login(LoginModel request) {
 
         UserModel user = userRepository.findByEmail(request.getEmail())
@@ -62,6 +56,7 @@ public class authService implements UserDetailsService {
                 user.getLastName(), user.getGender(), user.getCountry(), user.getLanguage(), user.getUserId());
     }
 
+    @Override
     public ResetResponse resetPassword(ResetModel request) {
         UserModel user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
@@ -72,6 +67,7 @@ public class authService implements UserDetailsService {
         return new ResetResponse("Password has been reset successfully.");
     }
 
+    @Override
     public SettingsResponse updateUser(SettingsModel request) {
 
 
@@ -88,6 +84,15 @@ public class authService implements UserDetailsService {
 
         return new SettingsResponse("User information succesfully updated");
 
+    }
+
+    @Override
+    public SettingsModel getUser(long id) {
+        UserModel user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return new SettingsModel(user.getFirstName(), user.getLastName(), user.getUserId(),
+                user.getGender(), user.getCountry(), user.getLanguage());
     }
 
     @Override

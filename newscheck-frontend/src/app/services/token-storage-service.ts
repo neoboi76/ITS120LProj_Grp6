@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LoginModel } from '../models/login-model';
+import { Observable } from 'rxjs';
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
@@ -16,19 +17,16 @@ export class TokenStorageService {
   }
 
   public getToken(): string | null {
-    console.log(TOKEN_KEY);
     return window.sessionStorage.getItem(TOKEN_KEY);
   }
 
   public saveUser(user: LoginModel): void {
     window.sessionStorage.removeItem(USER_KEY);
-    console.log(JSON.stringify(user));
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
   
-  public getUser(): any {
+  public getUser(): Observable<LoginModel> {
     const user = JSON.parse(sessionStorage.getItem(USER_KEY) || '{}');
-
     return user;
   }
 

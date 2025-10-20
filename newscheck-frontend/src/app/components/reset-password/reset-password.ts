@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { TokenStorageService } from '../../services/token-storage-service';
+
 import { AuthService } from '../../services/auth-service';
 import { NgClass } from '@angular/common';
-import { ResetPasswordModel } from '../../models/reset-model';
 
 @Component({
   selector: 'app-reset-password',
@@ -20,7 +19,6 @@ export class ResetPasswordComponent implements OnInit{
   successMessage = '';
 
   constructor(
-    private tokenStorageService: TokenStorageService,
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder
