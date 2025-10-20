@@ -11,16 +11,9 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class NavComponent {
 
-  goHistory() {
-    this.route.navigate(['/history'], { fragment: 'history' });
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  goSettings() {
-    this.route.navigate(['/settings'], { fragment: 'settings' });
-  }
-  goHome() {
-    this.route.navigate(['/home'], { fragment: 'home' });
-  }
-
 
   constructor(
     private route: Router,

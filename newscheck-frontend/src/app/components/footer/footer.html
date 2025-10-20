@@ -1,51 +1,55 @@
 <footer class="relative dark:bg-[#1f1f1f] px-20 py-10 text-white">
-  <div class="flex flex-col justify-center text-center items-center md:flex-row md:justify-between gap-8">
-    <div class="md:w-[40%] flex flex-col space-y-3 text-left">
-      <h2 class="text-2xl font-semibold leading-snug">
-        An AI-driven platform built to identify fake news and confirm information through credible and relevant sources.
-      </h2>
-      <p class="text-sm text-gray-300">
-        Hello! Thank you for visiting our website. We use advanced AI technology to detect fake news and verify information through trusted and reliable sources. Our goal is to help you stay informed with accurate, fact-checked content and promote a safer, more trustworthy online community.
-      </p>
-    </div>
+    <div class="flex flex-col justify-center text-center items-center md:flex-row md:justify-between gap-8">
+        <div class="md:w-[40%] flex flex-col space-y-3 text-left">
+            <h2 class="text-2xl font-semibold leading-snug">
+                An AI-driven platform built to identify fake news and confirm information through credible and relevant sources.
+            </h2>
+            <p class="text-sm text-gray-300">
+                Hello! Thank you for visiting our website. We use advanced AI technology to detect fake news and verify information through trusted and reliable sources. Our goal is to help you stay informed with accurate, fact-checked content and promote a safer, more trustworthy online community.
+            </p>
+        </div>
 
-    <div class="md:w-[25%] flex flex-col space-y-2 text-left">
-      <h1 class="text-2xl font-semibold mb-2">Site Links</h1>
-      <ul class="space-y-1 text-gray-300">
-        <li><a (click)="goHome()" class="cursor-pointer hover:text-blue-500 transition">Home</a></li>
-        <li><a (click)="goHistory()" class="cursor-pointer hover:text-blue-500 transition">History</a></li>
-        <li><a (click)="goSettings()" class="cursor-pointer hover:text-blue-500 transition">Settings</a></li>
-      </ul>
-    </div>
+        <div class="md:w-[25%] flex flex-col space-y-2 text-left">
+            <h1 class="text-2xl font-semibold mb-2">Site Links</h1>
+            <ul class="space-y-1 text-gray-300">
+                <li><a routerLink="/home" (click)="scrollToTop()" class="cursor-pointer hover:text-blue-500 transition">Home</a></li>
+                <li><a routerLink="/history" (click)="scrollToTop()" class="cursor-pointer hover:text-blue-500 transition">History</a></li>
+                <li><a routerLink="/settings" (click)="scrollToTop()" class="cursor-pointer hover:text-blue-500 transition">Settings</a></li>
+            </ul>
+        </div>
 
-    <div class="md:w-[20%] flex flex-col items-center md:items-center space-y-4">
-      <a routerLink="/home" class="flex items-center space-x-3">
-        <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-60 h-auto">
-      </a>
-      <div class="flex space-x-4">
-        <a target="_blank" rel="noopener noreferrer" href="https://x.com/NewsCheck52" class="w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:scale-110 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="black" class="w-5 h-5">
-            <path d="M459.4 151.7c.3 4.1.3 8.2.3 12.4 0 126.1-96 271.5-271.5 271.5-54 0-104.3-15.8-146.7-42.9 7.6.9 15.2 1.2 23 1.2 44.8 0 86-15.2 118.8-40.9-41.9-.9-77.2-28.5-89.4-66.6 5.9.9 11.8 1.5 18 .1-43.9-8.9-76.9-47.6-76.9-94.3v-1.2c12.9 7.2 27.9 11.5 43.8 12-25.9-17.3-43-46.8-43-80.2 0-17.6 4.8-33.9 13.2-48 48.1 59.2 120.2 98.1 201.4 102.3-1.5-7-2.4-14.3-2.4-21.8 0-52.7 42.7-95.4 95.4-95.4 27.5 0 52.4 11.6 69.9 30.2 21.8-4.3 42.3-12.3 60.7-23.4-7.2 22.5-22.5 41.3-42.5 53.2 19.4-2.3 38-7.4 55.2-15z"/>
-          </svg>
-        </a>
-        <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/profile.php?id=61582443213301" class="w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:scale-110 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="black" class="w-5 h-5">
-            <path d="M279.14 288l14.22-92.66h-88.91V127.93c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.09 44.38-121.09 124.72v70.62H22.89V288h81.38v224h100.17V288z"/>
-          </svg>
-        </a>
-        <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/newscheckbusiness" class="w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:scale-110 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="black" class="w-5 h-5">
-            <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9S160.5 370.8 224.1 370.8 339 319.5 339 255.9 287.7 141 224.1 141zm0 186.6c-39.7 0-71.8-32.1-71.8-71.8s32.1-71.8 71.8-71.8 71.8 32.1 71.8 71.8-32.1 71.8-71.8 71.8zm146.4-194.3c0 14.9-12 26.9-26.9 26.9-14.9 0-26.9-12-26.9-26.9s12-26.9 26.9-26.9 26.9 12 26.9 26.9zM398.8 80C374 55.1 339.6 40 304.1 40H143.9C108.4 40 74 55.1 49.2 80 24.4 104.9 9.3 139.3 9.3 174.8v160.3C9.3 372.7 24.4 407.1 49.2 432c24.8 24.9 59.2 40 94.7 40h160.3c35.5 0 69.9-15.1 94.7-40 24.8-24.9 39.9-59.3 39.9-94.8V174.8c0-35.5-15.1-69.9-40-94.8zM224.1 338c-45.5 0-82.1-36.6-82.1-82.1s36.6-82.1 82.1-82.1 82.1 36.6 82.1 82.1S269.6 338 224.1 338z"/>
-          </svg>
-        </a>
-      </div>
+        <div class="md:w-[20%] flex flex-col items-center md:items-center space-y-4">
+            <a routerLink="/home" class="flex items-center space-x-3">
+                <img src="assets/newscheck-logo.png" alt="NewsCheck Logo" class="w-60 h-auto">
+            </a>
+            <div class="flex space-x-4">
+                <a target="_blank" rel="noopener noreferrer" href="https://x.com/NewsCheck52" class="w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:scale-110 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="black" class="w-5 h-5">
+                        <path d="M459.4 151.7c.3 4.1.3 8.2.3 12.4 0 126.1-96 271.5-271.5 271.5-54 0-104.3-15.8-146.7-42.9 7.6.9 15.2 1.2 23 1.2 44.8 0 86-15.2 118.8-40.9-41.9-.9-77.2-28.5-89.4-66.6 5.9.9 11.8 1.5 18 .1-43.9-8.9-76.9-47.6-76.9-94.3v-1.2c12.9 7.2 27.9 11.5 43.8 12-25.9-17.3-43-46.8-43-80.2 0-17.6 4.8-33.9 13.2-48 48.1 59.2 120.2 98.1 201.4 102.3-1.5-7-2.4-14.3-2.4-21.8 0-52.7 42.7-95.4 95.4-95.4 27.5 0 52.4 11.6 69.9 30.2 21.8-4.3 42.3-12.3 60.7-23.4-7.2 22.5-22.5 41.3-42.5 53.2 19.4-2.3 38-7.4 55.2-15z"/>
+                    </svg>
+                </a>
+                <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/profile.php?id=61582443213301" class="w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:scale-110 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="black" class="w-5 h-5">
+                        <path d="M279.14 288l14.22-92.66h-88.91V127.93c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.09 44.38-121.09 124.72v70.62H22.89V288h81.38v224h100.17V288z"/>
+                    </svg>
+                </a>
+                <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/newscheckbusiness" class="w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:scale-110 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="black" class="w-5 h-5">
+                        <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9S160.5 370.8 224.1 370.8 339 319.5 339 255.9 287.7 141 224.1 141zm0 186.6c-39.7 0-71.8-32.1-71.8-71.8s32.1-71.8 71.8-71.8 71.8 32.1 71.8 71.8-32.1 71.8-71.8 71.8zm146.4-194.3c0 14.9-12 26.9-26.9 26.9-14.9 0-26.9-12-26.9-26.9s12-26.9 26.9-26.9 26.9 12 26.9 26.9zM398.8 80C374 55.1 339.6 40 304.1 40H143.9C108.4 40 74 55.1 49.2 80 24.4 104.9 9.3 139.3 9.3 174.8v160.3C9.3 372.7 24.4 407.1 49.2 432c24.8 24.9 59.2 40 94.7 40h160.3c35.5 0 69.9-15.1 94.7-40 24.8-24.9 39.9-59.3 39.9-94.8V174.8c0-35.5-15.1-69.9-40-94.8zM224.1 338c-45.5 0-82.1-36.6-82.1-82.1s36.6-82.1 82.1-82.1 82.1 36.6 82.1 82.1S269.6 338 224.1 338z"/>
+                    </svg>
+                </a>
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/neoboi76/ITS120LProj_Grp6" class="w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:scale-110 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" fill="black" class="w-5 h-5">
+                        <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-2.9 0-5.2-1.6-5.2-3.6 0-2 2.3-3.6 5.2-3.6 2.9 0 5.2 1.6 5.2 3.6zm-33.2-6.2c-.7 1.6.7 3.5 3.1 4.3 2.4.8 5.2 0 5.9-1.6.7-1.6-.7-3.5-3.1-4.3-2.4-.8-5.2 0-5.9 1.6zm44.8-1.7c-2.9.8-4.8 2.9-4.3 4.9.5 2 3.1 3.1 6 2.3 2.9-.8 4.8-2.9 4.3-4.9-.5-2-3.1-3.1-6-2.3zm44.8-1.7c-2.9.8-4.8 2.9-4.3 4.9.5 2 3.1 3.1 6 2.3 2.9-.8 4.8-2.9 4.3-4.9-.5-2-3.1-3.1-6-2.3zM248 8C111 8 0 119 0 256c0 110.3 71.3 203.9 170.5 237.2 12.5 2.3 17.1-5.4 17.1-12v-42.2c-69.4 15.1-84-33.7-84-33.7-11.4-29-27.9-36.7-27.9-36.7-22.8-15.6 1.7-15.3 1.7-15.3 25.2 1.8 38.5 25.9 38.5 25.9 22.4 38.4 58.8 27.3 73.2 20.9 2.3-16.2 8.8-27.3 16-33.6-55.4-6.3-113.7-27.7-113.7-123.3 0-27.2 9.7-49.4 25.6-66.8-2.6-6.3-11.1-31.8 2.4-66.3 0 0 20.9-6.7 68.5 25.5 19.9-5.5 41.3-8.3 62.6-8.4 21.3.1 42.7 2.9 62.6 8.4 47.6-32.2 68.5-25.5 68.5-25.5 13.5 34.5 5 60 2.4 66.3 15.9 17.4 25.6 39.6 25.6 66.8 0 95.9-58.4 117-113.9 123.2 9 7.8 17 23.2 17 46.8v69.4c0 6.6 4.6 14.3 17.2 12C424.7 459.9 496 366.3 496 256 496 119 385 8 248 8z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
     </div>
-  </div>
-
-  <div class="mt-10 text-center text-sm font-medium text-gray-400">
-    Copyright &copy; 2025 — Developed by 
-    <span class="font-semibold text-cyan-400">
-      Ken Aliling, Anicia Kaela Bonayao, Carl Norbi Felonia, Cedrick Miguel Kaneko, and Dino Alfred Timbol
-    </span>
-  </div>
+    <div class="mt-10 text-center text-sm font-medium text-gray-400">
+        Copyright &copy; 2025 — Developed by 
+        <span class="font-semibold text-cyan-400">
+            Ken Aliling, Anicia Kaela Bonayao, Carl Norbi Felonia, Cedrick Miguel Kaneko, and Dino Alfred Timbol
+        </span>
+    </div>
 </footer>

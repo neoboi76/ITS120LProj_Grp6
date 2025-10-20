@@ -8,7 +8,6 @@ import com.newscheck.newscheck.models.responses.ResetResponse;
 import com.newscheck.newscheck.models.responses.SettingsResponse;
 import com.newscheck.newscheck.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

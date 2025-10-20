@@ -13,15 +13,8 @@ export class FooterComponent {
     private route: Router
   ) {}
 
-  goHistory() {
-    this.route.navigate(['/history'], { fragment: 'history' });
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  goSettings() {
-    this.route.navigate(['/settings'], { fragment: 'settings' });
-  }
-  goHome() {
-    this.route.navigate(['/home'], { fragment: 'home' });
-  }
-
 
 }

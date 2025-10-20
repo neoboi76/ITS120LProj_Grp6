@@ -12,3 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient()
   ]
 };
+function withScrollPositionRestoration(arg0: string): import("@angular/router").RouterFeatures {
+  throw new Error('Function not implemented.');
+}
+
