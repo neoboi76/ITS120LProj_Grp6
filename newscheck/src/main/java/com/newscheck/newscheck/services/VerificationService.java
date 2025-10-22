@@ -4,13 +4,15 @@ import com.newscheck.newscheck.models.*;
 import com.newscheck.newscheck.models.requests.EvidenceDTO;
 import com.newscheck.newscheck.models.requests.VerificationRequestDTO;
 import com.newscheck.newscheck.models.responses.VerificationResponseDTO;
-import com.newscheck.newscheck.models.enums.ContentType;
 import com.newscheck.newscheck.models.enums.VerificationStatus;
 import com.newscheck.newscheck.models.Gemini.GeminiAnalysisResult;
+import com.newscheck.newscheck.models.search.SearchResult;
 import com.newscheck.newscheck.repositories.EvidenceRepository;
 import com.newscheck.newscheck.repositories.UserRepository;
 import com.newscheck.newscheck.repositories.VerdictRepository;
 import com.newscheck.newscheck.repositories.VerificationRepository;
+import com.newscheck.newscheck.utils.ContentValidator;
+import com.newscheck.newscheck.utils.SearchQueryExtractor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +33,14 @@ public class VerificationService implements IVerificationService {
     private final IGeminiService geminiService;
     private final IUrlContentExtractorService urlContentExtractorService;
     private final IImageTextExtractorService imageTextExtractorService;
+    private final IGoogleSearchService googleSearchService;
 
     @Override
     @Transactional
     public VerificationResponseDTO submitVerification(VerificationRequestDTO request) throws Exception {
+
+        ContentValidator.validateVerificationRequest(request);
+
         UserModel user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new Exception("User not found"));
 
@@ -60,16 +66,29 @@ public class VerificationService implements IVerificationService {
                     break;
 
                 case IMAGE:
+
                     contentToAnalyze = imageTextExtractorService.extractTextFromImage(request.getImageBase64());
                     verification.setContentText(contentToAnalyze);
-                    // In a real application, you'd save the image file and store the path
-                    verification.setImagePath("image_" + System.currentTimeMillis() + ".jpg");
                     break;
             }
 
             verification = verificationRepository.save(verification);
 
-            GeminiAnalysisResult analysisResult = geminiService.analyzeContent(contentToAnalyze);
+            List<SearchResult> searchResults = new ArrayList<>();
+            try {
+                String searchQuery = SearchQueryExtractor.extractSearchQuery(contentToAnalyze);
+                searchQuery = SearchQueryExtractor.enhanceQuery(searchQuery);
+                searchResults = googleSearchService.searchNews(searchQuery, 5);
+            } catch (Exception searchEx) {
+                System.out.println("Search failed, proceeding without search results: " + searchEx.getMessage());
+            }
+
+            GeminiAnalysisResult analysisResult;
+            if (!searchResults.isEmpty()) {
+                analysisResult = geminiService.analyzeContentWithSearch(contentToAnalyze, searchResults);
+            } else {
+                analysisResult = geminiService.analyzeContent(contentToAnalyze);
+            }
 
             VerdictModel verdict = new VerdictModel();
             verdict.setVerification(verification);
@@ -93,7 +112,7 @@ public class VerificationService implements IVerificationService {
                 evidenceRepository.saveAll(evidences);
             }
 
-            verification.setStatus(VerificationStatus.SUCCESS);
+            verification.setStatus(VerificationStatus.VERIFIED);
             verification.setScore(analysisResult.getConfidenceScore());
             verification.setVerdict(verdict);
             verificationRepository.save(verification);
@@ -121,19 +140,28 @@ public class VerificationService implements IVerificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<VerificationResponseDTO> getUserVerifications(Long userId) throws Exception {
-        List<VerificationModel> verifications = verificationRepository.findByUser_UserIdOrderBySubmittedAtDesc(userId);
+        List<VerificationModel> verifications =
+                verificationRepository.findByUser_UserIdOrderBySubmittedAtDesc(userId);
 
         return verifications.stream()
                 .map(v -> {
+                    // Force-read the LOB (content_text)
+                    if (v.getContentText() != null) {
+                        v.getContentText().length();
+                    }
+
                     VerdictModel verdict = v.getVerdict();
-                    List<EvidenceModel> evidences = verdict != null ?
-                            evidenceRepository.findByVerdict_VerdictId(verdict.getVerdictId()) :
-                            new ArrayList<>();
+                    List<EvidenceModel> evidences = verdict != null
+                            ? evidenceRepository.findByVerdict_VerdictId(verdict.getVerdictId())
+                            : new ArrayList<>();
+
                     return buildVerificationResponse(v, verdict, evidences, v.getScore());
                 })
                 .collect(Collectors.toList());
     }
+
 
     private VerificationResponseDTO buildVerificationResponse(VerificationModel verification,
                                                               VerdictModel verdict,
@@ -163,7 +191,7 @@ public class VerificationService implements IVerificationService {
         }
 
         String message = switch (verification.getStatus()) {
-            case SUCCESS -> "Verification completed successfully";
+            case VERIFIED -> "Verification completed successfully";
             case PENDING -> "Verification is in progress";
             case FAILED -> "Verification failed";
         };

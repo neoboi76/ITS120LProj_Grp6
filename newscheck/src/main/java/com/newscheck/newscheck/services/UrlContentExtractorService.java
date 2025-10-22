@@ -19,13 +19,11 @@ public class UrlContentExtractorService implements IUrlContentExtractorService {
 
             StringBuilder content = new StringBuilder();
 
-            // Extract title
             String title = doc.title();
             if (title != null && !title.isEmpty()) {
                 content.append("Title: ").append(title).append("\n\n");
             }
 
-            // Extract meta description
             Element metaDescription = doc.selectFirst("meta[name=description]");
             if (metaDescription != null) {
                 String description = metaDescription.attr("content");
@@ -34,8 +32,6 @@ public class UrlContentExtractorService implements IUrlContentExtractorService {
                 }
             }
 
-            // Extract main content
-            // Try common article selectors
             Elements articleContent = doc.select("article, .article-content, .post-content, .entry-content, main");
 
             if (!articleContent.isEmpty()) {
@@ -51,7 +47,6 @@ public class UrlContentExtractorService implements IUrlContentExtractorService {
                     }
                 }
             } else {
-                // Fallback: extract all paragraphs
                 Elements paragraphs = doc.select("p");
                 content.append("Content:\n");
                 for (Element p : paragraphs) {
@@ -68,7 +63,6 @@ public class UrlContentExtractorService implements IUrlContentExtractorService {
                 throw new Exception("Could not extract meaningful content from the URL");
             }
 
-            // Limit content length to avoid token limits
             if (extractedContent.length() > 10000) {
                 extractedContent = extractedContent.substring(0, 10000) + "...";
             }

@@ -40,7 +40,7 @@ public class UserController {
 
 
         } catch(Exception e) {
-            return ResponseEntity.badRequest().body("User does not exist");
+            return ResponseEntity.badRequest().body("Login failed: " + e.getMessage());
         }
 
 
@@ -49,15 +49,19 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterModel request) {
 
-        RegisterResponse response = authService.register(request);
+        try {
+            RegisterResponse response = authService.register(request);
 
-        if (response == null) {
-            return ResponseEntity.badRequest().body("Invalid signup");
+            if (response == null) {
+                return ResponseEntity.badRequest().body("Invalid signup");
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Register failed: " + e.getMessage());
         }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
 
     }
 
@@ -74,7 +78,7 @@ public class UserController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Password reset failed");
+            return ResponseEntity.badRequest().body("Password reset failed: " + e.getMessage());
         }
     }
 
@@ -86,7 +90,7 @@ public class UserController {
             return ResponseEntity.ok(new LogoutResponse("Logout successful. Token has been invalidated."));
 
         } catch(Exception e) {
-            return ResponseEntity.badRequest().body("Logout unsuccessful");
+            return ResponseEntity.badRequest().body("Logout failed " + e.getMessage());
         }
     }
 
@@ -106,7 +110,7 @@ public class UserController {
 
 
         } catch(Exception e) {
-            return ResponseEntity.badRequest().body("User does not exist");
+            return ResponseEntity.badRequest().body("Update user failed: " + e.getMessage());
         }
 
         return null;
@@ -126,7 +130,7 @@ public class UserController {
 
 
         } catch(Exception e) {
-            return ResponseEntity.badRequest().body("User does not exist");
+            return ResponseEntity.badRequest().body("Retrieving user failed " + e.getMessage());
         }
 
         return null;

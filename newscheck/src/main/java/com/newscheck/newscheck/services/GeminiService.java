@@ -6,6 +6,7 @@ import com.newscheck.newscheck.models.enums.VerdictType;
 import com.newscheck.newscheck.models.Gemini.GeminiAnalysisResult;
 import com.newscheck.newscheck.models.Gemini.GeminiRequest;
 import com.newscheck.newscheck.models.Gemini.GeminiResponse;
+import com.newscheck.newscheck.models.search.SearchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -36,39 +37,113 @@ public class GeminiService implements IGeminiService {
         return parseGeminiResponse(response);
     }
 
+    @Override
+    public GeminiAnalysisResult analyzeContentWithSearch(String content, List<SearchResult> searchResults) throws Exception {
+        String prompt = buildAnalysisPromptWithSearch(content, searchResults);
+        String response = callGeminiAPI(prompt);
+        return parseGeminiResponse(response);
+    }
+
     private String buildAnalysisPrompt(String content) {
         return """
-                Analyze the following news content and determine if it's TRUE, FALSE, or UNDEFINED (if there's not enough information to determine).
-                Use REAL, EXISTING, and TRACEABLE sources from reputable news organizations or academic journals. If the 
-                URL doesn't work or access blocked you for some reason, try to search on google about the article
-                and infer content based on the content of the link. Then, utilizing both, construct your analysis 
-                and retrieve your sources.
+                You are a fact-checking assistant. Analyze the following news content and determine if it's likely TRUE, FALSE, or UNDEFINED.
+                
+                IMPORTANT LIMITATIONS:
+                - You do NOT have access to real-time internet or current news
+                - Base your analysis on logical consistency, known facts, and content patterns
+                - Be HONEST about uncertainty - use UNDEFINED when you cannot verify with confidence
                 
                 Provide your analysis in the following JSON format ONLY (no additional text):
                 {
                     "verdict": "TRUE" or "FALSE" or "UNDEFINED",
-                    "reasoning": "Detailed explanation of your analysis",
+                    "reasoning": "Detailed explanation of your analysis. If uncertain, explain why.",
                     "confidenceScore": 0.0 to 1.0,
                     "sources": [
                         {
-                            "sourceName": "Name of the source",
-                            "sourceUrl": "URL if available, otherwise 'N/A'",
-                            "description": "Brief description of how this source supports the verdict",
+                            "sourceName": "Type of analysis (e.g., 'Logical Consistency Check', 'Pattern Analysis')",
+                            "sourceUrl": "N/A",
+                            "description": "Explanation of the analysis method used",
                             "relevanceScore": 0.0 to 1.0
                         }
                     ]
                 }
                 
-                Consider the following in your analysis:
-                1. Factual accuracy
-                2. Source credibility
-                3. Logical consistency
-                4. Context and framing
-                5. Potential bias or misleading information
-                6. Temporal relevance
+                Analysis criteria:
+                1. Logical consistency
+                2. Known historical facts
+                3. Language patterns (sensationalism, vagueness, clickbait)
+                4. Plausibility based on your training knowledge
+                5. For recent/current events: Use UNDEFINED and explain verification needs real-time sources
                 
                 News Content:
                 """ + content;
+    }
+
+    private String buildAnalysisPromptWithSearch(String content, List<SearchResult> searchResults) {
+        StringBuilder prompt = new StringBuilder();
+        prompt.append("""
+                You are a fact-checking assistant with access to real Google search results.
+                Analyze the following news content and determine if it's TRUE, FALSE, or UNDEFINED.
+                
+                You have been provided with REAL, CURRENT Google search results related to this content.
+                Use these search results as evidence to support your verdict. DO NOT USE WIKIPEDIA SOURCES!
+                
+                Provide your analysis in the following JSON format ONLY (no additional text):
+                {
+                    "verdict": "TRUE" or "FALSE" or "UNDEFINED",
+                    "reasoning": "Detailed explanation based on the search results provided",
+                    "confidenceScore": 0.0 to 1.0,
+                    "sources": [
+                        {
+                            "sourceName": "Exact title from search results",
+                            "sourceUrl": "Exact URL from search results",
+                            "description": "How this source supports or contradicts the claim",
+                            "relevanceScore": 0.0 to 1.0
+                        }
+                    ]
+                }
+                
+                Analysis Guidelines:
+                1. Cross-reference the content with the search results
+                2. Check if multiple reputable sources confirm the information
+                3. Look for contradictions between the content and search results
+                4. Evaluate source credibility (e.g., reuters.com, bbc.com vs unknown sites)
+                5. Check publication dates - recent sources are more reliable for current events
+                6. If search results don't provide enough information, use UNDEFINED
+                
+                IMPORTANT: Only cite sources that are actually provided in the search results below.
+                Do NOT make up or hallucinate sources.
+                
+                ---GOOGLE SEARCH RESULTS---
+                """);
+
+        for (int i = 0; i < searchResults.size(); i++) {
+            SearchResult result = searchResults.get(i);
+            prompt.append(String.format("""
+                    
+                    Result %d:
+                    Title: %s
+                    URL: %s
+                    Snippet: %s
+                    Source: %s
+                    """,
+                    i + 1,
+                    result.getTitle(),
+                    result.getLink(),
+                    result.getSnippet(),
+                    result.getDisplayLink()
+            ));
+        }
+
+        prompt.append("""
+                
+                ---END OF SEARCH RESULTS---
+                
+                Now analyze this news content:
+                """);
+        prompt.append(content);
+
+        return prompt.toString();
     }
 
     private String callGeminiAPI(String prompt) throws Exception {

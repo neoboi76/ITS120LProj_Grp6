@@ -30,6 +30,11 @@ export class TokenStorageService {
     return user;
   }
 
+  public getUsrId() {
+    const user = JSON.parse(sessionStorage.getItem(USER_KEY) || '{}');
+    return user.id;
+  }
+
   logout(): void {
     window.sessionStorage.clear();
     sessionStorage.clear();

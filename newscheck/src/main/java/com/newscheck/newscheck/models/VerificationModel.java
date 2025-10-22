@@ -34,7 +34,7 @@ public class VerificationModel {
 
     private String contentUrl;
 
-    private String imagePath;
+    private String imagePath;//Convert to base 64 string
 
     @Enumerated(EnumType.STRING)
     private VerificationStatus status;

@@ -1,6 +1,5 @@
 package com.newscheck.newscheck.models.responses;
 
-
 import com.newscheck.newscheck.models.enums.VerificationStatus;
 import com.newscheck.newscheck.models.enums.VerdictType;
 import com.newscheck.newscheck.models.requests.EvidenceDTO;

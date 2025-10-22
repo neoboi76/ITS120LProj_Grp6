@@ -1,4 +1,4 @@
-newscheck\src\main\resources/application.properties
+newscheck/src/main/resources/application.properties
 
 .DS_Store
 Thumbs.db
