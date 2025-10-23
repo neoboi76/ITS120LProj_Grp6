@@ -9,7 +9,7 @@ export type HistoryModel = {
     confidenceScore: number;
     evidences: EvidenceModel[];
     date: string;
-    news: string;
+    claim: string;
     submittedAt: string;
     completedAt: string;
     message: string;

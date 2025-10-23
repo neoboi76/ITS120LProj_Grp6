@@ -35,8 +35,9 @@ export class HistoryPageComponent implements OnInit {
         confidenceScore: item.confidenceScore,
         evidences: item.evidences,
         date: item.submittedAt,
-        news: item.message
+        news: item.claim
       }));
+      console.log(data);
       console.log("Mapped history:", this.history);
     },
       error: (err) => {
@@ -51,8 +52,8 @@ export class HistoryPageComponent implements OnInit {
   filteredHistory() {
     const query = this.searchQuery.toLowerCase().trim();
     if (!query) return this.history;
-    return this.history.filter((item: { news: string; date: string; verdict: string; status: string; }) =>
-      item.news.toLowerCase().includes(query) ||
+    return this.history.filter((item: {claim: string; date: string; verdict: string; status: string; }) =>
+      item.claim.toLowerCase().includes(query) ||
       item.date.toLowerCase().includes(query) ||
       item.verdict.toLowerCase().includes(query) ||
       item.status.toLowerCase().includes(query)

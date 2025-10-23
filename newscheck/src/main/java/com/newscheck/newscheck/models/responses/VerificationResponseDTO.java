@@ -17,6 +17,7 @@ public class VerificationResponseDTO {
 
     private Long verificationId;
     private VerificationStatus status;
+    private String claim;
     private VerdictType verdictType;
     private String reasoning;
     private Double confidenceScore;

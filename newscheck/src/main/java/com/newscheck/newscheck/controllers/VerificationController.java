@@ -41,7 +41,7 @@ public class VerificationController {
             return ResponseEntity.badRequest().body("Failed to retrieve verification result: " + e.getMessage());
         }
     }
-/*
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUserVerifications(@PathVariable Long userId) {
         try {
@@ -50,8 +50,9 @@ public class VerificationController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to retrieve user verifications: " + e.getMessage());
         }
-    }*/
+    }
 
+    /*
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getMockVerifications(@PathVariable Long userId) {
         List<VerificationResponseDTO> mockVerifications = new ArrayList<>();
@@ -102,7 +103,7 @@ public class VerificationController {
         mockVerifications.add(pending);
 
         return ResponseEntity.ok(mockVerifications);
-    }
+    } */
 
 
 

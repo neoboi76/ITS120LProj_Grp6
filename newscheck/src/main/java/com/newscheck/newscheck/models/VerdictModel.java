@@ -37,7 +37,7 @@ public class VerdictModel {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "verdict", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "verdict", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<EvidenceModel> evidences;
 
 }

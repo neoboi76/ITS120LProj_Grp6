@@ -20,7 +20,7 @@ public class VerificationModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long verificationId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", nullable = false)
     private UserModel user;
 
@@ -34,7 +34,7 @@ public class VerificationModel {
 
     private String contentUrl;
 
-    private String imagePath;//Convert to base 64 string
+    private String imagePath;
 
     @Enumerated(EnumType.STRING)
     private VerificationStatus status;
@@ -42,7 +42,7 @@ public class VerificationModel {
     @Column(nullable = false)
     private LocalDateTime submittedAt = LocalDateTime.now();
 
-    @OneToOne(mappedBy = "verification", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "verification", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private VerdictModel verdict;
 
     private Double score;

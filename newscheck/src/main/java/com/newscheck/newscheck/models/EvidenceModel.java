@@ -16,14 +16,14 @@ public class EvidenceModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long evidenceId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "verdictId", nullable = false)
     private VerdictModel verdict;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     private String sourceName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String sourceUrl;
 
     @Column(columnDefinition = "TEXT")
