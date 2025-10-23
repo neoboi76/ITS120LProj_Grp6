@@ -45,6 +45,7 @@ public class GeminiService implements IGeminiService {
     }
 
     private String buildAnalysisPrompt(String content) {
+
         return """
                 You are a fact-checking assistant. Analyze the following news content and determine if it's likely TRUE, FALSE, or UNDEFINED.
                 
@@ -80,13 +81,22 @@ public class GeminiService implements IGeminiService {
     }
 
     private String buildAnalysisPromptWithSearch(String content, List<SearchResult> searchResults) {
+
         StringBuilder prompt = new StringBuilder();
         prompt.append("""
                 You are a fact-checking assistant with access to real Google search results.
                 Analyze the following news content and determine if it's TRUE, FALSE, or UNDEFINED.
                 
                 You have been provided with REAL, CURRENT Google search results related to this content.
-                Use these search results as evidence to support your verdict. DO NOT USE WIKIPEDIA SOURCES!
+                Use these search results as evidence to support your verdict. DO NOT USE WIKIPEDIA SOURCES AND/OR 
+                REDDIT SOURCES, AND SOCIAL MEDIA SOURCES.! Use sources that come from accredited news organizations.
+                If you are going to use social media sources, make sure it comes from verified news outlets, and not
+                random Facebook, X, or Instagram posts! 
+                Furthermore, you are a AI model that was trained using past data, but dealing with
+                up-to-date, recent sources. From your perspective, they are the "future." However, if you have met with
+                a claim that is about a "future" event from your perspective, but which to the perspective of the sender
+                of this prompt, is the "present" and even it's past. Speak as if your "future" is in your "present" and/or
+                past as reported by the sources. 
                 
                 Provide your analysis in the following JSON format ONLY (no additional text):
                 {

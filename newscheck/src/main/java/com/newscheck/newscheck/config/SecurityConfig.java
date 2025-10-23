@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .logout(logout -> logout.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/register", "/reset-password", "/logout").permitAll()
-                        .requestMatchers("/api/verification/**").authenticated() // Require authentication
+                        .requestMatchers("/api/verification/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

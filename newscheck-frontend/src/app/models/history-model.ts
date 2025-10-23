@@ -1,10 +1,9 @@
 import { EvidenceModel } from "./evidence-model";
 
-export type HistoryModel = {
-    map(arg0: (item: any) => { verificationId: any; status: any; verdict: any; reasoning: any; confidenceScore: any; evidences: any; date: any; news: any; }): any;
+export interface HistoryModel {
     verificationId: number;
     status: string;
-    verdict: string
+    verdictType: string;
     reasoning: string;
     confidenceScore: number;
     evidences: EvidenceModel[];

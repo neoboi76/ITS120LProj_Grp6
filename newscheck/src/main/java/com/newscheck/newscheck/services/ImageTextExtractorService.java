@@ -41,8 +41,9 @@ public class ImageTextExtractorService implements IImageTextExtractorService {
         inlineData.put("mimeType", "image/jpeg");
         inlineData.put("data", base64Image);
 
-        GeminiRequest.Part imagePart = new GeminiRequest.Part();
-        objectMapper.updateValue(imagePart, Collections.singletonMap("inlineData", inlineData));
+        GeminiRequest.Part imagePart = new GeminiRequest.Part(
+                objectMapper.writeValueAsString(Collections.singletonMap("inlineData", inlineData))
+        );
 
         GeminiRequest.Content content = new GeminiRequest.Content(List.of(textPart, imagePart));
         GeminiRequest request = new GeminiRequest(List.of(content));

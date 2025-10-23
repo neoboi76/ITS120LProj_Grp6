@@ -3,12 +3,12 @@
 <app-nav></app-nav>
 
 <section id="home"> 
-  <div class="bg-[url('/assets/hero.png')] h-[75vh] flex flex-col bg-fixed bg-no-repeat bg-center bg-cover items-center justify-center text-center">
-    <h1 class="font-extrabold bg-gradient-to-r from-cyan-300 to-blue-500 bg-clip-text text-transparent text-3xl sm:text-4xl md:text-6xl drop-shadow-[0_0_8px_rgba(56,189,248,0.7)]  mb-0">
-      Powered by AI — Detecting fake news, <br> one claim at a time.
-    </h1>
-  </div>
-  <div class="bg-[#1f1f1f] bg-[url('/assets/Underhero.png')] h-[14vh] bg-no-repeat bg-center bg-cover items-center justify-center text-center mb-0"></div>
+    <div class="relative bg-[url('/assets/hero.png')] h-[76vh] flex flex-col bg-fixed bg-no-repeat bg-center bg-cover before:absolute before:inset-0 before:bg-black/40 items-center justify-center text-center" >
+        <h1 class="font-extrabold bg-gradient-to-r from-cyan-300 to-blue-500 bg-clip-text text-transparent text-4xl sm:text-5xl md:text-7xl drop-shadow-[0_0_8px_rgba(56,189,248,0.7)]  mb-0">
+            Powered by AI — Detecting fake news, <br> one claim at a time.
+        </h1>
+    </div>
+    <div class="bg-[#1f1f1f] bg-[url('/assets/Underhero.png')] h-[14vh] bg-no-repeat bg-center bg-cover items-center justify-center text-center mb-0"></div>
 </section>
 
 <section>
@@ -16,7 +16,7 @@
         class="relative bg-[url('/assets/main.png')] min-h-[100vh] flex flex-col xl:flex-row justify-around items-center bg-fixed bg-no-repeat bg-center bg-cover before:absolute before:inset-0 before:bg-black/60 text-white px-6 md:px-10 py-10 md:py-0 gap-8"
     >
         <div class="xl:w-[40%] mt-10 flex flex-col space-y-5 text-left z-10">
-            <h1 class="text-3xl md:text-4xl font-semibold leading-snug">
+            <h1 class="text-4xl md:text-5xl font-semibold leading-snug">
                 Driven by AI — Exposing fake news and confirming facts through
                 <span
                     class="bg-gradient-to-r from-green-400 via-green-500 to-green-300 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(34,197,94,0.7)]"
@@ -24,7 +24,7 @@
                     trusted sources
                 </span>
             </h1>
-            <p class="text-sm md:text-base text-gray-300">
+            <p class="text-base md:text-lg text-gray-300">
                 An AI-powered system designed to detect fake news, verify information
                 through reliable sources, and help users stay informed with accurate,
                 trustworthy, and up-to-date content that promotes responsible
@@ -32,31 +32,31 @@
             </p>
 
             <div
-                class="mt-6 bg-white/10 backdrop-blur-md rounded-xl p-4 shadow-lg border border-white/20 text-sm w-full md:w-[100%] max-h-[200px] overflow-y-auto"
+                class="mt-6 bg-white/10 backdrop-blur-md rounded-xl p-4 shadow-lg border border-white/20 text-base w-full md:w-[100%] max-h-[400px] overflow-y-auto"
             >
-                <h2 class="text-lg font-semibold text-green-400 text-center mb-2">Recent History</h2>
+                <h2 class="text-xl font-semibold text-green-400 text-center mb-2">Recent History</h2>
                 <table class="w-full text-left text-gray-200">
                     <thead class="border-b border-gray-400/40">
                         <tr>
                             <th class="pb-2">Date</th>
-                            <th class="pb-2">News</th>
+                            <th class="pb-2">Claim</th>
                             <th class="pb-2">Status</th>
                             <th class="pb-2">Verdict</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for (item of history; track item) {
-                            <tr class="border-b border-gray-400/20">
-                                <td class="py-1 ">{{ item.date }}</td>
-                                <td >{{ item.news }}</td>
+                            <tr class="border-b border-gray-400/20 transition-all duration-300 ease-in-out hover:bg-white/20 hover:shadow-lg hover:scale-[1.02]">
+                                <td class="py-1 w-[15%]">{{ item.date | date:'yyyy-MM-dd'}}</td>
+                                <td class="cursor-pointer hover:underline"><a routerLink="/entry-details/{{item.verificationId}}" (click)="scrollToTop()">{{ item.claim }}</a></td>
                                 <td class="pr-3">{{ item.status }}</td>
                                 <td
-                                    [class.text-green-400]="item.verdict === 'True'"
-                                    [class.text-red-400]="item.verdict === 'False'"
-                                    [class.text-yellow-400]="item.verdict === '—'"
+                                    [class.text-green-400]="item.verdictType === 'TRUE'"
+                                    [class.text-red-400]="item.verdictType === 'FALSE'"
+                                    [class.text-yellow-400]="item.verdictType === '—'"
                                     class="font-semibold"
                                 >
-                                    {{ item.verdict }}
+                                    {{ item.verdictType }}
                                 </td>
                             </tr>
                         }
@@ -66,9 +66,9 @@
         </div>
 
         <div
-            class="md:w-[100%] mb-10 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 space-y-6 z-10 w-full max-w-[650px]"
+            class="mt-40 mb-40 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 space-y-6 z-10 w-full max-w-[800px]"
         >
-            <h2 class="text-2xl font-semibold text-center text-white">
+            <h2 class="text-3xl font-semibold text-center text-white">
                 NewsCheck
             </h2>
 
@@ -77,21 +77,21 @@
                     [(ngModel)]="inputText"
                     rows="10"
                     placeholder="Paste article or claim here..."
-                    class="w-full p-3 rounded-lg bg-white/90 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+                    class="w-full p-3 rounded-lg bg-white/90 text-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
                 ></textarea>
             </div>
 
             <div class="flex flex-col md:flex-row gap-4">
                 <input
                     type="file"
-                    class="file:mr-3 file:py-2 cursor-pointer file:px-4 file:rounded-lg file:border-0 file:bg-green-500 file:text-white hover:file:bg-green-700 text-gray-200"
+                    class="file:mr-3 file:py-2 cursor-pointer file:px-4 file:rounded-lg file:border-0 file:bg-green-500 file:text-white hover:file:bg-green-700 text-gray-200 text-base"
                     (change)="onFileSelected($event)"
                 />
                 <input
                     [(ngModel)]="inputLink"
                     type="url"
                     placeholder="Paste article link (optional)"
-                    class="flex-1 p-3 rounded-lg bg-white/90 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400"
+                    class="flex-1 p-3 rounded-lg bg-white/90 text-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
             </div>
 
@@ -105,7 +105,7 @@
             </div>
 
             @if (isLoading) {
-                <div class="flex flex-col items-center mt-4 text-gray-300 text-sm space-y-2">
+                <div class="flex flex-col items-center mt-4 text-gray-300 text-base space-y-2">
                     <div class="h-10 w-10 border-4 border-t-green-400 border-gray-200 rounded-full animate-spin"></div>
                     <p>Analyzing your input... please wait</p>
                 </div>
@@ -113,14 +113,17 @@
 
 
             @if (result) {
-                <div class="mt-4 bg-blue-100 text-gray-800 rounded-lg p-4 text-sm">
-                    <h3 class="font-bold text-blue-700">Verified!</h3>
-                    <p>{{ result }}</p>
+                <div class="mt-4 bg-blue-100 text-gray-800 rounded-lg p-4 text-xl">
+                    <h3 class="font-bold text-blue-700 mb-2">Verified!</h3>
+                    <p><Strong>Status:</Strong> {{ result.status }}</p>
+                    <p><Strong>Claim:</Strong> {{ result.claim }}</p>
+                    <p><Strong>Verdict:</Strong> {{ result.verdict }}</p>
+                    <p><strong>Reasoning:</strong> {{ result.reasoning }}</p>
                 </div>
             }
 
             @else if (noResult) {
-                <div class="mt-4 bg-red-100 text-gray-800 rounded-lg p-4 text-sm">
+                <div class="mt-4 bg-red-100 text-gray-800 rounded-lg p-4 text-base">
                     <h3 class="font-bold text-red-700">Error</h3>
                     <p>{{ noResult }}</p>
                 </div>
@@ -134,5 +137,3 @@
 
 
 <app-footer></app-footer>
-
-

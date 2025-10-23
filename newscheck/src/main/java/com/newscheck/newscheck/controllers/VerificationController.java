@@ -6,6 +6,8 @@ import com.newscheck.newscheck.models.requests.EvidenceDTO;
 import com.newscheck.newscheck.models.requests.VerificationRequestDTO;
 import com.newscheck.newscheck.models.responses.VerificationResponseDTO;
 import com.newscheck.newscheck.services.IVerificationService;
+import com.newscheck.newscheck.services.JwtTokenProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +23,23 @@ import java.util.List;
 public class VerificationController {
 
     private final IVerificationService verificationService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/submit")
-    public ResponseEntity<?> submitVerification(@RequestBody VerificationRequestDTO request) {
+    public ResponseEntity<?> submitVerification(HttpServletRequest httpReq, @RequestBody VerificationRequestDTO request) {
         try {
-            VerificationResponseDTO response = verificationService.submitVerification(request);
-            return ResponseEntity.ok(response);
+
+            System.out.println(this.jwtTokenProvider.validateToken(getTokenFromRequest(httpReq)));
+
+            if (this.jwtTokenProvider.validateToken(getTokenFromRequest(httpReq))) {
+                VerificationResponseDTO response = verificationService.submitVerification(request);
+                return ResponseEntity.ok(response);
+            }
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Verification submission failed: " + e.getMessage());
         }
+        return null;
     }
 
     @GetMapping("/result/{verificationId}")
@@ -105,7 +115,13 @@ public class VerificationController {
         return ResponseEntity.ok(mockVerifications);
     } */
 
-
+    private String getTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
 
 
 }

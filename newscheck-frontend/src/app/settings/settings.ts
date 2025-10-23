@@ -94,6 +94,11 @@ export class SettingsComponent {
     this.authService.settingsForm(firstName, lastName, userId, gender, country, language).subscribe({
       next: (res) => {
         this.successMessage = "User information updated successfully.";
+        this.user.firstName = firstName;
+        this.user.lastName = lastName;
+        this.user.gender = gender;
+        this.user.country = country;
+        this.user.language = language;
         this.startEdit();
       },
       error: (err) => {

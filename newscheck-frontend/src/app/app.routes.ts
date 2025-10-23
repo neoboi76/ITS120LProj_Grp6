@@ -6,6 +6,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { AuthGuard } from './services/auth-guard';
 import { HistoryPageComponent } from './history/history';
 import { SettingsComponent } from './settings/settings';
+import { EntryDetailsComponent } from './components/entry-details/entry-details';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'}, 
@@ -14,5 +15,6 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard]}, //canActivate: [AuthGaurd]
     { path: 'reset-password', component: ResetPasswordComponent},
     { path: 'history', component: HistoryPageComponent, canActivate: [AuthGuard]},
-    { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]}
+    { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]},
+    { path: 'entry-details/:id', component: EntryDetailsComponent, canActivate: [AuthGuard]}
 ];

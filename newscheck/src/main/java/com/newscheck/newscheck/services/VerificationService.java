@@ -1,6 +1,7 @@
 package com.newscheck.newscheck.services;
 
 import com.newscheck.newscheck.models.*;
+import com.newscheck.newscheck.models.enums.ContentType;
 import com.newscheck.newscheck.models.requests.EvidenceDTO;
 import com.newscheck.newscheck.models.requests.VerificationRequestDTO;
 import com.newscheck.newscheck.models.responses.VerificationResponseDTO;
@@ -35,21 +36,18 @@ public class VerificationService implements IVerificationService {
     @Override
     @Transactional
     public VerificationResponseDTO submitVerification(VerificationRequestDTO request) throws Exception {
-        // Validate request
+
         com.newscheck.newscheck.utils.ContentValidator.validateVerificationRequest(request);
 
-        // Validate user
         UserModel user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new Exception("User not found"));
 
-        // Create verification record
         VerificationModel verification = new VerificationModel();
         verification.setUser(user);
         verification.setContentType(request.getContentType());
         verification.setStatus(VerificationStatus.PENDING);
         verification.setSubmittedAt(LocalDateTime.now());
 
-        // Extract content based on type
         String contentToAnalyze = "";
 
         try {
@@ -66,41 +64,45 @@ public class VerificationService implements IVerificationService {
                     break;
 
                 case IMAGE:
-                    // Extract text from image using Gemini Vision
                     contentToAnalyze = imageTextExtractorService.extractTextFromImage(request.getImageBase64());
                     verification.setContentText(contentToAnalyze);
-                    // Note: Image file is NOT saved - only extracted text is stored
-                    // Base64 string is used temporarily and discarded
                     break;
             }
 
-            // Save verification with PENDING status first
             verification = verificationRepository.save(verification);
 
-            // Get the verification ID for potential rollback
             final Long verificationId = verification.getVerificationId();
 
-            // Perform Google Search for real-time verification
             List<com.newscheck.newscheck.models.search.SearchResult> searchResults = new ArrayList<>();
+            boolean searchSucceeded = false;
             try {
-                // Extract optimal search query from content
                 String searchQuery = com.newscheck.newscheck.utils.SearchQueryExtractor.extractSearchQuery(contentToAnalyze);
                 searchQuery = com.newscheck.newscheck.utils.SearchQueryExtractor.enhanceQuery(searchQuery);
+
+                System.out.println("Performing search for: " + searchQuery);
                 searchResults = googleSearchService.searchNews(searchQuery, 5);
+
+                if (!searchResults.isEmpty()) {
+                    searchSucceeded = true;
+                    System.out.println("Search succeeded with " + searchResults.size() + " results");
+                } else {
+                    System.out.println("Search returned no results");
+                }
             } catch (Exception searchEx) {
-                // If search fails, continue with analysis without search results
-                System.out.println("Search failed, proceeding without search results: " + searchEx.getMessage());
+
+                System.err.println("Search failed: " + searchEx.getMessage());
+                searchEx.printStackTrace();
             }
 
-            // Analyze content with Gemini (with or without search results)
             GeminiAnalysisResult analysisResult;
-            if (!searchResults.isEmpty()) {
+            if (searchSucceeded && !searchResults.isEmpty()) {
+                System.out.println("Analyzing with search results");
                 analysisResult = geminiService.analyzeContentWithSearch(contentToAnalyze, searchResults);
             } else {
+                System.out.println("Analyzing without search results (fallback mode)");
                 analysisResult = geminiService.analyzeContent(contentToAnalyze);
             }
 
-            // Create verdict
             VerdictModel verdict = new VerdictModel();
             verdict.setVerification(verification);
             verdict.setVerdictType(analysisResult.getVerdict());
@@ -109,7 +111,6 @@ public class VerificationService implements IVerificationService {
             verdict.setCreatedAt(LocalDateTime.now());
             verdict = verdictRepository.save(verdict);
 
-            // Create evidence records
             List<EvidenceModel> evidences = new ArrayList<>();
             if (analysisResult.getSources() != null) {
                 for (GeminiAnalysisResult.SourceEvidence source : analysisResult.getSources()) {
@@ -124,21 +125,17 @@ public class VerificationService implements IVerificationService {
                 evidenceRepository.saveAll(evidences);
             }
 
-            // Update verification status and score
             verification.setStatus(VerificationStatus.VERIFIED);
             verification.setScore(analysisResult.getConfidenceScore());
             verification.setVerdict(verdict);
             verification = verificationRepository.save(verification);
 
-            // Build response
             return buildVerificationResponse(verification, verdict, evidences, analysisResult.getConfidenceScore());
 
         } catch (Exception e) {
-            // Log the actual error
             System.err.println("Verification failed with error: " + e.getMessage());
             e.printStackTrace();
 
-            // Try to update verification status to FAILED (in a separate transaction if needed)
             try {
                 verification.setStatus(VerificationStatus.FAILED);
                 verificationRepository.save(verification);
@@ -146,7 +143,6 @@ public class VerificationService implements IVerificationService {
                 System.err.println("Could not save FAILED status: " + saveEx.getMessage());
             }
 
-            // Re-throw with more context
             throw new Exception("Verification failed: " + e.getMessage(), e);
         }
     }
@@ -172,7 +168,11 @@ public class VerificationService implements IVerificationService {
                 .map(v -> {
                     VerdictModel verdict = v.getVerdict();
                     List<EvidenceModel> evidences = verdict != null ? verdict.getEvidences() : new ArrayList<>();
-                    return buildVerificationResponse(v, verdict, evidences, v.getScore());
+                    try {
+                        return buildVerificationResponse(v, verdict, evidences, v.getScore());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 })
                 .collect(Collectors.toList());
     }
@@ -180,13 +180,18 @@ public class VerificationService implements IVerificationService {
     private VerificationResponseDTO buildVerificationResponse(VerificationModel verification,
                                                               VerdictModel verdict,
                                                               List<EvidenceModel> evidences,
-                                                              Double confidenceScore) {
+                                                              Double confidenceScore) throws Exception {
         VerificationResponseDTO response = new VerificationResponseDTO();
         response.setVerificationId(verification.getVerificationId());
         response.setStatus(verification.getStatus());
         response.setSubmittedAt(verification.getSubmittedAt());
 
-        response.setClaim(verification.getContentText());
+        if (verification.getContentType() == ContentType.TEXT) {
+            response.setClaim(verification.getContentText());
+        }
+        else if (verification.getContentType() == ContentType.URL) {
+            response.setClaim((urlContentExtractorService.extractTitle(verification.getContentText())));
+        }
 
         if (verdict != null) {
             response.setVerdictType(verdict.getVerdictType());

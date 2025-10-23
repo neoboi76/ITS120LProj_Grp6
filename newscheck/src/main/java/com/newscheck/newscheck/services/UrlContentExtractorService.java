@@ -6,6 +6,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 public class UrlContentExtractorService implements IUrlContentExtractorService {
 
@@ -73,4 +76,19 @@ public class UrlContentExtractorService implements IUrlContentExtractorService {
             throw new Exception("Failed to extract content from URL: " + e.getMessage());
         }
     }
+
+    @Override
+    public String extractTitle(String claim) throws Exception {
+
+        Pattern pattern = Pattern.compile("^Title:\\s*(.*)", Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(claim);
+
+        if (matcher.find()) {
+            String title = matcher.group(1);
+            return title;
+        } else {
+            return null;
+        }
+    }
+
 }
