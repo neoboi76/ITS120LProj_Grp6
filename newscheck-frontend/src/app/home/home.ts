@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { FooterComponent } from "../components/footer/footer";
 import { NavComponent } from "../components/nav/nav";
 import { TokenStorageService } from '../services/token-storage-service';
@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, FooterComponent, NavComponent, RouterLink],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, FooterComponent, NavComponent, RouterLink, NgClass],
     templateUrl: './home.html',
 })
 export class HomeComponent implements OnInit{
@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit{
     isLoading = false;
     history: any;
     base64String = '';
+    isDisabled = true;
 
     constructor(
         private tokenStorageService: TokenStorageService,
@@ -76,6 +77,7 @@ export class HomeComponent implements OnInit{
         }
         else {
 
+            
             this.isLoading = true;     
             this.result = '';        
             this.noResult = '';        

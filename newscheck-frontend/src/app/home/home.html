@@ -47,13 +47,13 @@
                     <tbody>
                         @for (item of history; track item) {
                             <tr class="border-b border-gray-400/20 transition-all duration-300 ease-in-out hover:bg-white/20 hover:shadow-lg hover:scale-[1.02]">
-                                <td class="py-1 w-[15%]">{{ item.date | date:'yyyy-MM-dd'}}</td>
+                                <td class="py-1 w-[15%] pr-5">{{ item.date | date:'yyyy-MM-dd'}}</td>
                                 <td class="cursor-pointer hover:underline"><a routerLink="/entry-details/{{item.verificationId}}" (click)="scrollToTop()">{{ item.claim }}</a></td>
                                 <td class="pr-3">{{ item.status }}</td>
                                 <td
                                     [class.text-green-400]="item.verdictType === 'TRUE'"
                                     [class.text-red-400]="item.verdictType === 'FALSE'"
-                                    [class.text-yellow-400]="item.verdictType === '—'"
+                                    [class.text-yellow-400]="item.verdictType === 'UNDEFINED'"
                                     class="font-semibold"
                                 >
                                     {{ item.verdictType }}
@@ -98,10 +98,16 @@
             <div class="flex justify-center">
                 <button
                     (click)="analyzeInput()"
-                    class="cursor-pointer px-6 py-2 bg-green-500 hover:bg-green-800 rounded-lg text-white font-semibold transition"
-                >
-                    Scan
+                    [disabled]="!inputText && !inputLink && !selectedFile || isLoading"
+                    [ngClass]="
+                        (!inputText && !inputLink && !selectedFile) || isLoading
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-green-500 hover:bg-green-800 cursor-pointer'
+                    "
+                    class="px-6 py-2 rounded-lg text-white font-semibold transition"
+                    > Scan
                 </button>
+
             </div>
 
             @if (isLoading) {
