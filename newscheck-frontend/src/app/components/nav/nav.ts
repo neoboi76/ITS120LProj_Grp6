@@ -27,7 +27,6 @@ export class NavComponent {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  // Check if current user is admin
   isAdmin(): boolean {
     return this.tokenStorageService.isAdmin();
   }

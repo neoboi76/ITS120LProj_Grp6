@@ -15,6 +15,13 @@
                 <li><a routerLink="/home" (click)="scrollToTop()" class="cursor-pointer hover:text-blue-500 transition">Home</a></li>
                 <li><a routerLink="/history" (click)="scrollToTop()" class="cursor-pointer hover:text-blue-500 transition">History</a></li>
                 <li><a routerLink="/settings" (click)="scrollToTop()" class="cursor-pointer hover:text-blue-500 transition">Settings</a></li>
+                @if (isAdmin()) {
+                    <li>
+                        <a routerLink="/admin/dashboard" (click)="scrollToTop()" class="cursor-pointer block py-2 px-3 text-green-400 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-500 md:p-0 md:dark:hover:text-green-300 dark:hover:bg-green-500 md:dark:hover:bg-transparent font-semibold">
+                        <i class="fas fa-crown mr-1"></i>Admin
+                        </a>
+                    </li>
+                    }
             </ul>
         </div>
 

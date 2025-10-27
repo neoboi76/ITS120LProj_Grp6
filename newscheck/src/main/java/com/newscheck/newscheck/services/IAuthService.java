@@ -16,5 +16,6 @@ public interface IAuthService {
     SettingsResponse updateUser(SettingsModel request);
     SettingsModel getUser(long id);
     Long getUserIdByEmail(String email);
+    String requestReset(String email);
 }
 

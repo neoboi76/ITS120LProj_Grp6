@@ -56,8 +56,18 @@
         </form>
     </div>
     <span class="text-center">
+        @if (sent) {
+
+                @if(successMessage) {
+                    <p class="text-green-600 font-medium">{{ successMessage }}</p>
+                }
+            }
+        
         <p class="text-sm text-gray-400">Want to change your password? 
-            <a class="font-semibold text-cyan-500 cursor-pointer hover:text-cyan-700" target="_blank" rel="noopener noreferrer" routerLink="/reset-password">Reset here
+            <a
+            class="font-semibold text-cyan-500 cursor-pointer hover:text-cyan-700"
+            (click)="requestReset($event)">
+            Reset here
             </a>
         </p>
     </span>

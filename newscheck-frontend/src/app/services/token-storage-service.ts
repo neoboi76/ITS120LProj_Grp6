@@ -34,6 +34,11 @@ export class TokenStorageService {
     return user ? user.id : 0;
   }
 
+  public getUserEmail(): string {
+    const user = this.getUser();
+    return user ? user.email : "";
+  }
+
   public isAdmin(): boolean {
     const user = this.getUser();
     return user && user.role === 'ADMIN';

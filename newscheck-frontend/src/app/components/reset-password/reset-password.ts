@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../services/auth-service';
 import { NgClass } from '@angular/common';
@@ -17,11 +17,13 @@ export class ResetPasswordComponent implements OnInit{
   submitted = false;
   errorMessage = '';
   successMessage = '';
+  token: any;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private route: ActivatedRoute
   ) {}
 
   showPassword1: boolean = false;
@@ -37,6 +39,9 @@ export class ResetPasswordComponent implements OnInit{
 
 
   ngOnInit(): void {
+
+    this.token = this.route.snapshot.queryParamMap.get('token');
+    
     this.resetForm = this.fb.group({ 
       email: ['', [Validators.required, Validators.minLength(6)]],
       oldPassword: ['', [Validators.required,Validators.minLength(6)]],
@@ -57,7 +62,7 @@ export class ResetPasswordComponent implements OnInit{
 
     const {email, oldPassword, newPassword} = this.resetForm.value;
 
-      this.authService.resetPassword(email, oldPassword, newPassword).subscribe({
+      this.authService.resetPassword(email, oldPassword, newPassword, this.token).subscribe({
         next: (res)  => {
           console.log(res);
           this.successMessage = 'Reset was a success!';

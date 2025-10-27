@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { NavComponent } from '../../components/nav/nav';
 import { FooterComponent } from '../../components/footer/footer';
-import { AdminService, DashboardStats } from '../../services/admin-service';
+import { AdminService } from '../../services/admin-service';
+import { DashboardStats } from '../../models/admin-models';
 
 @Component({
   selector: 'app-admin-dashboard',

@@ -22,6 +22,8 @@ export class SettingsComponent {
   errorMessage = '';
   submitted = false;
   isEnabled = false;
+  sent = false;
+  
   
   constructor(
     private fb: FormBuilder,
@@ -80,8 +82,6 @@ export class SettingsComponent {
     this.errorMessage = '';
     this.errorMessage = '';
 
-    if (this.userForm.invalid) return;
-
     const {firstName, lastName, gender, country, language} = this.userForm.value;
 
     const userId = this.user.id;
@@ -106,6 +106,23 @@ export class SettingsComponent {
       }
     });
 
+  }
+
+  requestReset(event: Event) {
+    event.preventDefault();
+    this.sent = true;
+    this.successMessage = "Check your email for the password reset link";
+    const payload = { email: this.tokenStorageService.getUserEmail() };
+    this.authService.requestPasswordReset(payload).subscribe({
+      next: (data) => {
+        this.successMessage = "Check your email for the password reset link";
+      },
+      error: (err) => {
+        this.errorMessage = "Error password reset";
+      }
+    })
+
+    
   }
 
 

@@ -71,6 +71,9 @@ export class HomeComponent implements OnInit{
 
 
     async analyzeInput(): Promise<void> {
+
+        console.log("SUBMITTED!");
+
         if (!this.inputText && !this.inputLink && !this.selectedFile) {
             this.result = '';
             this.noResult = 'Please provide text, a link, or an uploaded file to analyze.';

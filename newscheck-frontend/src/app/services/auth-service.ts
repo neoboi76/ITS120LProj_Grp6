@@ -52,21 +52,26 @@ export class AuthService  {
     );
   }
 
-  resetPassword(email: string, oldPassword: string, newPassword: string) {
+  resetPassword(email: string, oldPassword: string, newPassword: string, token: string) {
     return this.http.put(this.apiUrl + "/reset-password", 
-      { email, oldPassword, newPassword }
+      { email, oldPassword, newPassword, token}
     )
   }
 
+  requestPasswordReset(payload: { email: string }): Observable<any> {
+
+    return this.http.post(this.apiUrl + '/request-reset', payload);
+    
+  }
+
+
   settingsForm(firstName: string, lastName: string, id: number, gender: string, country: string, language: string) {
 
-    
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.tokenStorageService.getToken()}`,
       'Content-Type': 'application/json'
     });
 
-    
     return this.http.put(this.apiUrl + "/update-user",
       {firstName, lastName, id, gender, country, language},
       { headers }

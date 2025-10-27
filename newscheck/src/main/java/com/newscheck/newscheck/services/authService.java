@@ -6,6 +6,8 @@ import com.newscheck.newscheck.models.responses.LoginResponse;
 import com.newscheck.newscheck.models.responses.RegisterResponse;
 import com.newscheck.newscheck.models.responses.ResetResponse;
 import com.newscheck.newscheck.models.responses.SettingsResponse;
+import com.newscheck.newscheck.repositories.PasswordTokenRepository;
+import com.newscheck.newscheck.repositories.TokenRepository;
 import com.newscheck.newscheck.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,8 +18,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +30,8 @@ public class authService implements IAuthService, UserDetailsService  {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final EmailService emailService;
+    private final PasswordTokenRepository passwordTokenRepository;
 
 
     @Override
@@ -74,13 +80,46 @@ public class authService implements IAuthService, UserDetailsService  {
 
     @Override
     public ResetResponse resetPassword(ResetModel request) {
+
         UserModel user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
+
+        PasswordResetToken tokenRecord = passwordTokenRepository.findByToken(request.getToken())
+                .orElseThrow(() -> new RuntimeException("Invalid or expired token"));
+
+        if (tokenRecord.getExpiry().isBefore(LocalDateTime.now())) {
+            return new ResetResponse("Token expired");
+        }
 
         user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
 
+        passwordTokenRepository.delete(tokenRecord);
+
         return new ResetResponse("Password has been reset successfully.");
+    }
+
+    @Override
+    public String requestReset(String email) {
+        Optional<UserModel> optionalUser = userRepository.findByEmail(email);
+
+        if (optionalUser.isPresent()) {
+            UserModel user = optionalUser.get();
+            String token = UUID.randomUUID().toString();
+            LocalDateTime expiry = LocalDateTime.now().plusHours(1);
+
+            PasswordResetToken resetToken = new PasswordResetToken();
+            resetToken.setToken(token);
+            resetToken.setUser(user);
+            resetToken.setExpiry(expiry);
+            passwordTokenRepository.save(resetToken);
+
+            emailService.sendResetPasswordEmail(email, token);
+
+            return "If your email exists, a reset link has been sent.";
+        }
+
+        return null;
     }
 
     @Override

@@ -12,5 +12,6 @@ public class ResetModel {
     private String email;
     private String oldPassword;
     private String newPassword;
+    private String token;
 
 }

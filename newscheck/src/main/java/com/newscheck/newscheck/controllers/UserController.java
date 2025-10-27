@@ -2,6 +2,7 @@ package com.newscheck.newscheck.controllers;
 
 import com.newscheck.newscheck.models.*;
 import com.newscheck.newscheck.models.enums.AuditAction;
+import com.newscheck.newscheck.models.requests.ResetDTO;
 import com.newscheck.newscheck.models.responses.*;
 import com.newscheck.newscheck.services.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -22,6 +26,7 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final IAuditLogService auditLogService;
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginModel request, HttpServletRequest httpRequest) {
@@ -91,6 +96,7 @@ public class UserController {
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getOldPassword())
             );
 
+
             ResetResponse response = authService.resetPassword(request);
 
             Long userId = authService.getUserIdByEmail(request.getEmail());
@@ -113,6 +119,22 @@ public class UserController {
             return ResponseEntity.badRequest().body("User does not exist");
         }
     }
+
+    @PostMapping("/request-reset")
+    public ResponseEntity<?> requestReset(@RequestBody ResetDTO body, HttpServletRequest request) {
+        try {
+            String email = body.getEmail();
+
+            String msg = authService.requestReset(email);
+
+            return ResponseEntity.ok(msg);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Password reset was unsuccessful");
+        }
+
+    }
+
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
