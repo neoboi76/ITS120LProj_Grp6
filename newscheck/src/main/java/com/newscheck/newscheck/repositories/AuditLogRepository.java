@@ -5,13 +5,14 @@ import com.newscheck.newscheck.models.enums.AuditAction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface AuditLogRepository extends JpaRepository<AuditLogModel, Long> {
+public interface AuditLogRepository extends JpaRepository<AuditLogModel, Long>, JpaSpecificationExecutor<AuditLogModel> {
 
     List<AuditLogModel> findByUser_UserIdOrderByTimestampDesc(Long userId);
 
@@ -29,4 +30,11 @@ public interface AuditLogRepository extends JpaRepository<AuditLogModel, Long> {
 
     long countByAction(AuditAction action);
 
+    List<AuditLogModel> findByVerificationIdOrderByTimestampDesc(Long verificationId);
+
+    Page<AuditLogModel> findByVerificationIdOrderByTimestampDesc(Long verificationId, Pageable pageable);
+
+    List<AuditLogModel> findByTimestampBefore(LocalDateTime cutoffDate);
+
+    long countByTimestampAfter(LocalDateTime date);
 }

@@ -1,13 +1,17 @@
 package com.newscheck.newscheck.services;
 
-import com.newscheck.newscheck.models.AuditLogModel;
 import com.newscheck.newscheck.models.UserModel;
-import com.newscheck.newscheck.models.requests.AuditLogDTO;
 import com.newscheck.newscheck.models.enums.AuditAction;
+import com.newscheck.newscheck.models.requests.AuditLogDTO;
+import com.newscheck.newscheck.models.requests.AuditLogFilterDTO;
+import com.newscheck.newscheck.models.responses.AuditLogResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface IAuditLogService {
 
@@ -29,4 +33,15 @@ public interface IAuditLogService {
 
     long getUserActionCount(Long userId);
 
+    Page<AuditLogResponseDTO> getAllAuditLogs(Pageable pageable, AuditLogFilterDTO filter);
+
+    Page<AuditLogResponseDTO> getAuditLogsByUserId(Long userId, Pageable pageable);
+
+    Page<AuditLogResponseDTO> getAuditLogsByVerificationId(Long verificationId, Pageable pageable);
+
+    Map<String, Object> getAuditLogStatistics();
+
+    long deleteAuditLogsOlderThan(LocalDateTime cutoffDate);
+
+    List<Map<String, Object>> getAllUsersWithLogCounts();
 }

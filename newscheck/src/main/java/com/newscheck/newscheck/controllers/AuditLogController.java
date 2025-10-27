@@ -18,17 +18,13 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/admin/audit-logs")
+@RequestMapping("/admin/audit-logs")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')") // Class-level: Only admins can access any endpoint here
+@PreAuthorize("hasRole('ADMIN')")
 public class AuditLogController {
 
     private final IAuditLogService auditLogService;
 
-    /**
-     * Get all audit logs with pagination and filtering
-     * Only accessible by ADMIN role
-     */
     @GetMapping
     public ResponseEntity<?> getAllAuditLogs(
             @RequestParam(defaultValue = "0") int page,
@@ -47,10 +43,9 @@ public class AuditLogController {
 
             Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
 
-            // Build filter
             AuditLogFilterDTO filter = new AuditLogFilterDTO();
             filter.setUserId(userId);
-            filter.setAction(action);
+            filter.setAction(action != null ? com.newscheck.newscheck.models.enums.AuditAction.valueOf(action) : null);
 
             if (startDate != null && !startDate.isEmpty()) {
                 filter.setStartDate(LocalDateTime.parse(startDate));
@@ -66,6 +61,9 @@ public class AuditLogController {
             response.put("currentPage", auditLogs.getNumber());
             response.put("totalItems", auditLogs.getTotalElements());
             response.put("totalPages", auditLogs.getTotalPages());
+            response.put("pageSize", auditLogs.getSize());
+            response.put("hasNext", auditLogs.hasNext());
+            response.put("hasPrevious", auditLogs.hasPrevious());
 
             return ResponseEntity.ok(response);
 
@@ -75,19 +73,20 @@ public class AuditLogController {
         }
     }
 
-    /**
-     * Get audit logs for a specific user
-     * Only accessible by ADMIN role
-     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUserAuditLogs(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "timestamp") String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection
     ) {
         try {
-            Pageable pageable = PageRequest.of(page, size,
-                    Sort.by(Sort.Direction.DESC, "timestamp"));
+            Sort.Direction direction = sortDirection.equalsIgnoreCase("ASC")
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC;
+
+            Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
 
             Page<AuditLogResponseDTO> auditLogs =
                     auditLogService.getAuditLogsByUserId(userId, pageable);
@@ -97,6 +96,10 @@ public class AuditLogController {
             response.put("currentPage", auditLogs.getNumber());
             response.put("totalItems", auditLogs.getTotalElements());
             response.put("totalPages", auditLogs.getTotalPages());
+            response.put("pageSize", auditLogs.getSize());
+            response.put("hasNext", auditLogs.hasNext());
+            response.put("hasPrevious", auditLogs.hasPrevious());
+            response.put("userId", userId);
 
             return ResponseEntity.ok(response);
 
@@ -106,15 +109,35 @@ public class AuditLogController {
         }
     }
 
-    /**
-     * Get audit logs for a specific verification
-     * Only accessible by ADMIN role
-     */
     @GetMapping("/verification/{verificationId}")
-    public ResponseEntity<?> getVerificationAuditLogs(@PathVariable Long verificationId) {
+    public ResponseEntity<?> getVerificationAuditLogs(
+            @PathVariable Long verificationId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "timestamp") String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection
+    ) {
         try {
-            var auditLogs = auditLogService.getAuditLogsByVerificationId(verificationId);
-            return ResponseEntity.ok(auditLogs);
+            Sort.Direction direction = sortDirection.equalsIgnoreCase("ASC")
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC;
+
+            Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+
+            Page<AuditLogResponseDTO> auditLogs =
+                    auditLogService.getAuditLogsByVerificationId(verificationId, pageable);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("content", auditLogs.getContent());
+            response.put("currentPage", auditLogs.getNumber());
+            response.put("totalItems", auditLogs.getTotalElements());
+            response.put("totalPages", auditLogs.getTotalPages());
+            response.put("pageSize", auditLogs.getSize());
+            response.put("hasNext", auditLogs.hasNext());
+            response.put("hasPrevious", auditLogs.hasPrevious());
+            response.put("verificationId", verificationId);
+
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             return ResponseEntity.badRequest()
@@ -122,10 +145,6 @@ public class AuditLogController {
         }
     }
 
-    /**
-     * Get audit log statistics/summary
-     * Only accessible by ADMIN role
-     */
     @GetMapping("/stats")
     public ResponseEntity<?> getAuditLogStats() {
         try {
@@ -138,10 +157,6 @@ public class AuditLogController {
         }
     }
 
-    /**
-     * Delete old audit logs (cleanup)
-     * Only accessible by ADMIN role
-     */
     @DeleteMapping("/cleanup")
     public ResponseEntity<?> cleanupOldAuditLogs(
             @RequestParam(defaultValue = "90") int daysOld
@@ -153,6 +168,7 @@ public class AuditLogController {
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Audit logs cleaned up successfully");
             response.put("deletedCount", deletedCount);
+            response.put("cutoffDate", cutoffDate);
 
             return ResponseEntity.ok(response);
 

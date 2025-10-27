@@ -22,7 +22,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true) // Enable @PreAuthorize
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -41,9 +41,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .logout(logout -> logout.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // Public endpoints - no authentication required
                         .requestMatchers("/login", "/register", "/reset-password", "/logout").permitAll()
+
+                        // Admin-only endpoints - requires ADMIN role
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // User endpoints - requires authentication (both USER and ADMIN can access)
                         .requestMatchers("/api/verification/**").authenticated()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // All other requests require authentication
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
