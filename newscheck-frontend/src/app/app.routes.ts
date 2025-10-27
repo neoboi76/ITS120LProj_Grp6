@@ -9,6 +9,9 @@ import { SettingsComponent } from './settings/settings';
 import { EntryDetailsComponent } from './components/entry-details/entry-details';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard';
 import { AdminGuard } from './services/admin-gaurd';
+import { AdminUsersComponent } from './components/admin-users/admin-users';
+import { AdminVerificationsComponent } from './components/admin-verifications/admin-verifications';
+import { AdminAuditLogsComponent } from './components/admin-audit-logs/admin-audit-logs';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'}, 
@@ -19,9 +22,9 @@ export const routes: Routes = [
     { path: 'history', component: HistoryPageComponent, canActivate: [AuthGuard]},
     { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]},
     { path: 'entry-details/:id', component: EntryDetailsComponent, canActivate: [AuthGuard]},
-    { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [AdminGuard]}
-   // { path: 'admin/users', component: , canActivate: [AdminGuard]},
-  //  { path: 'admin/verifications', component: , canActivate: [AdminGuard]}
-  //  { path: 'admin/audit-logs', component: , canActivate: [AdminGuard]}
+    { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [AdminGuard]},
+    { path: 'admin/users', component: AdminUsersComponent, canActivate: [AdminGuard]},
+    { path: 'admin/verifications', component: AdminVerificationsComponent, canActivate: [AdminGuard]},
+    { path: 'admin/audit-logs', component: AdminAuditLogsComponent, canActivate: [AdminGuard]}
 
 ];
