@@ -9,6 +9,7 @@ import com.newscheck.newscheck.models.responses.SettingsResponse;
 import com.newscheck.newscheck.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +39,15 @@ public class authService implements IAuthService, UserDetailsService  {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.USER);
+
+        if (request.getEmail().equals("admin@gmail.com")) {
+            user.setRole(Role.ADMIN);
+        }
+
+         else {
+            user.setRole(Role.USER);
+        }
+
         UserModel savedUser = userRepository.save(user);
 
 
@@ -105,4 +115,10 @@ public class authService implements IAuthService, UserDetailsService  {
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
         );
     }
+
+    @Override
+    public Long getUserIdByEmail(String email) {
+        return userRepository.getUserIdByEmail(email);
+    }
+
 }

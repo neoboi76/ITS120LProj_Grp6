@@ -1,10 +1,12 @@
 package com.newscheck.newscheck.repositories;
 
-import com.newscheck.newscheck.models.TokenBlackList;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import java.time.Instant;
 import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.newscheck.newscheck.models.TokenBlackList;
 
 @Repository
 public interface TokenRepository extends JpaRepository<TokenBlackList, Long> {

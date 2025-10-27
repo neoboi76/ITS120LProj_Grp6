@@ -1,11 +1,11 @@
 package com.newscheck.newscheck.controllers;
 
 import com.newscheck.newscheck.models.*;
+import com.newscheck.newscheck.models.enums.AuditAction;
 import com.newscheck.newscheck.models.responses.*;
 import com.newscheck.newscheck.services.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
-
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -22,52 +21,71 @@ public class UserController {
     private final ILogoutService logoutService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final IAuditLogService auditLogService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginModel request) {
-
+    public ResponseEntity<?> login(@RequestBody LoginModel request, HttpServletRequest httpRequest) {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken
-                            (request.getEmail(), request.getPassword())
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
 
             LoginResponse response = authService.login(request);
 
+            auditLogService.log(
+                    AuditAction.USER_LOGIN,
+                    response.getId(),
+                    "User logged in successfully",
+                    httpRequest
+            );
+
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(response);
 
-
-        } catch(Exception e) {
-            return ResponseEntity.badRequest().body("Login failed: " + e.getMessage());
+        } catch (Exception e) {
+            auditLogService.log(
+                    AuditAction.LOGIN_FAILED,
+                    (UserModel) null,
+                    "Failed login attempt for email: " + request.getEmail(),
+                    httpRequest
+            );
+            return ResponseEntity.badRequest().body("User does not exist");
         }
-
-
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterModel request) {
-
+    public ResponseEntity<?> register(@RequestBody RegisterModel request, HttpServletRequest httpRequest) {
         try {
             RegisterResponse response = authService.register(request);
-
             if (response == null) {
-                return ResponseEntity.badRequest().body("Invalid signup");
+                throw new RuntimeException("Invalid signup");
             }
+
+            auditLogService.log(
+                    AuditAction.USER_REGISTER,
+                    response.getId(),
+                    "New user registered: " + response.getEmail(),
+                    httpRequest
+            );
 
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(response);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Register failed: " + e.getMessage());
-        }
 
+        } catch (Exception e) {
+            auditLogService.log(
+                    AuditAction.SYSTEM_ERROR,
+                    (UserModel) null,
+                    "Failed registration attempt for email: " + request.getEmail(),
+                    httpRequest
+            );
+            return ResponseEntity.badRequest().body("User does not exist");
+        }
     }
 
     @PutMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetModel request) {
-
+    public ResponseEntity<?> resetPassword(@RequestBody ResetModel request, HttpServletRequest httpRequest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getOldPassword())
@@ -75,10 +93,24 @@ public class UserController {
 
             ResetResponse response = authService.resetPassword(request);
 
+            Long userId = authService.getUserIdByEmail(request.getEmail());
+            auditLogService.log(
+                    AuditAction.PASSWORD_RESET,
+                    userId,
+                    "User reset password",
+                    httpRequest
+            );
+
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Password reset failed: " + e.getMessage());
+            auditLogService.log(
+                    AuditAction.SYSTEM_ERROR,
+                    (UserModel) null,
+                    "Failed password reset attempt for email: " + request.getEmail(),
+                    httpRequest
+            );
+            return ResponseEntity.badRequest().body("User does not exist");
         }
     }
 
@@ -86,54 +118,87 @@ public class UserController {
     public ResponseEntity<?> logout(HttpServletRequest request) {
         try {
             String token = getTokenFromRequest(request);
+            String email = jwtTokenProvider.getEmailFromToken(token);
+            Long userId = authService.getUserIdByEmail(email);
+
             logoutService.blacklistToken(token);
+
+            auditLogService.log(
+                    AuditAction.USER_LOGOUT,
+                    userId,
+                    "User logged out",
+                    request
+            );
+
             return ResponseEntity.ok(new LogoutResponse("Logout successful. Token has been invalidated."));
 
-        } catch(Exception e) {
-            return ResponseEntity.badRequest().body("Logout failed " + e.getMessage());
+        } catch (Exception e) {
+            auditLogService.log(
+                    AuditAction.SYSTEM_ERROR,
+                    (UserModel) null,
+                    "Failed logout attempt",
+                    request
+            );
+            return ResponseEntity.badRequest().body("User does not exist");
         }
     }
 
     @PutMapping("/update-user")
     public ResponseEntity<?> updateUser(HttpServletRequest request, @RequestBody SettingsModel usrReq) {
-
         try {
-
-            if (this.jwtTokenProvider.validateToken(getTokenFromRequest(request))) {
-
+            if (jwtTokenProvider.validateToken(getTokenFromRequest(request))) {
                 SettingsResponse response = authService.updateUser(usrReq);
+
+                auditLogService.log(
+                        AuditAction.USER_PROFILE_UPDATED,
+                        usrReq.getId(),
+                        "User profile updated",
+                        request
+                );
 
                 return ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(response);
             }
-
-
-        } catch(Exception e) {
-            return ResponseEntity.badRequest().body("Update user failed: " + e.getMessage());
+        } catch (Exception e) {
+            auditLogService.log(
+                    AuditAction.SYSTEM_ERROR,
+                    (UserModel) null,
+                    "Failed profile update for user ID: " + usrReq.getId(),
+                    request
+            );
+            return ResponseEntity.badRequest().body("User does not exist");
         }
 
-        return null;
+        return ResponseEntity.badRequest().body("User does not exist");
     }
 
     @GetMapping("/get-user/{id}")
     public ResponseEntity<?> getUser(HttpServletRequest request, @PathVariable long id) {
-
         try {
-
-            if (this.jwtTokenProvider.validateToken(getTokenFromRequest(request))) {
-
+            if (jwtTokenProvider.validateToken(getTokenFromRequest(request))) {
                 SettingsModel response = authService.getUser(id);
+
+                auditLogService.log(
+                        AuditAction.USER_PROFILE_VIEWED,
+                        id,
+                        "User profile viewed",
+                        request
+                );
 
                 return ResponseEntity.ok(response);
             }
-
-
-        } catch(Exception e) {
-            return ResponseEntity.badRequest().body("Retrieving user failed " + e.getMessage());
+        } catch (Exception e) {
+            auditLogService.log(
+                    AuditAction.SYSTEM_ERROR,
+                    (UserModel) null,
+                    "Failed to fetch user profile with ID: " + id,
+                    request
+            );
+            return ResponseEntity.badRequest().body("User does not exist");
         }
 
-        return null;
+        return ResponseEntity.badRequest().body("User does not exist");
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
@@ -143,6 +208,4 @@ public class UserController {
         }
         return null;
     }
-
-
 }
