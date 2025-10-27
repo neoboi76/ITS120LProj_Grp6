@@ -76,9 +76,10 @@ export class HistoryService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<HistoryModel>(this.apiUrl + '/result/' + verificationId.toString(), 
-      { headers }
-    )
+    return this.http.get<HistoryModel>(this.apiUrl + "/result/" + verificationId.toString(), 
+      { headers}
+    );
   }
+
 
 }

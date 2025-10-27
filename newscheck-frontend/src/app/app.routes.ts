@@ -7,6 +7,8 @@ import { AuthGuard } from './services/auth-guard';
 import { HistoryPageComponent } from './history/history';
 import { SettingsComponent } from './settings/settings';
 import { EntryDetailsComponent } from './components/entry-details/entry-details';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard';
+import { AdminGuard } from './services/admin-gaurd';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'}, 
@@ -16,5 +18,10 @@ export const routes: Routes = [
     { path: 'reset-password', component: ResetPasswordComponent},
     { path: 'history', component: HistoryPageComponent, canActivate: [AuthGuard]},
     { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]},
-    { path: 'entry-details/:id', component: EntryDetailsComponent, canActivate: [AuthGuard]}
+    { path: 'entry-details/:id', component: EntryDetailsComponent, canActivate: [AuthGuard]},
+    { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [AdminGuard]}
+   // { path: 'admin/users', component: , canActivate: [AdminGuard]},
+  //  { path: 'admin/verifications', component: , canActivate: [AdminGuard]}
+  //  { path: 'admin/audit-logs', component: , canActivate: [AdminGuard]}
+
 ];

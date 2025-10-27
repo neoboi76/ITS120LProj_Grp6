@@ -10,7 +10,6 @@ const USER_KEY = 'auth-user';
 })
 export class TokenStorageService {
 
-
   public saveToken(token: string): void {
     window.sessionStorage.removeItem(TOKEN_KEY);
     window.sessionStorage.setItem(TOKEN_KEY, token);
@@ -25,19 +24,23 @@ export class TokenStorageService {
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
   
-  public getUser(): Observable<LoginModel> {
-    const user = JSON.parse(sessionStorage.getItem(USER_KEY) || '{}');
-    return user;
+  public getUser(): any {
+    const user = sessionStorage.getItem(USER_KEY);
+    return user ? JSON.parse(user) : null;
   }
 
-  public getUsrId() {
-    const user = JSON.parse(sessionStorage.getItem(USER_KEY) || '{}');
-    return user.id;
+  public getUsrId(): number {
+    const user = this.getUser();
+    return user ? user.id : 0;
+  }
+
+  public isAdmin(): boolean {
+    const user = this.getUser();
+    return user && user.role === 'ADMIN';
   }
 
   logout(): void {
     window.sessionStorage.clear();
     sessionStorage.clear();
   }
-
 }

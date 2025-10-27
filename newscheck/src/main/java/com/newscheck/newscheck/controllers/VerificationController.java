@@ -1,5 +1,7 @@
 package com.newscheck.newscheck.controllers;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.newscheck.newscheck.models.enums.AuditAction;
 import com.newscheck.newscheck.models.requests.VerificationRequestDTO;
 import com.newscheck.newscheck.models.responses.VerificationResponseDTO;
@@ -80,18 +82,20 @@ public class VerificationController {
         try {
             String token = getTokenFromRequest(httpReq);
             if (token == null || !this.jwtTokenProvider.validateToken(token)) {
-                auditLogService.log(
+                auditLogService.verLog(
                         AuditAction.VERIFICATION_FAILED,
-                        (Long) null,
+                        null,
                         "Unauthorized attempt to view verification result",
                         httpReq
                 );
                 return ResponseEntity.status(401).body("Unauthorized");
             }
 
+            System.out.println(verificationId);
+
             VerificationResponseDTO response = verificationService.getVerificationResult(verificationId);
 
-            auditLogService.log(
+            auditLogService.verLog(
                     AuditAction.VERIFICATION_VIEWED,
                     verificationId,
                     "Verification result viewed for ID: " + verificationId,

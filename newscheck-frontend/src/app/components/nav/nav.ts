@@ -17,13 +17,19 @@ export class NavComponent {
 
   constructor(
     private route: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private tokenStorageService: TokenStorageService
   ) {}
 
   isMenuOpen = false;
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  // Check if current user is admin
+  isAdmin(): boolean {
+    return this.tokenStorageService.isAdmin();
   }
 
   logout() {
@@ -47,6 +53,4 @@ export class NavComponent {
       this.logout();
     }
   }
-
-
 }

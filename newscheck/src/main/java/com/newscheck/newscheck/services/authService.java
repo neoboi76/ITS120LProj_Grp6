@@ -42,14 +42,11 @@ public class authService implements IAuthService, UserDetailsService  {
 
         if (request.getEmail().equals("admin@gmail.com")) {
             user.setRole(Role.ADMIN);
-        }
-
-         else {
+        } else {
             user.setRole(Role.USER);
         }
 
         UserModel savedUser = userRepository.save(user);
-
 
         return new RegisterResponse("Account Created!", savedUser.getEmail(), savedUser.getUserId());
     }
@@ -61,8 +58,18 @@ public class authService implements IAuthService, UserDetailsService  {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found after successful authentication."));
         String token = jwtTokenProvider.generateToken(user.getEmail());
 
-        return new LoginResponse("Login Successful!", token, user.getEmail(), user.getFirstName(),
-                user.getLastName(), user.getGender(), user.getCountry(), user.getLanguage(), user.getUserId());
+        return new LoginResponse(
+                "Login Successful!",
+                token,
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getGender(),
+                user.getCountry(),
+                user.getLanguage(),
+                user.getRole().name(), // Include role in response
+                user.getUserId()
+        );
     }
 
     @Override
@@ -79,7 +86,6 @@ public class authService implements IAuthService, UserDetailsService  {
     @Override
     public SettingsResponse updateUser(SettingsModel request) {
 
-
         UserModel user = userRepository.findById(request.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -92,7 +98,6 @@ public class authService implements IAuthService, UserDetailsService  {
         userRepository.save(user);
 
         return new SettingsResponse("User information succesfully updated");
-
     }
 
     @Override
@@ -100,8 +105,14 @@ public class authService implements IAuthService, UserDetailsService  {
         UserModel user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new SettingsModel(user.getFirstName(), user.getLastName(), user.getUserId(),
-                user.getGender(), user.getCountry(), user.getLanguage());
+        return new SettingsModel(
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUserId(),
+                user.getGender(),
+                user.getCountry(),
+                user.getLanguage()
+        );
     }
 
     @Override
@@ -120,5 +131,4 @@ public class authService implements IAuthService, UserDetailsService  {
     public Long getUserIdByEmail(String email) {
         return userRepository.getUserIdByEmail(email);
     }
-
 }

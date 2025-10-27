@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class AuditLogFilterDTO {
 
     private Long userId;
+    private Long verificationId;
     private AuditAction action;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

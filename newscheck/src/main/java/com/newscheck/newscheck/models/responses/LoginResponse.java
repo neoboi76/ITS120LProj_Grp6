@@ -17,5 +17,6 @@ public class LoginResponse {
     private String gender;
     private String country;
     private String language;
+    private String role;
     private long id;
 }

@@ -21,6 +21,8 @@ public interface IAuditLogService {
 
     void log(AuditAction action, UserModel user, String details, Long verificationId, HttpServletRequest request);
 
+    void verLog(AuditAction action, Long verificationId, String details, HttpServletRequest request);
+
     void logError(AuditAction action, UserModel user, String errorMessage, HttpServletRequest request);
 
     List<AuditLogDTO> getUserLogs(Long userId);

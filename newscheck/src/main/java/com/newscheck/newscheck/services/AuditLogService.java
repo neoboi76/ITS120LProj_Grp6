@@ -2,12 +2,15 @@ package com.newscheck.newscheck.services;
 
 import com.newscheck.newscheck.models.AuditLogModel;
 import com.newscheck.newscheck.models.UserModel;
+import com.newscheck.newscheck.models.VerificationModel;
 import com.newscheck.newscheck.models.enums.AuditAction;
 import com.newscheck.newscheck.models.requests.AuditLogDTO;
 import com.newscheck.newscheck.models.requests.AuditLogFilterDTO;
 import com.newscheck.newscheck.models.responses.AuditLogResponseDTO;
 import com.newscheck.newscheck.repositories.AuditLogRepository;
 import com.newscheck.newscheck.repositories.UserRepository;
+import com.newscheck.newscheck.repositories.VerdictRepository;
+import com.newscheck.newscheck.repositories.VerificationRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,6 +33,7 @@ public class AuditLogService implements IAuditLogService {
 
     private final AuditLogRepository auditLogRepository;
     private final UserRepository userRepository;
+    private final VerificationRepository verificationRepository;
 
     @Override
     @Async
@@ -56,6 +60,25 @@ public class AuditLogService implements IAuditLogService {
             user = userRepository.findById(userId).orElse(null);
         }
         log(action, user, details, request);
+    }
+
+    @Override
+    @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void verLog(AuditAction action, Long verificationId, String details, HttpServletRequest request) {
+        VerificationModel verification = null;
+        UserModel user = null;
+        Long userId = verificationRepository.getUserIdByVerificationId(verificationId);
+
+        if (userId != null) {
+            user = userRepository.findById(userId).orElse(null);
+        }
+
+        if (verificationId != null) {
+            verification = verificationRepository.findById(verificationId).orElse(null);
+        }
+
+        log(action, user, details, verificationId, request);
     }
 
     @Override

@@ -5,6 +5,8 @@ import com.newscheck.newscheck.models.enums.VerificationStatus;
 import com.newscheck.newscheck.models.enums.VerdictType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -28,4 +30,8 @@ public interface VerificationRepository extends JpaRepository<VerificationModel,
     long countByVerdict_VerdictType(VerdictType verdictType);
 
     long countBySubmittedAtAfter(LocalDateTime date);
+
+    @Query("SELECT v.user.userId FROM VerificationModel v WHERE v.verificationId = :verificationId")
+    Long getUserIdByVerificationId(@Param("verificationId") Long verificationId);
+
 }

@@ -7,4 +7,5 @@ export type LoginModel = {
     gender: string;
     country: string;
     language: string;
+    role: string;  
 }
