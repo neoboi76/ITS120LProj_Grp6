@@ -1,4 +1,4 @@
-<title>Admin - Audit Logs</title>
+<title>Manage Audit Logs</title>
 
 <app-nav></app-nav>
 
@@ -6,7 +6,6 @@
   
   <div class="relative z-10 max-w-7xl mx-auto">
     
-    <!-- Header -->
     <div class="mb-8 flex justify-between items-center">
       <div>
         <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">Audit Logs</h1>
@@ -18,7 +17,6 @@
       </a>
     </div>
 
-    <!-- Messages -->
     @if (errorMessage) {
       <div class="bg-red-500/20 border border-red-500 rounded-lg p-4 text-red-200 mb-6">
         {{ errorMessage }}
@@ -31,7 +29,6 @@
       </div>
     }
 
-    <!-- Stats Cards -->
     @if (stats) {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
@@ -145,7 +142,6 @@
       </div>
     }
 
-    <!-- Audit Logs Table -->
     @if (!isLoading && auditLogs.length > 0) {
       <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 mb-6">
         <div class="flex justify-between items-center mb-4">
@@ -173,7 +169,7 @@
             </thead>
             <tbody>
               @for (log of auditLogs; track log.auditId) {
-                <tr class="border-b border-gray-400/20 hover:bg-white/10 transition">
+                <tr class="border-b border-gray-400/20 hover:bg-white/10 transition hover:shadow-lg hover:scale-[1.01]">
                   <td class="py-3 px-2">{{ log.auditId }}</td>
                   <td class="py-3 px-2">
                     <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getActionColor(log.action)">

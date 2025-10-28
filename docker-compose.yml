@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  database:
+    image: postgres:15-alpine
+    container_name: newscheck-db
+    environment:
+      POSTGRES_DB: newscheck
+      POSTGRES_USER: newscheck_user
+      POSTGRES_PASSWORD: newscheck_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - newscheck-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U newscheck_user -d newscheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Backend
+  backend:
+    build:
+      context: ./newscheck
+      dockerfile: Dockerfile
+    container_name: newscheck-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/newscheck
+      SPRING_DATASOURCE_USERNAME: newscheck_user
+      SPRING_DATASOURCE_PASSWORD: newscheck_password
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: 86400000
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL_URL: https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-latest:generateContent
+      GOOGLE_SEARCH_API_KEY: ${GOOGLE_SEARCH_API_KEY}
+      GOOGLE_SEARCH_ENGINE_ID: ${GOOGLE_SEARCH_ENGINE_ID}
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: ${EMAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${EMAIL_PASSWORD}
+    ports:
+      - "8080:8080"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - newscheck-network
+    restart: unless-stopped
+
+  # Angular Frontend
+  frontend:
+    build:
+      context: ./newscheck-frontend
+      dockerfile: Dockerfile
+    container_name: newscheck-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - newscheck-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  newscheck-network:
+    driver: bridge
