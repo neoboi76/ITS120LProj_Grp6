@@ -585,8 +585,8 @@ Special thanks to the open-source projects that made this possible:
 
 - **[GitHub Repository](https://github.com/neoboi76/ITS120LProj_Grp6)**
 - **[Live Demo](#)** - *(Coming Soon)*
-- **[Project Documentation](#)** - *(Add your documentation link)*
-- **[Figma Prototype] - *(Coming Soon)*
+- **[Project Documentation](#)** - *(Coming Soon)*
+- **[Figma Prototype](#)** - *(Coming Soon)*
 - **[Report Issues](https://github.com/neoboi76/ITS120LProj_Grp6/issues)**
 
 ---
@@ -595,7 +595,7 @@ Special thanks to the open-source projects that made this possible:
 
 For questions, suggestions, or collaboration opportunities:
 
-- **Email:** *dattimbol@mymail.mapua./edu.ph*
+- **Email:** *dattimbol@mymail.mapua.edu.ph*
 - **GitHub Issues:** [Create an issue](https://github.com/neoboi76/ITS120LProj_Grp6/issues)
 
 ---
