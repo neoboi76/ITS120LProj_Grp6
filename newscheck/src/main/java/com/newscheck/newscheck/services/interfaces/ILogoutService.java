@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.interfaces;
 
 public interface ILogoutService {
     void blacklistToken(String token);

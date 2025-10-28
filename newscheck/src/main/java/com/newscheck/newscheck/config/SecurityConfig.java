@@ -1,7 +1,7 @@
 package com.newscheck.newscheck.config;
 
-import com.newscheck.newscheck.services.JwtAuthenticationFilter;
-import com.newscheck.newscheck.services.authService;
+import com.newscheck.newscheck.services.implementations.JwtAuthenticationFilter;
+import com.newscheck.newscheck.services.implementations.authService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

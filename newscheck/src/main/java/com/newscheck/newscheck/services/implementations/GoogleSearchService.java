@@ -1,8 +1,9 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newscheck.newscheck.models.search.SearchResult;
+import com.newscheck.newscheck.services.interfaces.IGoogleSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;

@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;

@@ -56,18 +56,24 @@ export class HomeComponent implements OnInit{
     onFileSelected(event: Event): void {
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
-                this.selectedFile = input.files[0];
-
-                const reader = new FileReader();
-
-                reader.onload = () => {
-                    this.base64String = reader.result as string; 
-                };
-
-                reader.readAsDataURL(this.selectedFile);
-                
+            this.selectedFile = input.files[0];
+            
+ 
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!validTypes.includes(this.selectedFile.type)) {
+                alert('Please select a valid image file (JPEG, PNG, or WebP)');
+                return;
             }
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                const result = reader.result as string;
+                this.base64String = result.split(',')[1];
+            };
+
+            reader.readAsDataURL(this.selectedFile);
         }
+    }
 
 
     async analyzeInput(): Promise<void> {
@@ -93,7 +99,7 @@ export class HomeComponent implements OnInit{
                 next: (data: HistoryModel) => {
                     this.result = {               
                         status: data.status,
-                        claim: data.claim,
+                        claim: data.claim ?? 'N/A',
                         verdict: data.verdictType,
                         reasoning: data.reasoning,
                         submittedAt: data.submittedAt
@@ -102,7 +108,7 @@ export class HomeComponent implements OnInit{
                      const newEntry = {
                         verificationId: data.verificationId,
                         date: data.submittedAt,
-                        claim: data.claim,
+                        claim: data.claim ?? 'N/A',
                         status: data.status,
                         verdictType: data.verdictType
                     };
@@ -125,7 +131,7 @@ export class HomeComponent implements OnInit{
                 next: (data: HistoryModel) => {
                     this.result = {               
                         status: data.status,
-                        claim: data.claim,
+                        claim: data.claim ?? 'N/A',
                         verdict: data.verdictType,
                         reasoning: data.reasoning,
                         submittedAt: data.submittedAt
@@ -134,7 +140,7 @@ export class HomeComponent implements OnInit{
                     const newEntry = {
                         verificationId: data.verificationId,
                         date: data.submittedAt,
-                        claim: data.claim,
+                        claim: data.claim ?? 'N/A',
                         status: data.status,
                         verdictType: data.verdictType
                     };
@@ -160,7 +166,7 @@ export class HomeComponent implements OnInit{
                 next: (data: HistoryModel) => {
                     this.result = {               
                         status: data.status,
-                        claim: data.claim,
+                        claim: data.claim ?? 'N/A',
                         verdict: data.verdictType,
                         reasoning: data.reasoning,
                         submittedAt: data.submittedAt
@@ -169,7 +175,7 @@ export class HomeComponent implements OnInit{
                     const newEntry = {
                         verificationId: data.verificationId,
                         date: data.submittedAt,
-                        claim: data.claim,
+                        claim: data.claim ?? 'N/A',
                         status: data.status,
                         verdictType: data.verdictType
                     };
@@ -187,6 +193,8 @@ export class HomeComponent implements OnInit{
            }
 
             this.inputText = '';
+            this.inputLink = '';
+            this.selectedFile = null;
         }
 
     }

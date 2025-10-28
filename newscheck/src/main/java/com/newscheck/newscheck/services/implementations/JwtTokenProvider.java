@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

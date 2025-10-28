@@ -22,16 +22,23 @@ export class AuthService  {
     private tokenStorageService: TokenStorageService
   ) {}
 
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenStorageService.getToken()}`,
+      'Content-Type': 'application/json'
+    });
+  }
+
   login(email: string, password: string) {
     return this.http.post<LoginModel>(
-      this.apiUrl + "/login",
+      `${this.apiUrl}/login`,
       { email, password }
     )
   }
 
   register(firstName: string, lastName: string, email: string, password: string) {
     return this.http.post<RegisterModel>(
-      this.apiUrl + "/register",
+      `${this.apiUrl}/register`,
       { firstName, lastName, email, password }
     )
   }
@@ -39,12 +46,9 @@ export class AuthService  {
 
   logout(): Observable<any> {
     
-    const token = this.tokenStorageService.getToken(); 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.post(this.apiUrl + "/logout", null, { headers }).pipe(
+    return this.http.post(
+      `${this.apiUrl}/logout`,
+       null, { headers: this.getHeaders() }).pipe(
       tap(() => {
         this.tokenStorageService.logout(); 
         this.isLoggedIn = false;
@@ -53,7 +57,8 @@ export class AuthService  {
   }
 
   resetPassword(email: string, oldPassword: string, newPassword: string, token: string) {
-    return this.http.put(this.apiUrl + "/reset-password", 
+    return this.http.put(
+      `${this.apiUrl}/reset-password`, 
       { email, oldPassword, newPassword, token}
     )
   }
@@ -67,26 +72,19 @@ export class AuthService  {
 
   settingsForm(firstName: string, lastName: string, id: number, gender: string, country: string, language: string) {
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.tokenStorageService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
 
-    return this.http.put(this.apiUrl + "/update-user",
+    return this.http.put(
+      `${this.apiUrl}/update-user`,
       {firstName, lastName, id, gender, country, language},
-      { headers }
+      { headers: this.getHeaders() }
     );
   }
 
   getUser(id: number): Observable<UserModel> {
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.tokenStorageService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get<UserModel>(this.apiUrl + "/get-user/" + id, 
-      { headers }
+    return this.http.get<UserModel>(
+      `${this.apiUrl}/get-user/${id}`, 
+      { headers: this.getHeaders() }
     )
   }
   

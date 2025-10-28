@@ -1,8 +1,6 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
-import com.newscheck.newscheck.services.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

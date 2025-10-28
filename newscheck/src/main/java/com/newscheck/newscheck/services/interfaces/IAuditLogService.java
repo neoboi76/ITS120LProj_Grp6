@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.interfaces;
 
 import com.newscheck.newscheck.models.UserModel;
 import com.newscheck.newscheck.models.enums.AuditAction;

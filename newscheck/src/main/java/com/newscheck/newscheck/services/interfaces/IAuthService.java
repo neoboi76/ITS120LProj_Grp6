@@ -1,12 +1,10 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.interfaces;
 
 import com.newscheck.newscheck.models.*;
 import com.newscheck.newscheck.models.responses.LoginResponse;
 import com.newscheck.newscheck.models.responses.RegisterResponse;
 import com.newscheck.newscheck.models.responses.ResetResponse;
 import com.newscheck.newscheck.models.responses.SettingsResponse;
-
-import java.util.Optional;
 
 public interface IAuthService {
 

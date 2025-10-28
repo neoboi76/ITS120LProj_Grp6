@@ -1,9 +1,9 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
 import com.newscheck.newscheck.models.TokenBlackList;
 import com.newscheck.newscheck.repositories.TokenRepository;
+import com.newscheck.newscheck.services.interfaces.ILogoutService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.time.Instant;

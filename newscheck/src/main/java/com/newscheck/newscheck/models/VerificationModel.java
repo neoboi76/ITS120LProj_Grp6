@@ -34,7 +34,9 @@ public class VerificationModel {
 
     private String contentUrl;
 
-    private String imagePath;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String imageBase64;
 
     @Enumerated(EnumType.STRING)
     private VerificationStatus status;

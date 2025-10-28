@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
 import com.newscheck.newscheck.models.AuditLogModel;
 import com.newscheck.newscheck.models.UserModel;
@@ -9,8 +9,8 @@ import com.newscheck.newscheck.models.requests.AuditLogFilterDTO;
 import com.newscheck.newscheck.models.responses.AuditLogResponseDTO;
 import com.newscheck.newscheck.repositories.AuditLogRepository;
 import com.newscheck.newscheck.repositories.UserRepository;
-import com.newscheck.newscheck.repositories.VerdictRepository;
 import com.newscheck.newscheck.repositories.VerificationRepository;
+import com.newscheck.newscheck.services.interfaces.IAuditLogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

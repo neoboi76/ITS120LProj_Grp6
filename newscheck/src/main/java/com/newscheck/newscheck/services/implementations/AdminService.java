@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
 import com.newscheck.newscheck.models.UserModel;
 import com.newscheck.newscheck.models.VerificationModel;
@@ -10,6 +10,8 @@ import com.newscheck.newscheck.models.responses.VerificationResponseDTO;
 import com.newscheck.newscheck.repositories.AuditLogRepository;
 import com.newscheck.newscheck.repositories.UserRepository;
 import com.newscheck.newscheck.repositories.VerificationRepository;
+import com.newscheck.newscheck.services.interfaces.IAdminService;
+import com.newscheck.newscheck.services.interfaces.IVerificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

@@ -18,66 +18,55 @@ export class HistoryService {
     private tokenStorageService: TokenStorageService
   ) {}
 
-  getHistory(id: number): Observable<HistoryModel[]> {
-
-    const headers = new HttpHeaders({
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
       'Authorization': `Bearer ${this.tokenStorageService.getToken()}`,
       'Content-Type': 'application/json'
     });
+  }
 
-    return this.http.get<HistoryModel[]>(this.apiUrl + "/user/" + id.toString(), 
-      { headers }
+  getHistory(id: number): Observable<HistoryModel[]> {
+
+    return this.http.get<HistoryModel[]>(
+      `${this.apiUrl}/user/${id.toString()}`,
+      { headers: this.getHeaders() }
     );
   }
 
   submitText(userId: number, contentType: ContentType, contentText: string): Observable<HistoryModel> {
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.tokenStorageService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post<HistoryModel>(this.apiUrl + "/submit", 
+    return this.http.post<HistoryModel>(
+      `${this.apiUrl}/submit`, 
       { userId, contentType, contentText},
-      { headers }
+      { headers: this.getHeaders() }
     );
   }
 
   submitLink(userId: number, contentType: ContentType, contentUrl: string): Observable<HistoryModel> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.tokenStorageService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
 
-    return this.http.post<HistoryModel>(this.apiUrl + "/submit", 
+    return this.http.post<HistoryModel>(
+      `${this.apiUrl}/submit`, 
       { userId, contentType, contentUrl},
-      { headers }
+      { headers: this.getHeaders() }
     );
 
 
   }
 
   submitImage(userId: number, contentType: ContentType, imageBase64: string): Observable<HistoryModel> {
-    
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.tokenStorageService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
 
-    return this.http.post<HistoryModel>(this.apiUrl + "/submit", 
+    return this.http.post<HistoryModel>(
+      `${this.apiUrl}/submit`, 
       { userId, contentType, imageBase64},
-      { headers }
+      { headers: this.getHeaders() }
     );
   }
 
   getVerification(verificationId: number): Observable<HistoryModel> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.tokenStorageService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
 
-    return this.http.get<HistoryModel>(this.apiUrl + "/result/" + verificationId.toString(), 
-      { headers}
+    return this.http.get<HistoryModel>(
+      `${this.apiUrl}/result/${verificationId.toString()}`, 
+      { headers: this.getHeaders() }
     );
   }
 

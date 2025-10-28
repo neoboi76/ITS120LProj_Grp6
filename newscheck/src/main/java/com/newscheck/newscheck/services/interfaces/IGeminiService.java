@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.interfaces;
 
 import com.newscheck.newscheck.models.Gemini.GeminiAnalysisResult;
 import com.newscheck.newscheck.models.search.SearchResult;

@@ -1,5 +1,6 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
+import com.newscheck.newscheck.services.interfaces.IUrlContentExtractorService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

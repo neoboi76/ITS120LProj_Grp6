@@ -2,7 +2,7 @@ package com.newscheck.newscheck.controllers;
 
 import com.newscheck.newscheck.models.requests.AuditLogFilterDTO;
 import com.newscheck.newscheck.models.responses.AuditLogResponseDTO;
-import com.newscheck.newscheck.services.IAuditLogService;
+import com.newscheck.newscheck.services.interfaces.IAuditLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

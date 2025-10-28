@@ -4,7 +4,10 @@ import com.newscheck.newscheck.models.*;
 import com.newscheck.newscheck.models.enums.AuditAction;
 import com.newscheck.newscheck.models.requests.ResetDTO;
 import com.newscheck.newscheck.models.responses.*;
-import com.newscheck.newscheck.services.*;
+import com.newscheck.newscheck.services.implementations.JwtTokenProvider;
+import com.newscheck.newscheck.services.interfaces.IAuditLogService;
+import com.newscheck.newscheck.services.interfaces.IAuthService;
+import com.newscheck.newscheck.services.interfaces.ILogoutService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -12,9 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController

@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.interfaces;
 
 import com.newscheck.newscheck.models.responses.UserResponseDTO;
 import com.newscheck.newscheck.models.responses.VerificationResponseDTO;

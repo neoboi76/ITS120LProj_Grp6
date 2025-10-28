@@ -1,13 +1,11 @@
 package com.newscheck.newscheck.controllers;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.newscheck.newscheck.models.enums.AuditAction;
 import com.newscheck.newscheck.models.requests.VerificationRequestDTO;
 import com.newscheck.newscheck.models.responses.VerificationResponseDTO;
-import com.newscheck.newscheck.services.IAuditLogService;
-import com.newscheck.newscheck.services.IVerificationService;
-import com.newscheck.newscheck.services.JwtTokenProvider;
+import com.newscheck.newscheck.services.interfaces.IAuditLogService;
+import com.newscheck.newscheck.services.interfaces.IVerificationService;
+import com.newscheck.newscheck.services.implementations.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

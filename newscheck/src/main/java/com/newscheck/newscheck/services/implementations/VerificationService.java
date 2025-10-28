@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
 import com.newscheck.newscheck.models.*;
 import com.newscheck.newscheck.models.enums.ContentType;
@@ -11,6 +11,7 @@ import com.newscheck.newscheck.repositories.EvidenceRepository;
 import com.newscheck.newscheck.repositories.UserRepository;
 import com.newscheck.newscheck.repositories.VerdictRepository;
 import com.newscheck.newscheck.repositories.VerificationRepository;
+import com.newscheck.newscheck.services.interfaces.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,8 +65,20 @@ public class VerificationService implements IVerificationService {
                     break;
 
                 case IMAGE:
-                    contentToAnalyze = imageTextExtractorService.extractTextFromImage(request.getImageBase64());
+                    System.out.println("Processing IMAGE verification");
+                    System.out.println("Base64 length: " + request.getImageBase64().length());
+
+                    contentToAnalyze = imageTextExtractorService.extractTextFromImage(
+                            request.getImageBase64()
+                    );
+
+
+                    System.out.println("Extracted text length: " + contentToAnalyze.length());
+                    System.out.println("Extracted text preview: " +
+                            contentToAnalyze.substring(0, Math.min(200, contentToAnalyze.length())));
+
                     verification.setContentText(contentToAnalyze);
+                    verification.setImageBase64(request.getImageBase64());
                     break;
             }
 

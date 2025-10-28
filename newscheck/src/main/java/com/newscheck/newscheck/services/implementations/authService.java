@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
 import com.newscheck.newscheck.models.*;
 import com.newscheck.newscheck.models.enums.Role;
@@ -7,11 +7,10 @@ import com.newscheck.newscheck.models.responses.RegisterResponse;
 import com.newscheck.newscheck.models.responses.ResetResponse;
 import com.newscheck.newscheck.models.responses.SettingsResponse;
 import com.newscheck.newscheck.repositories.PasswordTokenRepository;
-import com.newscheck.newscheck.repositories.TokenRepository;
 import com.newscheck.newscheck.repositories.UserRepository;
+import com.newscheck.newscheck.services.interfaces.IAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -2,7 +2,7 @@ package com.newscheck.newscheck.controllers;
 
 import com.newscheck.newscheck.models.responses.UserResponseDTO;
 import com.newscheck.newscheck.models.responses.VerificationResponseDTO;
-import com.newscheck.newscheck.services.IAdminService;
+import com.newscheck.newscheck.services.interfaces.IAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

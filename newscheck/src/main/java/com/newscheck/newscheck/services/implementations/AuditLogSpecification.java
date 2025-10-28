@@ -1,4 +1,4 @@
-package com.newscheck.newscheck.services;
+package com.newscheck.newscheck.services.implementations;
 
 import com.newscheck.newscheck.models.AuditLogModel;
 import com.newscheck.newscheck.models.requests.AuditLogFilterDTO;
