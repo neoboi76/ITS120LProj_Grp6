@@ -1,6 +1,5 @@
 # NewsCheck: AI-Based Fake News Detection and Verification Platform
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Angular](https://img.shields.io/badge/Angular-20.3.0-red.svg)](https://angular.io/)
@@ -22,12 +21,9 @@ An AI-powered platform that detects fake news and verifies information through r
   - [Step 3: Backend Setup](#step-3-backend-setup)
   - [Step 4: Frontend Setup](#step-4-frontend-setup)
 - [Docker Setup](#-docker-setup)
-- [Deployment Guide](#-deployment-guide)
-- [API Documentation](#-api-documentation)
 - [Project Documentation](#-project-documentation)
 - [Team](#-team)
 - [Acknowledgements](#-acknowledgements)
-- [License](#-license)
 
 ---
 
