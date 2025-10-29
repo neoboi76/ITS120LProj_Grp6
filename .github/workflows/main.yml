@@ -21,8 +21,11 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17' # match your project
+          java-version: '17'
           distribution: temurin
+
+      - name: Make mvnw executable
+        run: chmod +x ./newscheck/mvnw
 
       - name: Build Backend JAR
         run: ./newscheck/mvnw clean package -DskipTests
