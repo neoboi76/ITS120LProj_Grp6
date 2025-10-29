@@ -923,7 +923,7 @@ For questions, suggestions, or collaboration opportunities:
 <p align="center">
   <q>In a world that has really been turned upside down, the true is a moment of the false.</q><br>
   — Guy Debord, <em>The Society of the Spectacle</em><br>
-  <em>Fighting fake news, claim at a time.</em><br><br>
+  <em>Fighting fake news, one claim at a time.</em><br><br>
 </p>
 
 ---
