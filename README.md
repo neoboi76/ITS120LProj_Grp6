@@ -391,7 +391,7 @@ Docker provides a containerized environment that ensures consistency across diff
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/newscheck.git
+git clone https://github.com/neoboi76/ITS120LProj_Grp6.git
 cd newscheck
 ```
 
