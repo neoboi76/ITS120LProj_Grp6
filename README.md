@@ -609,16 +609,17 @@ For detailed project documentation, please refer to:
 
 | Name | Role | Contributions |
 |------|------|---------------|
-| **Dino Alfred Timbol** | Group Leader & Lead backend & frontend developer | Login/Registration/Password functionality, JWT implementation, Backend architecture |
-| **Ken Aliling** | Developer | AI-driven News Fact Checker, API integration, Evidence gathering |
-| **Anicia Kaela Bonayao** | Developer | Homepage/Verification UI, Settings functionality, Frontend design |
-| **Carl Norbi Felonia** | Developer | AI verification pipeline, Reports functionality, Backend services |
-| **Cedrick Miguel Kaneko** | Developer | History page functionality, Database design, Admin features |
+| **[Dino Alfred Timbol](mailto:dattimbol@mymail.mapua.edu.ph)** | Group Leader & Lead Fullstack Developer | Login/Registration/Password functionality, JWT implementation, Email Service implementation, Backend & Frontend architecture |
+| **[Ken Aliling](mailto:kbaliling@mymail.mapua.edu.ph)** | Developer | AI-driven News Fact Checker, API integration, Evidence gathering |
+| **[Anicia Kaela Bonayao](mailto:aksbonayao@mymail.mapua.edu.ph)** | Developer | Homepage/Verification UI, Settings functionality, Frontend design |
+| **[Carl Norbi Felonia](mailto:cncfelonia@mymail.mapua.edu.ph)** | Developer | AI verification pipeline, Reports functionality, Backend services |
+| **[Cedrick Miguel Kaneko](mailto:cmpkaneko@mymail.mapua.edu.ph)** | Developer | History page functionality, Database design, Admin features |
 
 **Submitted to:** Prof. Crizepvill Dumalaog  
-**Course:** ITS120L - Applicaiton Development and Emerging Technologies Laboratory
-**Institution:** *Mapúa University - School of  Information Technology*  
+**Course:** ITS120L - Application Development and Emerging Technologies Laboratory  
+**Institution:** *Mapúa University - School of Information Technology*  
 **Date:** October 2025
+
 
 ---
 
@@ -663,13 +664,15 @@ Special thanks to the open-source projects that made this possible:
 For questions, suggestions, or collaboration opportunities:
 
 - **Email:** *dattimbol@mymail.mapua.edu.ph*
+- **Linkedin:** [Dino Alfred T. Timbol](www.linkedin.com/in/dino-alfred-timbol-3b949a248)
 - **GitHub Issues:** [Create an issue](https://github.com/neoboi76/ITS120LProj_Grp6/issues)
 
 ---
 
 <p align="center">
-  <strong>Made with ❤️ by Group 6</strong><br>
-  <em>Fighting misinformation, one verification at a time.</em>
+  <q>In a world that has really been turned upside down, the true is a moment of the false.</q><br>
+  — Guy Debord, <em>The Society of the Spectacle</em><br>
+  <em>Fighting fake news, claim at a time.</em><br><br>
 </p>
 
 ---
