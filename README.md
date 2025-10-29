@@ -436,62 +436,6 @@ type nul > src\main\resources\application.properties
 touch src/main/resources/application.properties
 ```
 
-Add the following content to `application.properties`:
-
-```application.properties
-
-# =========================================================
-# = SERVER CONFIGURATION
-# =========================================================
-#server.port=8080
-
-# =========================================================
-# = DATABASE CONFIGURATION (PostgreSQL)
-# =========================================================
-spring.datasource.url=jdbc:postgresql://localhost:5432/newscheck_db
-spring.datasource.username=ENTER_YOUR_DATABASE_USERNAME
-spring.datasource.password=ENTER_YOUR_DATABASE_PASSWORD
-spring.datasource.driver-class-name=org.postgresql.Driver
-
-# =========================================================
-# = JPA / HIBERNATE CONFIGURATION
-# =========================================================
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-
-# =========================================================
-# = JWT CONFIGURATION
-# =========================================================
-jwt.secret=${JWT_SECRET}
-jwt.expiration=86400000
-
-# =========================================================
-# = GEMINI API CONFIGURATION
-# =========================================================
-gemini.api.key=${GEMINI_API_KEY}
-gemini.model.url=${GEMINI_MODEL_URL}
-
-# =========================================================
-# = GOOGLE SEARCH API CONFIGURATION
-# =========================================================
-google.search.api.key=${GOOGLE_SEARCH_API_KEY}
-google.search.engine.id=${GOOGLE_SEARCH_ENGINE_ID}
-
-# =========================================================
-# = EMAIL CONFIGURATION
-# =========================================================
-spring.mail.username=${EMAIL_USERNAME}
-spring.mail.password=${EMAIL_PASSWORD}
-spring.mail.port=587
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
-spring.mail.properties.mail.smtp.starttls.required=true
-spring.mail.properties.mail.smtp.connectiontimeout=5000
-spring.mail.properties.mail.smtp.timeout=5000
-spring.mail.properties.mail.smtp.writetimeout=5000
-```
 
 **Replace all placeholder values with your actual API keys and credentials.**
 
@@ -500,7 +444,7 @@ spring.mail.properties.mail.smtp.writetimeout=5000
 ```bash
 # Build backend
 cd newscheck
-docker build -t newscheck-backend .
+docker build -t newscheck .
 
 # Build frontend
 cd ../newscheck-frontend
