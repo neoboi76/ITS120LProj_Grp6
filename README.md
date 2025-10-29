@@ -426,6 +426,16 @@ EMAIL_USERNAME=YOUR_GMAIL_ADDRESS
 EMAIL_PASSWORD=YOUR_GMAIL_APP_PASSWORD
 ```
 
+Create a `application.properties` file in the newscheck (backend) directory
+
+```bash
+# For Windows
+type nul > src\main\resources\application.properties
+
+# For Mac/Linux
+touch src/main/resources/application.properties
+```
+
 Add the following content to `application.properties`:
 
 ```application.properties
