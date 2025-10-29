@@ -860,7 +860,7 @@ For detailed project documentation, please refer to:
 
 | Name | Role | Contributions |
 |------|------|---------------|
-| **[Dino Alfred Timbol](mailto:dattimbol@mymail.mapua.edu.ph)** | Lead Fullstack Developer | Login/Registration/Password functionality, JWT implementation, Email Service implementation, Backend & Frontend architecture |
+| **[Dino Alfred Timbol](mailto:dattimbol@mymail.mapua.edu.ph)** | Lead Developer | Login/Registration/Password functionality, JWT implementation, Email Service implementation, Backend & Frontend architecture |
 | **[Ken Aliling](mailto:kbaliling@mymail.mapua.edu.ph)** | Developer | AI-driven News Fact Checker, API integration, Evidence gathering |
 | **[Anicia Kaela Bonayao](mailto:aksbonayao@mymail.mapua.edu.ph)** | Developer | Homepage/Verification UI, Settings functionality, Frontend design |
 | **[Carl Norbi Felonia](mailto:cncfelonia@mymail.mapua.edu.ph)** | Developer | AI verification pipeline, Reports functionality, Backend services |
