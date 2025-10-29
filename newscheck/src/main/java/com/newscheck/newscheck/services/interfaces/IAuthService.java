@@ -15,5 +15,8 @@ public interface IAuthService {
     SettingsModel getUser(long id);
     Long getUserIdByEmail(String email);
     String requestReset(String email);
+    boolean isEmailValid(String email);
+    ResetResponse forgotPassword(ForgotModel request);
+    String requestForgot(String email);
 }
 

@@ -21,6 +21,8 @@ export class LoginComponent implements OnInit{
   submitted = false;
   errorMessage = '';
   successMessage = '';
+  sent: any;
+  resetMessage: any;
 
   constructor(
     private tokenStorageService: TokenStorageService,
@@ -75,6 +77,23 @@ export class LoginComponent implements OnInit{
       }
     });
 
+  }
+
+  requestReset(event: Event) {
+    event.preventDefault();
+    this.sent = true;
+    const {email, password} = this.loginForm.value;
+    this.resetMessage = "Check your email for the password reset link";
+    this.authService.requestForgotPassword(email.toString()).subscribe({
+      next: (data) => {
+        this.resetMessage = "Check your email for the password reset link";
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+
+    
   }
 
 }

@@ -30,6 +30,7 @@ public class authService implements IAuthService, UserDetailsService  {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final EmailService emailService;
+    private final ForgotService forgotService;
     private final PasswordTokenRepository passwordTokenRepository;
 
 
@@ -99,6 +100,27 @@ public class authService implements IAuthService, UserDetailsService  {
     }
 
     @Override
+    public ResetResponse forgotPassword(ForgotModel request) {
+
+        UserModel user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
+
+        PasswordResetToken tokenRecord = passwordTokenRepository.findByToken(request.getToken())
+                .orElseThrow(() -> new RuntimeException("Invalid or expired token"));
+
+        if (tokenRecord.getExpiry().isBefore(LocalDateTime.now())) {
+            return new ResetResponse("Token expired");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        passwordTokenRepository.delete(tokenRecord);
+
+        return new ResetResponse("Password has been reset successfully.");
+    }
+
+    @Override
     public String requestReset(String email) {
         Optional<UserModel> optionalUser = userRepository.findByEmail(email);
 
@@ -120,6 +142,31 @@ public class authService implements IAuthService, UserDetailsService  {
 
         return null;
     }
+
+    @Override
+    public String requestForgot(String email) {
+        Optional<UserModel> optionalUser = userRepository.findByEmail(email);
+
+        if (optionalUser.isPresent()) {
+            UserModel user = optionalUser.get();
+            String token = UUID.randomUUID().toString();
+            LocalDateTime expiry = LocalDateTime.now().plusHours(1);
+
+            PasswordResetToken resetToken = new PasswordResetToken();
+            resetToken.setToken(token);
+            resetToken.setUser(user);
+            resetToken.setExpiry(expiry);
+            passwordTokenRepository.save(resetToken);
+
+            forgotService.sendResetPasswordEmail(email, token);
+
+            return "If your email exists, a reset link has been sent.";
+        }
+
+        return null;
+    }
+
+
 
     @Override
     public SettingsResponse updateUser(SettingsModel request) {
@@ -168,5 +215,10 @@ public class authService implements IAuthService, UserDetailsService  {
     @Override
     public Long getUserIdByEmail(String email) {
         return userRepository.getUserIdByEmail(email);
+    }
+
+    @Override
+    public boolean isEmailValid(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

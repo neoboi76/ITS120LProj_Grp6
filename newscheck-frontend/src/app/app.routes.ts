@@ -12,6 +12,7 @@ import { AdminGuard } from './services/admin-gaurd';
 import { AdminUsersComponent } from './components/admin-users/admin-users';
 import { AdminVerificationsComponent } from './components/admin-verifications/admin-verifications';
 import { AdminAuditLogsComponent } from './components/admin-audit-logs/admin-audit-logs';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'}, 
@@ -19,6 +20,7 @@ export const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard]}, 
     { path: 'reset-password', component: ResetPasswordComponent},
+    { path: 'forgot-password', component: ForgotPasswordComponent},
     { path: 'history', component: HistoryPageComponent, canActivate: [AuthGuard]},
     { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]},
     { path: 'entry-details/:id', component: EntryDetailsComponent, canActivate: [AuthGuard]},

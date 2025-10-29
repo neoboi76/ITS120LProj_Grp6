@@ -2,6 +2,7 @@ package com.newscheck.newscheck.controllers;
 
 import com.newscheck.newscheck.models.*;
 import com.newscheck.newscheck.models.enums.AuditAction;
+import com.newscheck.newscheck.models.requests.ForgotDTO;
 import com.newscheck.newscheck.models.requests.ResetDTO;
 import com.newscheck.newscheck.models.responses.*;
 import com.newscheck.newscheck.services.implementations.JwtTokenProvider;
@@ -120,12 +121,63 @@ public class UserController {
         }
     }
 
+    @PutMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotModel request, HttpServletRequest httpRequest) {
+        try {
+
+            if(authService.isEmailValid(request.getEmail())) {
+                ResetResponse response = authService.forgotPassword(request);
+
+                Long userId = authService.getUserIdByEmail(request.getEmail());
+                auditLogService.log(
+                        AuditAction.PASSWORD_RESET,
+                        userId,
+                        "User reset password",
+                        httpRequest
+                );
+
+                return ResponseEntity.ok(response);
+            }
+
+        } catch (Exception e) {
+            auditLogService.log(
+                    AuditAction.SYSTEM_ERROR,
+                    (UserModel) null,
+                    "Failed password reset attempt for email: " + request.getEmail(),
+                    httpRequest
+            );
+            return ResponseEntity.badRequest().body("User does not exist");
+        }
+
+        return null;
+    }
+
+
+
     @PostMapping("/request-reset")
     public ResponseEntity<?> requestReset(@RequestBody ResetDTO body, HttpServletRequest request) {
         try {
             String email = body.getEmail();
 
             String msg = authService.requestReset(email);
+
+            return ResponseEntity.ok(msg);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Password reset was unsuccessful");
+        }
+
+    }
+
+    @PostMapping("/request-forgot")
+    public ResponseEntity<?> requestForgot(@RequestBody ForgotDTO body, HttpServletRequest request) {
+        try {
+
+            System.out.println(body.getEmail());
+
+            String email = body.getEmail();
+
+            String msg = authService.requestForgot(email);
 
             return ResponseEntity.ok(msg);
 

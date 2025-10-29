@@ -21,8 +21,9 @@ public interface UserRepository extends JpaRepository<UserModel, Long>, JpaSpeci
     @Query("SELECT u.userId FROM UserModel u WHERE u.email = :email")
     Long getUserIdByEmail(@Param("email") String email);
 
-    // New methods for admin operations
     long countByRole(Role role);
 
     long countByCreatedAtAfter(LocalDateTime date);
+
+    boolean existsByEmail(String email);
 }
