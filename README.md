@@ -21,6 +21,7 @@ An AI-powered platform that detects fake news and verifies information through r
   - [Step 3: Backend Setup](#step-3-backend-setup)
   - [Step 4: Frontend Setup](#step-4-frontend-setup)
 - [Docker Setup](#-docker-setup)
+- [Alternative Docker Setup](#-alternative-docker-setup)
 - [Project Documentation](#-project-documentation)
 - [Team](#-team)
 - [Acknowledgements](#-acknowledgements)
@@ -533,6 +534,312 @@ docker-compose down -v
 # Rebuild from scratch
 docker-compose up -d --build
 ```
+
+### Alternative Docker Setup
+
+If you prefer not to clone the entire repository, you can run NewsCheck directly using our pre-built Docker images from GitHub Container Registry (GHCR). This method is faster and requires less disk space since you don't need the source code.
+
+#### Prerequisites
+
+- Docker Desktop installed and running
+- At least 4GB of RAM allocated to Docker
+
+#### Step 1: Create Project Directory
+
+Create a new directory for your NewsCheck deployment:
+
+```bash
+# For Windows
+mkdir newscheck-docker
+cd newscheck-docker
+
+# For Mac/Linux
+mkdir newscheck-docker && cd newscheck-docker
+```
+
+#### Step 2: Create Environment File
+
+Create a file named `.env` in your project directory with the following content:
+
+```env
+# =========================================================
+# = SERVER CONFIGURATION
+# =========================================================
+server.port=8080
+
+# =========================================================
+# = DATABASE CONFIGURATION (PostgreSQL)
+# =========================================================
+spring.datasource.url=jdbc:postgresql://database:5432/newscheck
+spring.datasource.username=newscheck_user
+spring.datasource.password=newscheck_password
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# =========================================================
+# = JPA / HIBERNATE CONFIGURATION
+# =========================================================
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+# =========================================================
+# = JWT CONFIGURATION
+# =========================================================
+jwt.secret=YOUR_SECRET_KEY_HERE_MINIMUM_256_BITS_LONG_STRING
+jwt.expiration=86400000
+
+# =========================================================
+# = GEMINI API CONFIGURATION
+# =========================================================
+gemini.api.key=YOUR_GEMINI_API_KEY
+gemini.model.url=https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-latest:generateContent
+
+# =========================================================
+# = GOOGLE SEARCH API CONFIGURATION
+# =========================================================
+google.search.api.key=YOUR_GOOGLE_SEARCH_API_KEY
+google.search.engine.id=YOUR_SEARCH_ENGINE_ID
+
+# =========================================================
+# = EMAIL CONFIGURATION
+# =========================================================
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=YOUR_GMAIL_ADDRESS
+spring.mail.password=YOUR_GMAIL_APP_PASSWORD
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+spring.mail.properties.mail.smtp.connectiontimeout=5000
+spring.mail.properties.mail.smtp.timeout=5000
+spring.mail.properties.mail.smtp.writetimeout=5000
+
+# =========================================================
+# = LOGGING
+# =========================================================
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+```
+
+**⚠️ Important:** Replace all placeholder values with your actual API keys and credentials:
+- `YOUR_SECRET_KEY_HERE_MINIMUM_256_BITS_LONG_STRING` - A secure random string (at least 32 characters)
+- `YOUR_GEMINI_API_KEY` - Your Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+- `YOUR_GOOGLE_SEARCH_API_KEY` - Your Google Custom Search API key
+- `YOUR_SEARCH_ENGINE_ID` - Your Google Search Engine ID
+- `YOUR_GMAIL_ADDRESS` - Your Gmail address for sending emails
+- `YOUR_GMAIL_APP_PASSWORD` - Your Gmail app-specific password
+
+#### Step 3: Create Docker Compose File
+
+Create a file named `docker-compose.yaml` in the same directory:
+
+```yaml
+services:
+  database:
+    image: postgres:15-alpine
+    container_name: newscheck-db
+    environment:
+      POSTGRES_DB: newscheck
+      POSTGRES_USER: newscheck_user
+      POSTGRES_PASSWORD: newscheck_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - newscheck_postgres_data:/var/lib/postgresql/data
+    networks:
+      - newscheck-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U newscheck_user -d newscheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: ghcr.io/neoboi76/its120lproj_grp6/newscheck-backend:latest
+    container_name: newscheck-backend
+    env_file: .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - newscheck-network
+    restart: unless-stopped
+
+  frontend:
+    image: ghcr.io/neoboi76/its120lproj_grp6/newscheck-frontend:latest
+    container_name: newscheck-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - newscheck-network
+    restart: unless-stopped
+
+volumes:
+  newscheck_postgres_data:
+
+networks:
+  newscheck-network:
+    driver: bridge
+```
+
+#### Understanding the Docker Compose Configuration
+
+**Services:**
+
+1. **database** (PostgreSQL)
+   - Uses the official PostgreSQL 15 Alpine image
+   - Port: 5432 (mapped to host)
+   - Credentials: `newscheck_user` / `newscheck_password`
+   - Database: `newscheck`
+   - Includes health checks to ensure it's ready before starting backend
+
+2. **backend** (Spring Boot Application)
+   - Uses pre-built image from GitHub Container Registry
+   - Port: 8080 (mapped to host)
+   - Loads configuration from `.env` file
+   - Waits for database to be healthy before starting
+   - Auto-restarts unless manually stopped
+
+3. **frontend** (Angular Application)
+   - Uses pre-built image from GitHub Container Registry
+   - Port: 4200 (mapped from container port 80)
+   - Depends on backend service
+   - Auto-restarts unless manually stopped
+
+**Volumes:**
+- `newscheck_postgres_data`: Persists PostgreSQL database data between container restarts
+
+**Networks:**
+- `newscheck-network`: Internal bridge network for inter-container communication
+
+#### Step 4: Start the Application
+
+Run the following command to start all services:
+
+```bash
+docker-compose up -d
+```
+
+This will:
+1. Pull the pre-built images from GitHub Container Registry (first time only)
+2. Create and start the database container
+3. Wait for the database to be healthy
+4. Start the backend container
+5. Start the frontend container
+
+#### Step 5: Verify Installation
+
+Check that all containers are running:
+
+```bash
+docker-compose ps
+```
+
+You should see three containers in "Up" status:
+- `newscheck-db`
+- `newscheck-backend`
+- `newscheck-frontend`
+
+#### Step 6: Access the Application
+
+Once all containers are running:
+
+- **Frontend:** http://localhost:4200
+- **Backend API:** http://localhost:8080
+- **Database:** localhost:5432
+
+#### Managing the Application
+
+**View logs:**
+```bash
+# All services
+docker-compose logs -f
+
+# Specific service
+docker-compose logs -f backend
+docker-compose logs -f frontend
+docker-compose logs -f database
+```
+
+**Stop the application:**
+```bash
+docker-compose down
+```
+
+**Stop and remove all data (including database):**
+```bash
+docker-compose down -v
+```
+
+**Restart a specific service:**
+```bash
+docker-compose restart backend
+docker-compose restart frontend
+```
+
+**Update to latest images:**
+```bash
+# Pull latest images
+docker-compose pull
+
+# Restart with new images
+docker-compose up -d
+```
+
+#### Troubleshooting
+
+**Images fail to pull:**
+- Ensure you have internet connectivity
+- Check if GitHub Container Registry is accessible
+- Try pulling images manually:
+  ```bash
+  docker pull ghcr.io/neoboi76/its120lproj_grp6/newscheck-backend:latest
+  docker pull ghcr.io/neoboi76/its120lproj_grp6/newscheck-frontend:latest
+  ```
+
+**Backend fails to start:**
+- Check if `.env` file exists and contains valid API keys
+- View backend logs: `docker-compose logs backend`
+- Ensure database is healthy: `docker-compose ps database`
+
+**Database connection issues:**
+- Verify database health: `docker-compose logs database`
+- Ensure the database service is running before backend starts
+- Check network connectivity: `docker network inspect newscheck-network`
+
+**Frontend can't connect to backend:**
+- Ensure backend is running: `docker-compose ps backend`
+- Check backend logs for errors: `docker-compose logs backend`
+- Verify port 8080 is not in use by another application
+
+#### Advantages of This Method
+
+✅ **No source code needed** - Just two configuration files  
+✅ **Faster setup** - No compilation or building required  
+✅ **Smaller disk footprint** - Only stores images and configuration  
+✅ **Always up-to-date** - Pull latest images with one command  
+✅ **Consistent deployment** - Same images across all environments  
+
+#### When to Use Each Method
+
+**Use Pre-built Images (This Method) when:**
+- You want to quickly deploy and test the application
+- You don't need to modify the source code
+- You want the latest stable version
+- You have limited disk space
+
+**Use Full Repository Clone when:**
+- You want to contribute to the project
+- You need to modify or customize the code
+- You want to build images locally
+- You're developing or debugging features
+
+---
 
 ## 📖 Project Documentation
 
