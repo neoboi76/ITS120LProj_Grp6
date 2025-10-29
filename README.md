@@ -5,7 +5,7 @@
 [![Angular](https://img.shields.io/badge/Angular-20.3.0-red.svg)](https://angular.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-blue.svg)](https://www.postgresql.org/)
 
-An AI-powered platform that detects fake news and verifies information through reliable sources using Google Customer Search API and the Gemini 2.5 Pro API.
+An AI-powered platform that detects fake news and verifies information through reliable sources using Google Custom Search API and the Gemini 2.5 Pro API.
 
 ---
 
