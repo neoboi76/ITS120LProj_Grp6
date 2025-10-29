@@ -21,7 +21,7 @@ An AI-powered platform that detects fake news and verifies information through r
   - [Step 3: Backend Setup](#step-3-backend-setup)
   - [Step 4: Frontend Setup](#step-4-frontend-setup)
 - [Docker Setup](#-docker-setup)
-- [Alternative Docker Setup](#-alternative-docker-setup)
+- [Alternative Docker Setup](#alternative-docker-setup)
 - [Project Documentation](#-project-documentation)
 - [Team](#-team)
 - [Acknowledgements](#-acknowledgements)
