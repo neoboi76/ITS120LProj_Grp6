@@ -438,10 +438,10 @@ Add the following content to `application.properties`:
 # =========================================================
 # = DATABASE CONFIGURATION (PostgreSQL)
 # =========================================================
-#spring.datasource.url=jdbc:postgresql://localhost:5432/newscheck_db
-#spring.datasource.username=ENTER_YOUR_DATABASE_USERNAME
-#spring.datasource.password=ENTER_YOUR_DATABASE_PASSWORD
-#spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://localhost:5432/newscheck_db
+spring.datasource.username=ENTER_YOUR_DATABASE_USERNAME
+spring.datasource.password=ENTER_YOUR_DATABASE_PASSWORD
+spring.datasource.driver-class-name=org.postgresql.Driver
 
 # =========================================================
 # = JPA / HIBERNATE CONFIGURATION
