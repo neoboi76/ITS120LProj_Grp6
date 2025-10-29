@@ -664,7 +664,7 @@ Special thanks to the open-source projects that made this possible:
 For questions, suggestions, or collaboration opportunities:
 
 - **Email:** *dattimbol@mymail.mapua.edu.ph*
-- **Linkedin:** [Dino Alfred T. Timbol](www.linkedin.com/in/dino-alfred-timbol-3b949a248)
+- **Linkedin:** [Dino Alfred T. Timbol](https://www.linkedin.com/in/dino-alfred-timbol-3b949a248/)
 - **GitHub Issues:** [Create an issue](https://github.com/neoboi76/ITS120LProj_Grp6/issues)
 
 ---
