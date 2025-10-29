@@ -118,7 +118,7 @@ export class SettingsComponent {
         this.successMessage = "Check your email for the password reset link";
       },
       error: (err) => {
-        this.errorMessage = "Error password reset";
+        console.log(err)
       }
     })
 

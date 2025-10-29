@@ -93,7 +93,7 @@ public class VerificationService implements IVerificationService {
                 searchQuery = com.newscheck.newscheck.utils.SearchQueryExtractor.enhanceQuery(searchQuery);
 
                 System.out.println("Performing search for: " + searchQuery);
-                searchResults = googleSearchService.searchNews(searchQuery, 5);
+                searchResults = googleSearchService.searchNews(searchQuery, 8);
 
                 if (!searchResults.isEmpty()) {
                     searchSucceeded = true;
@@ -202,9 +202,14 @@ public class VerificationService implements IVerificationService {
         if (verification.getContentType() == ContentType.TEXT) {
             response.setClaim(verification.getContentText());
         }
-        else if (verification.getContentType() == ContentType.URL) {
-            response.setClaim((urlContentExtractorService.extractTitle(verification.getContentText())));
+        if (verification.getContentType() == ContentType.URL) {
+            response.setClaim(verification.getContentUrl());
         }
+
+
+        // response.setContentType(verification.getContentType());
+        //response.setClaim(verification.getContentText());
+        //response.setContentUrl(verification.getContentUrl());
 
         if (verdict != null) {
             response.setVerdictType(verdict.getVerdictType());
