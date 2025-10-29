@@ -1,0 +1,49 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main # Trigger when you push to main branch
+  workflow_dispatch: # Optional: allows manual triggering
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Backend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./newscheck
+          file: ./newscheck/Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/its120lproj_grp6/newscheck-backend:latest
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.description=NewsCheck backend image
+            org.opencontainers.image.licenses=MIT
+
+      - name: Build and Push Frontend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./newscheck-frontend #
+          file: ./newscheck-frontend/Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/its120lproj_grp6/newscheck-frontend:latest
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.description=NewsCheck frontend image
