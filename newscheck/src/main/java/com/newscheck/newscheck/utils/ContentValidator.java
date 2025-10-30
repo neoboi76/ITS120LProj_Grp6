@@ -3,8 +3,20 @@ package com.newscheck.newscheck.utils;
 import com.newscheck.newscheck.models.requests.VerificationRequestDTO;
 import com.newscheck.newscheck.models.enums.ContentType;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Content validator utility class.
+
 public class ContentValidator {
 
+    //Validates verification request
     public static void validateVerificationRequest(VerificationRequestDTO request) throws IllegalArgumentException {
         if (request.getUserId() == null) {
             throw new IllegalArgumentException("User ID is required");
@@ -44,6 +56,7 @@ public class ContentValidator {
         }
     }
 
+    //Checks whether the inputted url is valid or not
     private static boolean isValidUrl(String url) {
         try {
             String urlPattern = "^(https?://)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)$";
@@ -53,6 +66,7 @@ public class ContentValidator {
         }
     }
 
+    //Sanitizes content. Removes html tags and whitespaces.
     public static String sanitizeContent(String content) {
         if (content == null) {
             return "";

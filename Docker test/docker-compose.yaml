@@ -1,0 +1,50 @@
+services:
+  database:
+    image: postgres:15-alpine
+    container_name: newscheck-db
+    environment:
+      POSTGRES_DB: newscheck
+      POSTGRES_USER: newscheck_user
+      POSTGRES_PASSWORD: newscheck_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - newscheck_postgres_data:/var/lib/postgresql/data
+    networks:
+      - newscheck-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U newscheck_user -d newscheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: ghcr.io/neoboi76/its120lproj_grp6/newscheck-backend:latest
+    container_name: newscheck-backend
+    env_file: .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - newscheck-network
+    restart: unless-stopped
+
+  frontend:
+    image: ghcr.io/neoboi76/its120lproj_grp6/newscheck-frontend:latest
+    container_name: newscheck-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - newscheck-network
+    restart: unless-stopped
+
+volumes:
+  newscheck_postgres_data:
+
+networks:
+  newscheck-network:
+    driver: bridge

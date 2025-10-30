@@ -7,6 +7,17 @@ import { FooterComponent } from '../../components/footer/footer';
 import { AdminService } from '../../services/admin-service';
 import { AuditLogResponse } from '../../models/admin-models';
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Class that deals with admin audit logs operations
+
 @Component({
     selector: 'app-admin-audit-logs',
     standalone: true,
@@ -38,11 +49,13 @@ export class AdminAuditLogsComponent implements OnInit {
 
     constructor(private adminService: AdminService) {}
 
+    //Loads audit logs and stats on initialization
     ngOnInit(): void {
         this.loadAuditLogs();
         this.loadStats();
     }
 
+    //Loads all existing audit logs
     loadAuditLogs(): void {
         this.isLoading = true;
         this.errorMessage = '';
@@ -72,6 +85,7 @@ export class AdminAuditLogsComponent implements OnInit {
         });
     }
 
+    //Loads summarized statistics pertaining to the audit logs
     loadStats(): void {
         this.adminService.getAuditLogStats().subscribe({
             next: (data) => {
@@ -83,11 +97,13 @@ export class AdminAuditLogsComponent implements OnInit {
         });
     }
 
+    //Applies set filters
     applyFilters(): void {
         this.currentPage = 0;
         this.loadAuditLogs();
     }
 
+    //Removes set filters
     clearFilters(): void {
         this.userIdFilter = null;
         this.actionFilter = '';
@@ -97,6 +113,7 @@ export class AdminAuditLogsComponent implements OnInit {
         this.loadAuditLogs();
     }
 
+    //Change page
     changePage(page: number): void {
         if (page >= 0 && page < this.totalPages) {
             this.currentPage = page;
@@ -104,6 +121,7 @@ export class AdminAuditLogsComponent implements OnInit {
         }
     }
 
+    //Modify sort criteria
     changeSort(column: string): void {
         if (this.sortBy === column) {
             this.sortDirection = this.sortDirection === 'ASC' ? 'DESC' : 'ASC';
@@ -114,6 +132,7 @@ export class AdminAuditLogsComponent implements OnInit {
         this.loadAuditLogs();
     }
 
+    //Remove audit logs longer than 90 days
     cleanupOldLogs(daysOld: number = 90): void {
         if (confirm(`Are you sure you want to delete all audit logs older than ${daysOld} days? This cannot be undone.`)) {
             this.adminService.cleanupOldAuditLogs(daysOld).subscribe({
@@ -134,6 +153,8 @@ export class AdminAuditLogsComponent implements OnInit {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+
+    //Return page numbers relative to the current page
     getPageNumbers(): number[] {
         const maxVisible = 5;
         const pages: number[] = [];
@@ -150,6 +171,7 @@ export class AdminAuditLogsComponent implements OnInit {
         return pages;
     }
 
+    //Return action color associated with a given audit action
     getActionColor(action: string): string {
         const actionColors: {[key: string]: string} = {
             'USER_LOGIN': 'bg-blue-500/30 text-blue-300',
@@ -167,6 +189,7 @@ export class AdminAuditLogsComponent implements OnInit {
         return actionColors[action] || 'bg-gray-500/30 text-gray-300';
     }
 
+    //If details is longer than the specified length, truncate it
     truncateDetails(details: string, maxLength: number = 60): string {
         if (!details) return 'N/A';
         return details.length > maxLength ? details.substring(0, maxLength) + '...' : details;

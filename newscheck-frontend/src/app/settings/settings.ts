@@ -9,6 +9,17 @@ import { TokenStorageService } from '../services/token-storage-service';
 import { AuthService } from '../services/auth-service';
 import { NgClass } from '@angular/common';
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Settings page typescript
+
 @Component({
   selector: 'app-settings',
   imports: [ReactiveFormsModule, NavComponent, FooterComponent, RouterLink, NgClass, FormsModule],
@@ -31,7 +42,7 @@ export class SettingsComponent {
     private tokenStorageService: TokenStorageService,
     private authService: AuthService
 
-  ) {
+  ) { //Form control
     this.userForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.minLength(3)]],
@@ -42,8 +53,8 @@ export class SettingsComponent {
 
   }
 
+  //Retrieves user information on initialization
   ngOnInit() {
-
       this.user = this.tokenStorageService.getUser();
       this.authService.getUser(this.user.id).subscribe(data => {
         this.userForm.patchValue({
@@ -61,6 +72,7 @@ export class SettingsComponent {
   userForm: FormGroup;
   formSubmitted = false;
 
+  //Enables editing
   startEdit() {
 
     if (!this.userForm) return;
@@ -76,7 +88,7 @@ export class SettingsComponent {
      
   }
 
-
+  //Submits to backend
   onSubmit() {
     this.submitted = true;
     this.errorMessage = '';
@@ -108,6 +120,7 @@ export class SettingsComponent {
 
   }
 
+  //Requests reset password link from emailService, activated from the settings page
   requestReset(event: Event) {
     event.preventDefault();
     this.sent = true;

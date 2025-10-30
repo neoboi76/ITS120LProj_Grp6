@@ -10,6 +10,17 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Enables global exception handling across backend operations
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

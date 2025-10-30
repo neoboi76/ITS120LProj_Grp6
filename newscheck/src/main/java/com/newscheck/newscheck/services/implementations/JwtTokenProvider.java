@@ -11,15 +11,32 @@ import org.springframework.beans.factory.annotation.Value;
 import java.security.Key;
 import java.util.Date;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//JWT token provider service. Contains business logic
+//for jwt token provider operations
+
 @Component
 public class JwtTokenProvider {
 
+    //References jwt secret key stored in the
+    //application.properties file
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
+    //References jwt token expiration date stored in the
+    //application.properties file
     @Value("${jwt.expiration}")
     private long EXPIRATION_TIME;
 
+    //Generates JWT token using hmac
     public String generateToken(String email) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
@@ -34,6 +51,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    //Validates a JWT token
     public boolean validateToken(String token) {
         try {
             Claims claims = Jwts.parserBuilder()
@@ -53,8 +71,7 @@ public class JwtTokenProvider {
         }
     }
 
-
-
+    //Retrieves email associated with a JWT token
     public String getEmailFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
@@ -65,6 +82,7 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
+    //Retrieves expiration date of a JWT token
     public Date getExpirationDateFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))

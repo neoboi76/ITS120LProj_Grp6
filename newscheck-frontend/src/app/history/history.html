@@ -1,5 +1,16 @@
 <title>History</title>
 
+<!-- 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+  
+  History page
+      -->
+
 <app-nav id="history"></app-nav>
 
 <section>
@@ -20,7 +31,7 @@
             </div>
         }
 
-        @if (history?.length) {
+        @if (history?.length) { <!-- History section -->
             <div class="w-[98%] flex flex-col mt-2 mb-10 bg-white/10 backdrop-blur-md rounded-xl p-4 shadow-lg border border-white/20 text-base max-h-[875px] overflow-y-auto relative items-center">
 
                 <h2 class="text-xl font-semibold text-green-400 text-center mb-2">History</h2>
@@ -34,7 +45,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (item of filteredHistory(); track item) {
+                        @for (item of filteredHistory(); track item) {<!-- Loops and filters through a list of all verifications made by the logged user -->
                             <tr class="border-b border-gray-400/20 transition-all duration-300 ease-in-out hover:bg-white/20 hover:shadow-lg hover:scale-[1.02]">
                                 <td class="pr-5 p-1">{{ item.date | date:'yyyy-MM-dd'}}</td>
                                 <td class="cursor-pointer hover:underline">

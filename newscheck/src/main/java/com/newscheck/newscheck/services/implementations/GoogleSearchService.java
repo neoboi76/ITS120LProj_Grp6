@@ -15,19 +15,37 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Google search service. Contains business logic
+//for Google Custom Search API operations
+
 @Service
 @RequiredArgsConstructor
 public class GoogleSearchService implements IGoogleSearchService {
 
+    //References Google custom search api key stored in the
+    //application.properties file
     @Value("${google.search.api.key}")
     private String apiKey;
 
+    //References Google custom search engine id stored in the
+    //application.properties file
     @Value("${google.search.engine.id}")
     private String searchEngineId;
 
+    //Used for building queries to and from Google Custom Search API
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    //Searches for news. Max results to take is 10.
     @Override
     public List<SearchResult> searchNews(String query, int maxResults) throws Exception {
         try {
@@ -66,6 +84,7 @@ public class GoogleSearchService implements IGoogleSearchService {
         }
     }
 
+    //Parses retrieved search results
     private List<SearchResult> parseSearchResults(String responseBody) throws Exception {
         List<SearchResult> results = new ArrayList<>();
 

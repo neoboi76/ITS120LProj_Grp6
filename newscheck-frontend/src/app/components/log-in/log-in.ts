@@ -6,6 +6,16 @@ import { TokenStorageService } from '../../services/token-storage-service';
 import { LoginModel } from '../../models/login-model';
 import { AuthService } from '../../services/auth-service';
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Class that handles login operations
 
 @Component({
   selector: 'app-log-in',
@@ -31,18 +41,21 @@ export class LoginComponent implements OnInit{
     private fb: FormBuilder
   ) {}
 
+  //Toggles password visible or not
   showPassword: boolean = false;
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
+  //Check's if user is already logged in. If yes, redirects user to home page.
   ngOnInit(): void {
     if (this.tokenStorageService.getToken()) {
       this.authService.isLoggedIn = true;
       this.router.navigate(['/home']);
     }
 
+    //Validates form
     this.loginForm = this.fb.group({
       email: ['', [Validators.required,
         Validators.minLength(6)]],
@@ -55,6 +68,7 @@ export class LoginComponent implements OnInit{
     return this.loginForm.controls;
   }
 
+  //Facilitates login operation. Authenticates user in the backend.
   onSubmit(): void {
     this.submitted = true;
     this.errorMessage = '';
@@ -79,6 +93,7 @@ export class LoginComponent implements OnInit{
 
   }
 
+  //Requests reset password link from forgotService, activated from the login page
   requestReset(event: Event) {
     event.preventDefault();
     this.sent = true;

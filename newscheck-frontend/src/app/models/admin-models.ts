@@ -1,3 +1,14 @@
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Interfaces or model classes for admin use
+
 export interface DashboardStats {
   totalUsers: number;
   adminUsers: number;

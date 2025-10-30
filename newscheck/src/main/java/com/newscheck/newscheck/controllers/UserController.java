@@ -17,6 +17,18 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//User controller containing endpoints and operations
+//for handling user requests
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +41,7 @@ public class UserController {
     private final IAuditLogService auditLogService;
 
 
+    //Handles login authentication and logging
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginModel request, HttpServletRequest httpRequest) {
         try {
@@ -60,6 +73,7 @@ public class UserController {
         }
     }
 
+    //Handles register or sign-up operations and logging
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterModel request, HttpServletRequest httpRequest) {
         try {
@@ -90,6 +104,7 @@ public class UserController {
         }
     }
 
+    //Handles reset-password operations and logging
     @PutMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetModel request, HttpServletRequest httpRequest) {
         try {
@@ -121,6 +136,7 @@ public class UserController {
         }
     }
 
+    //Handles forgot-password operations and logging
     @PutMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotModel request, HttpServletRequest httpRequest) {
         try {
@@ -153,7 +169,7 @@ public class UserController {
     }
 
 
-
+    //Handles requests reset password (from inside settings page)
     @PostMapping("/request-reset")
     public ResponseEntity<?> requestReset(@RequestBody ResetDTO body, HttpServletRequest request) {
         try {
@@ -169,6 +185,7 @@ public class UserController {
 
     }
 
+    //Handles requests forgot password (from the login page)
     @PostMapping("/request-forgot")
     public ResponseEntity<?> requestForgot(@RequestBody ForgotDTO body, HttpServletRequest request) {
         try {
@@ -187,7 +204,7 @@ public class UserController {
 
     }
 
-
+    //Handles logout operations, jwt token blacklist, and logging
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         try {
@@ -217,6 +234,7 @@ public class UserController {
         }
     }
 
+    //Handles updating user information and logging
     @PutMapping("/update-user")
     public ResponseEntity<?> updateUser(HttpServletRequest request, @RequestBody SettingsModel usrReq) {
         try {
@@ -247,6 +265,7 @@ public class UserController {
         return ResponseEntity.badRequest().body("User does not exist");
     }
 
+    //Retrieves a particular user and logs it
     @GetMapping("/get-user/{id}")
     public ResponseEntity<?> getUser(HttpServletRequest request, @PathVariable long id) {
         try {
@@ -275,6 +294,7 @@ public class UserController {
         return ResponseEntity.badRequest().body("User does not exist");
     }
 
+    //Gets JWT token from request body 
     private String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {

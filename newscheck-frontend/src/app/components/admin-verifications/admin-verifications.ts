@@ -7,6 +7,17 @@ import { FooterComponent } from '../../components/footer/footer';
 import { AdminService} from '../../services/admin-service';
 import { VerificationResponse } from '../../models/admin-models';
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Class that deals with admin verification management operations
+
 @Component({
     selector: 'app-admin-verifications',
     standalone: true,
@@ -38,10 +49,12 @@ export class AdminVerificationsComponent implements OnInit {
 
     constructor(private adminService: AdminService) {}
 
+    //Loads user verification on initialization
     ngOnInit(): void {
         this.loadVerifications();
     }
 
+    //Returns all existing verifications
     loadVerifications(): void {
         this.isLoading = true;
         this.errorMessage = '';
@@ -70,11 +83,13 @@ export class AdminVerificationsComponent implements OnInit {
         });
     }
 
+    //Apply set filters
     applyFilters(): void {
         this.currentPage = 0;
         this.loadVerifications();
     }
 
+    //Clears set filters
     clearFilters(): void {
         this.userIdFilter = null;
         this.statusFilter = '';
@@ -83,6 +98,7 @@ export class AdminVerificationsComponent implements OnInit {
         this.loadVerifications();
     }
 
+    //Change page 
     changePage(page: number): void {
         if (page >= 0 && page < this.totalPages) {
             this.currentPage = page;
@@ -90,6 +106,7 @@ export class AdminVerificationsComponent implements OnInit {
         }
     }
 
+    //Modify sort criteria
     changeSort(column: string): void {
         if (this.sortBy === column) {
             this.sortDirection = this.sortDirection === 'ASC' ? 'DESC' : 'ASC';
@@ -100,16 +117,19 @@ export class AdminVerificationsComponent implements OnInit {
         this.loadVerifications();
     }
 
+    //Open delete popup warning
     openDeleteModal(verification: VerificationResponse): void {
         this.verificationToDelete = verification;
         this.showDeleteModal = true;
     }
 
+    //Close delete popup warning
     closeDeleteModal(): void {
         this.showDeleteModal = false;
         this.verificationToDelete = null;
     }
 
+    //Confirm delete operation
     confirmDelete(): void {
         if (this.verificationToDelete) {
             this.adminService.deleteVerification(this.verificationToDelete.verificationId).subscribe({
@@ -131,6 +151,7 @@ export class AdminVerificationsComponent implements OnInit {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    //Return page numbers relative to the current page
     getPageNumbers(): number[] {
         const maxVisible = 5;
         const pages: number[] = [];
@@ -147,6 +168,7 @@ export class AdminVerificationsComponent implements OnInit {
         return pages;
     }
 
+    //If claim is longer than specified length, truncate it
     truncateClaim(claim: string, maxLength: number = 50): string {
         if (!claim) return 'N/A';
         return claim.length > maxLength ? claim.substring(0, maxLength) + '...' : claim;

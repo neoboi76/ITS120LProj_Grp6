@@ -13,6 +13,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Verificaiton controller containing endpoints and operations
+//for handling verificatio requests
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/verification")
@@ -23,6 +35,7 @@ public class VerificationController {
     private final JwtTokenProvider jwtTokenProvider;
     private final IAuditLogService auditLogService;
 
+    //Handles text, url, and submit operations and logs it
     @PostMapping("/submit")
     public ResponseEntity<?> submitVerification(HttpServletRequest httpReq, @RequestBody VerificationRequestDTO request) {
         try {
@@ -75,6 +88,7 @@ public class VerificationController {
         }
     }
 
+    //Retrieves a particular verification and logs it
     @GetMapping("/result/{verificationId}")
     public ResponseEntity<?> getVerificationResult(HttpServletRequest httpReq, @PathVariable Long verificationId) {
         try {
@@ -122,6 +136,7 @@ public class VerificationController {
         }
     }
 
+    //Retrieves all verifications associated with a user and logs it
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUserVerifications(HttpServletRequest httpReq, @PathVariable Long userId) {
         try {
@@ -158,6 +173,7 @@ public class VerificationController {
         }
     }
 
+    //Gets JWT token from request body 
     private String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {

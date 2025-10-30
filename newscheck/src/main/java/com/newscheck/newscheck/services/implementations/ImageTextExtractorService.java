@@ -12,19 +12,37 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Image text extractor service. Contains business logic
+//for image text extraction operations
+
 @Service
 @RequiredArgsConstructor
 public class ImageTextExtractorService implements IImageTextExtractorService {
 
+    //References gemini api key stored in the
+    //application.properties file
     @Value("${gemini.api.key}")
     private String apiKey;
 
+    //References gemini model url stored in the
+    //application.properties file
     @Value("${gemini.model.url}")
     private String modelUrl;
 
+    //Used for building queries to and from Google Custom Search API
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    //Extracts text from image. Takes as input a base64 string.
     @Override
     public String extractTextFromImage(String base64Image) throws Exception {
         String url = modelUrl + "?key=" + apiKey;

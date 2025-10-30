@@ -6,6 +6,16 @@ import { FooterComponent } from '../../components/footer/footer';
 import { AdminService } from '../../services/admin-service';
 import { DashboardStats } from '../../models/admin-models';
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Class that deals with admin-dashboard operations
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
@@ -21,10 +31,12 @@ export class AdminDashboardComponent implements OnInit {
 
   constructor(private adminService: AdminService) {}
 
+  //Displays dashboard stats on initialization
   ngOnInit(): void {
     this.loadDashboardStats();
   }
 
+  //Displays dashboard stats
   loadDashboardStats(): void {
     this.isLoading = true;
     this.adminService.getDashboardStats().subscribe({

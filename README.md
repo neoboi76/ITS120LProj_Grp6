@@ -33,6 +33,7 @@ An AI-powered platform that detects fake news and verifies information through r
 NewsCheck is an enterprise-grade fact-checking platform designed to combat misinformation by leveraging AI-powered analysis. The system allows users to submit news content via text, URL, or image upload, and receive instant verification results with detailed reasoning and credible source citations.
 
 **Key Capabilities:**
+
 - Real-time fact-checking using Google's Gemini API
 - Multi-format content verification (Text, URL, Image)
 - Automated evidence gathering via Google Custom Search
@@ -57,6 +58,7 @@ NewsCheck is an enterprise-grade fact-checking platform designed to combat misin
 ## 🛠 Tech Stack
 
 ### Backend
+
 - **Java 17**
 - **Spring Boot 3.5.6**
 - **Spring Security** (JWT Authentication)
@@ -66,16 +68,19 @@ NewsCheck is an enterprise-grade fact-checking platform designed to combat misin
 - **Lombok** (Boilerplate reduction)
 
 ### Frontend
+
 - **Angular 20.3.0**
 - **Tailwind CSS 4.1.14**
 - **RxJS** (Reactive programming)
 - **Font Awesome** (Icons)
 
 ### AI & APIs
+
 - **Google Gemini API** (Content analysis and OCR)
 - **Google Custom Search API** (Evidence gathering)
 
 ### DevOps
+
 - **Docker & Docker Compose**
 - **Maven** (Build tool)
 - **npm** (Package manager)
@@ -88,33 +93,36 @@ Before you begin, ensure you have the following installed:
 
 ### Required Software
 
-| Software | Version | Download Link |
-|----------|---------|---------------|
-| **Java JDK** | 17+ | [Download](https://www.oracle.com/java/technologies/downloads/#java17) |
-| **Node.js** | 18+ | [Download](https://nodejs.org/) |
-| **PostgreSQL** | 14+ | [Download](https://www.postgresql.org/download/) |
-| **Maven** | 3.8+ | Included in IntelliJ IDEA |
-| **Git** | Latest | [Download](https://git-scm.com/) |
-| **IntelliJ IDEA** | Community Edition | [Download](https://www.jetbrains.com/idea/download/) |
-| **Visual Studio Code** | Latest | [Download](https://code.visualstudio.com/) |
-| **Docker Desktop** | Latest (for Docker setup) | [Download](https://www.docker.com/products/docker-desktop) |
+| Software               | Version                   | Download Link                                                          |
+| ---------------------- | ------------------------- | ---------------------------------------------------------------------- |
+| **Java JDK**           | 17+                       | [Download](https://www.oracle.com/java/technologies/downloads/#java17) |
+| **Node.js**            | 18+                       | [Download](https://nodejs.org/)                                        |
+| **PostgreSQL**         | 14+                       | [Download](https://www.postgresql.org/download/)                       |
+| **Maven**              | 3.8+                      | Included in IntelliJ IDEA                                              |
+| **Git**                | Latest                    | [Download](https://git-scm.com/)                                       |
+| **IntelliJ IDEA**      | Community Edition         | [Download](https://www.jetbrains.com/idea/download/)                   |
+| **Visual Studio Code** | Latest                    | [Download](https://code.visualstudio.com/)                             |
+| **Docker Desktop**     | Latest (for Docker setup) | [Download](https://www.docker.com/products/docker-desktop)             |
 
 ### API Keys Required
 
 You will need to obtain the following API keys:
 
 1. **Gemini API Key**
+
    - Visit: https://makersuite.google.com/app/apikey
    - Create a new API key
    - Enable Gemini API access
 
 2. **Google Custom Search API Key**
+
    - Visit: https://developers.google.com/custom-search/v1/introduction
    - Create a project in Google Cloud Console
    - Enable Custom Search API
    - Create credentials (API Key)
 
 3. **Google Search Engine ID**
+
    - Visit: https://programmablesearchengine.google.com/
    - Create a new search engine
    - Configure to search the entire web
@@ -148,6 +156,7 @@ cd newscheck
 1. **Open pgAdmin 4**
 
 2. **Create a new database:**
+
    - Right-click on "Databases" → Create → Database
    - Database name: `newscheck_db`
    - Owner: `postgres` (or your PostgreSQL username)
@@ -254,6 +263,7 @@ spring.mail.properties.mail.smtp.writetimeout=5000
 ```
 
 **Important Notes:**
+
 - Replace `YOUR_POSTGRESQL_PASSWORD` with your actual PostgreSQL password
 - Replace `YOUR_SECRET_KEY_HERE_MINIMUM_256_BITS_LONG_STRING` with a secure random string (at least 32 characters)
 - Replace all API keys with your actual keys obtained from the prerequisites section
@@ -280,6 +290,7 @@ spring.mail.properties.mail.smtp.writetimeout=5000
 ```
 
 **For Windows:**
+
 ```cmd
 mvnw.cmd clean install
 mvnw.cmd spring-boot:run
@@ -288,6 +299,7 @@ mvnw.cmd spring-boot:run
 #### 5. Verify Backend is Running
 
 Open your browser and navigate to:
+
 - http://localhost:8080
 
 You should see a 401 Unauthorized or 403 Forbidden response (this is expected - it means the backend is running).
@@ -310,6 +322,7 @@ npm install
 ```
 
 This will install all required packages including:
+
 - Angular 20.3.0
 - Tailwind CSS 4.1.14
 - Font Awesome
@@ -326,7 +339,7 @@ Create `src/environments/environment.ts`:
 ```typescript
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080'
+  apiUrl: "http://localhost:8080",
 };
 ```
 
@@ -347,6 +360,7 @@ The Angular development server will start on http://localhost:4200
 #### 5. Access the Application
 
 Open your browser and navigate to:
+
 - http://localhost:4200
 
 You should see the NewsCheck login page.
@@ -437,7 +451,6 @@ type nul > src\main\resources\application.properties
 touch src/main/resources/application.properties
 ```
 
-
 **Replace all placeholder values with your actual API keys and credentials.**
 
 ### Step 3: Build Docker Images
@@ -479,12 +492,14 @@ docker-compose down
 The `docker-compose.yml` file defines three services:
 
 1. **database** (PostgreSQL)
+
    - Port: 5432
    - Database: `newscheck`
    - Username: `newscheck_user`
    - Password: `newscheck_password`
 
 2. **backend** (Spring Boot)
+
    - Port: 8080
    - Depends on: database
 
@@ -623,6 +638,7 @@ logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
 ```
 
 **⚠️ Important:** Replace all placeholder values with your actual API keys and credentials:
+
 - `YOUR_SECRET_KEY_HERE_MINIMUM_256_BITS_LONG_STRING` - A secure random string (at least 32 characters)
 - `YOUR_GEMINI_API_KEY` - Your Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
 - `YOUR_GOOGLE_SEARCH_API_KEY` - Your Google Custom Search API key
@@ -692,6 +708,7 @@ networks:
 **Services:**
 
 1. **database** (PostgreSQL)
+
    - Uses the official PostgreSQL 15 Alpine image
    - Port: 5432 (mapped to host)
    - Credentials: `newscheck_user` / `newscheck_password`
@@ -699,6 +716,7 @@ networks:
    - Includes health checks to ensure it's ready before starting backend
 
 2. **backend** (Spring Boot Application)
+
    - Uses pre-built image from GitHub Container Registry
    - Port: 8080 (mapped to host)
    - Loads configuration from `.env` file
@@ -712,9 +730,11 @@ networks:
    - Auto-restarts unless manually stopped
 
 **Volumes:**
+
 - `newscheck_postgres_data`: Persists PostgreSQL database data between container restarts
 
 **Networks:**
+
 - `newscheck-network`: Internal bridge network for inter-container communication
 
 #### Step 4: Start the Application
@@ -726,6 +746,7 @@ docker-compose up -d
 ```
 
 This will:
+
 1. Pull the pre-built images from GitHub Container Registry (first time only)
 2. Create and start the database container
 3. Wait for the database to be healthy
@@ -741,6 +762,7 @@ docker-compose ps
 ```
 
 You should see three containers in "Up" status:
+
 - `newscheck-db`
 - `newscheck-backend`
 - `newscheck-frontend`
@@ -756,6 +778,7 @@ Once all containers are running:
 #### Managing the Application
 
 **View logs:**
+
 ```bash
 # All services
 docker-compose logs -f
@@ -767,22 +790,26 @@ docker-compose logs -f database
 ```
 
 **Stop the application:**
+
 ```bash
 docker-compose down
 ```
 
 **Stop and remove all data (including database):**
+
 ```bash
 docker-compose down -v
 ```
 
 **Restart a specific service:**
+
 ```bash
 docker-compose restart backend
 docker-compose restart frontend
 ```
 
 **Update to latest images:**
+
 ```bash
 # Pull latest images
 docker-compose pull
@@ -794,6 +821,7 @@ docker-compose up -d
 #### Troubleshooting
 
 **Images fail to pull:**
+
 - Ensure you have internet connectivity
 - Check if GitHub Container Registry is accessible
 - Try pulling images manually:
@@ -803,16 +831,19 @@ docker-compose up -d
   ```
 
 **Backend fails to start:**
+
 - Check if `.env` file exists and contains valid API keys
 - View backend logs: `docker-compose logs backend`
 - Ensure database is healthy: `docker-compose ps database`
 
 **Database connection issues:**
+
 - Verify database health: `docker-compose logs database`
 - Ensure the database service is running before backend starts
 - Check network connectivity: `docker network inspect newscheck-network`
 
 **Frontend can't connect to backend:**
+
 - Ensure backend is running: `docker-compose ps backend`
 - Check backend logs for errors: `docker-compose logs backend`
 - Verify port 8080 is not in use by another application
@@ -823,17 +854,19 @@ docker-compose up -d
 ✅ **Faster setup** - No compilation or building required  
 ✅ **Smaller disk footprint** - Only stores images and configuration  
 ✅ **Always up-to-date** - Pull latest images with one command  
-✅ **Consistent deployment** - Same images across all environments  
+✅ **Consistent deployment** - Same images across all environments
 
 #### When to Use Each Method
 
 **Use Pre-built Images (This Method) when:**
+
 - You want to quickly deploy and test the application
 - You don't need to modify the source code
 - You want the latest stable version
 - You have limited disk space
 
 **Use Full Repository Clone when:**
+
 - You want to contribute to the project
 - You need to modify or customize the code
 - You want to build images locally
@@ -845,12 +878,9 @@ docker-compose up -d
 
 For detailed project documentation, please refer to:
 
-- **[Project Proposal](./Grp6Timbol_Project%20Proposal.pdf)** - Initial project concept and objectives
-- **[Requirements Analysis](./Grp6Timbol_Requirements%20Analysis%20and%20Sprint%20Planning.pdf)** - Functional requirements and sprint planning
-- **[System Design](./Grp6Timbol_Prototype,%20ERD,%20and%20Acceptance%20Criteria.pdf)** - ERD, prototypes, and acceptance criteria
-- **[Weekly Scrum Reports](./Grp6Timbol_Week8-Scrum.pdf)** - Development progress and sprint retrospectives
-- **[Live Demo](#)** - *(Coming Soon)*
-- **[Figma Prototype](https://www.figma.com/YOUR_FIGMA_LINK)** - *(Add your Figma link)*
+- **[Project Proposal Documentation](https://drive.google.com/file/d/1--xRv-No0K4vA9x3XDWsQgxg7Fii9dgP/view?usp=sharing)**
+- **[Live Demo](https://drive.google.com/file/d/1kznJnLEyI3obyxEUKtwajqelAV-oKnSg/view?usp=sharing)**
+- **[Figma Prototype](https://www.figma.com/proto/MNzFOimWxmuiLpt7Y8NtJG/NewsCheck_Prototype?node-id=4739-2&t=ycjhROnS4BX25MW9-1)**
 
 ---
 
@@ -858,19 +888,18 @@ For detailed project documentation, please refer to:
 
 **Group 6 - ITS120L Project**
 
-| Name | Role | Contributions |
-|------|------|---------------|
-| **[Dino Alfred Timbol](mailto:dattimbol@mymail.mapua.edu.ph)** | Lead Developer | Login/Registration/Password functionality, JWT implementation, Email Service implementation, Backend & Frontend architecture |
-| **[Ken Aliling](mailto:kbaliling@mymail.mapua.edu.ph)** | Developer | AI-driven News Fact Checker, API integration, Evidence gathering |
-| **[Anicia Kaela Bonayao](mailto:aksbonayao@mymail.mapua.edu.ph)** | Developer | Homepage/Verification UI, Settings functionality, Frontend design |
-| **[Carl Norbi Felonia](mailto:cncfelonia@mymail.mapua.edu.ph)** | Developer | AI verification pipeline, Reports functionality, Backend services |
-| **[Cedrick Miguel Kaneko](mailto:cmpkaneko@mymail.mapua.edu.ph)** | Developer | History page functionality, Database design, Admin features |
+| Name                                                              | Role           | Contributions                                                                                                                |
+| ----------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **[Dino Alfred Timbol](mailto:dattimbol@mymail.mapua.edu.ph)**    | Lead Developer | Login/Registration/Password functionality, JWT implementation, Email Service implementation, Backend & Frontend architecture |
+| **[Ken Aliling](mailto:kbaliling@mymail.mapua.edu.ph)**           | Developer      | AI-driven News Fact Checker, API integration, Evidence gathering                                                             |
+| **[Anicia Kaela Bonayao](mailto:aksbonayao@mymail.mapua.edu.ph)** | Developer      | Homepage/Verification UI, Settings functionality, Frontend design                                                            |
+| **[Carl Norbi Felonia](mailto:cncfelonia@mymail.mapua.edu.ph)**   | Developer      | AI verification pipeline, Reports functionality, Backend services                                                            |
+| **[Cedrick Miguel Kaneko](mailto:cmpkaneko@mymail.mapua.edu.ph)** | Developer      | History page functionality, Database design, Admin features                                                                  |
 
 **Submitted to:** Prof. Crizepvill Dumalaog  
 **Course:** ITS120L - Application Development and Emerging Technologies Laboratory  
-**Institution:** *Mapúa University - School of Information Technology*  
+**Institution:** _Mapúa University - School of Information Technology_  
 **Date:** October 2025
-
 
 ---
 
@@ -897,16 +926,6 @@ Special thanks to the open-source projects that made this possible:
 - [JWT](https://jwt.io/)
 - [Docker](https://www.docker.com/)
 - [Font Awesome](https://fontawesome.com/)
-
----
-
-## 🔗 Links
-
-- **[GitHub Repository](https://github.com/neoboi76/ITS120LProj_Grp6)**
-- **[Live Demo](#)** - *(Coming Soon)*
-- **[Project Documentation](#)** - *(Coming Soon)*
-- **[Figma Prototype](#)** - *(Coming Soon)*
-- **[Report Issues](https://github.com/neoboi76/ITS120LProj_Grp6/issues)**
 
 ---
 

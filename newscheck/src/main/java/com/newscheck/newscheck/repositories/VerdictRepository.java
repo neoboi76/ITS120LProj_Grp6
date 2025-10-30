@@ -6,6 +6,18 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Verdict repository class, extending JpaRepository, containing
+//db methods related to the verdict table
+
 @Repository
 public interface VerdictRepository extends JpaRepository<VerdictModel, Long> {
 

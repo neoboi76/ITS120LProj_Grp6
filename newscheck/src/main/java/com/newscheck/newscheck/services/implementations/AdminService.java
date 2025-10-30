@@ -26,6 +26,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Admin service. Contains business logic
+//for admin operations
+
 @Service
 @RequiredArgsConstructor
 public class AdminService implements IAdminService {
@@ -35,6 +47,7 @@ public class AdminService implements IAdminService {
     private final AuditLogRepository auditLogRepository;
     private final IVerificationService verificationService;
 
+    //Retrieves all users paginated
     @Override
     @Transactional(readOnly = true)
     public Page<UserResponseDTO> getAllUsers(Pageable pageable, String email, String role) {
@@ -60,6 +73,7 @@ public class AdminService implements IAdminService {
         return users.map(this::convertToUserResponseDTO);
     }
 
+    //Retrieves a particular user
     @Override
     @Transactional(readOnly = true)
     public UserResponseDTO getUserById(Long userId) throws Exception {
@@ -68,6 +82,7 @@ public class AdminService implements IAdminService {
         return convertToUserResponseDTO(user);
     }
 
+    //Deletes a particular user
     @Override
     @Transactional
     public void deleteUser(Long userId) throws Exception {
@@ -81,6 +96,7 @@ public class AdminService implements IAdminService {
         userRepository.delete(user);
     }
 
+    //Retrieves all verifications paginated
     @Override
     @Transactional(readOnly = true)
     public Page<VerificationResponseDTO> getAllVerifications(
@@ -118,12 +134,14 @@ public class AdminService implements IAdminService {
         return verifications.map(this::convertToVerificationResponseDTO);
     }
 
+    //Retrieves a particular verification
     @Override
     @Transactional(readOnly = true)
     public VerificationResponseDTO getVerificationById(Long verificationId) throws Exception {
         return verificationService.getVerificationResult(verificationId);
     }
 
+    //Deletes a particular verification
     @Override
     @Transactional
     public void deleteVerification(Long verificationId) throws Exception {
@@ -133,6 +151,7 @@ public class AdminService implements IAdminService {
         verificationRepository.delete(verification);
     }
 
+    //Retrieves statistics for admin dashboard
     @Override
     @Transactional(readOnly = true)
     public Map<String, Object> getDashboardStatistics() {
@@ -180,6 +199,8 @@ public class AdminService implements IAdminService {
         return stats;
     }
 
+    //Converts user information to response object that can be used by the
+    //frontend
     private UserResponseDTO convertToUserResponseDTO(UserModel user) {
         UserResponseDTO dto = new UserResponseDTO();
         dto.setUserId(user.getUserId());
@@ -201,6 +222,8 @@ public class AdminService implements IAdminService {
         return dto;
     }
 
+    //Converts verificatio information to response object that can be used by the
+    //frontend
     private VerificationResponseDTO convertToVerificationResponseDTO(VerificationModel verification) {
         VerificationResponseDTO dto = new VerificationResponseDTO();
         dto.setVerificationId(verification.getVerificationId());

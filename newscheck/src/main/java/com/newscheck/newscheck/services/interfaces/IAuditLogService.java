@@ -13,6 +13,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Interface for the audit log service. Promotes loose coupling
+//and dependency injection
+
 public interface IAuditLogService {
 
     void log(AuditAction action, UserModel user, String details, HttpServletRequest request);

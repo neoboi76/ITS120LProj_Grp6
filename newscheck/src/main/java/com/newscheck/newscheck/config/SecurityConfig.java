@@ -20,6 +20,19 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//An important class. Stores the config for Sprint security used by the Application.
+//Comprised of JWTAuthentication, JWTAuthenticationFilter, enabling of CORS,
+//DaoAuthenticationProvider, PasswordEncoder, and specifies which endpoints need
+//authentiation and those which don't
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
@@ -36,29 +49,29 @@ public class SecurityConfig {
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true);
-                    return config;
+                    return config;//Cors setup
                 }))
-                .csrf(csrf -> csrf.disable())
-                .logout(logout -> logout.disable())
+                .csrf(csrf -> csrf.disable())//Crsf disabledd
+                .logout(logout -> logout.disable())//Logout is handled by the app
                 .authorizeHttpRequests(auth -> auth
-
+                        //These endpoints don't need any authentication
                         .requestMatchers("/login", "/register", "/reset-password", "/forgot-password", "/logout", "/request-reset", "/request-forgot").permitAll()
-
+                        //Admin endpoints need authentication
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-
+                        //Verificaiton endpoints need authentication
                         .requestMatchers("/api/verification/**").authenticated()
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated() //Any other not specified above endpoints need authentication
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)//Stateless requests
                 )
-                .authenticationProvider(authenticationProvider)
+                .authenticationProvider(authenticationProvider)//Sets authentication provider
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+                //Sets JWTAuthenticationFilter and PasswordAuthenticationFilter
         return http.build();
     }
 
-    @Bean
+    @Bean //The Authentication Provider
     public AuthenticationProvider authenticationProvider(authService authService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(authService);
@@ -66,12 +79,12 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    @Bean
+    @Bean //The Authentication Manager
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    @Bean
+    @Bean //Password encoder using BCrypt
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

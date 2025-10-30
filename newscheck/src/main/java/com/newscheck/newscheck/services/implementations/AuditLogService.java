@@ -27,6 +27,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Audit log service. Contains business logic
+//for audit log (which are essentially admin) operations
+
 @Service
 @RequiredArgsConstructor
 public class AuditLogService implements IAuditLogService {
@@ -35,6 +47,9 @@ public class AuditLogService implements IAuditLogService {
     private final UserRepository userRepository;
     private final VerificationRepository verificationRepository;
 
+    //Function overloadings
+
+    //Returns an add user log
     @Override
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -51,6 +66,7 @@ public class AuditLogService implements IAuditLogService {
         auditLogRepository.save(auditLog);
     }
 
+    //Returns a get user log
     @Override
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -62,6 +78,7 @@ public class AuditLogService implements IAuditLogService {
         log(action, user, details, request);
     }
 
+    //Returns a get verification log
     @Override
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -81,6 +98,7 @@ public class AuditLogService implements IAuditLogService {
         log(action, user, details, verificationId, request);
     }
 
+    //Saves an audit log (the main log method)
     @Override
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -98,6 +116,7 @@ public class AuditLogService implements IAuditLogService {
         auditLogRepository.save(auditLog);
     }
 
+    //Saves audit logs related to errors
     @Override
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -114,6 +133,7 @@ public class AuditLogService implements IAuditLogService {
         auditLogRepository.save(auditLog);
     }
 
+    //Returns audit logs associated with users (filter)
     @Override
     @Transactional(readOnly = true)
     public List<AuditLogDTO> getUserLogs(Long userId) {
@@ -121,6 +141,7 @@ public class AuditLogService implements IAuditLogService {
         return logs.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    //Returns audit logs associated with a particular audit action (filter)
     @Override
     @Transactional(readOnly = true)
     public List<AuditLogDTO> getLogsByAction(AuditAction action) {
@@ -128,6 +149,7 @@ public class AuditLogService implements IAuditLogService {
         return logs.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    //Returns audit logs associated with a period of time(filter)
     @Override
     @Transactional(readOnly = true)
     public List<AuditLogDTO> getLogsByDateRange(LocalDateTime start, LocalDateTime end) {
@@ -135,6 +157,7 @@ public class AuditLogService implements IAuditLogService {
         return logs.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    //Returns most recent audit logs (filter)
     @Override
     @Transactional(readOnly = true)
     public List<AuditLogDTO> getRecentLogs(int limit) {
@@ -145,12 +168,14 @@ public class AuditLogService implements IAuditLogService {
                 .collect(Collectors.toList());
     }
 
+    //Returns number of audit actions for each user
     @Override
     @Transactional(readOnly = true)
     public long getUserActionCount(Long userId) {
         return auditLogRepository.countByUser_UserId(userId);
     }
 
+    //Returns all audit logs paginated
     @Override
     @Transactional(readOnly = true)
     public Page<AuditLogResponseDTO> getAllAuditLogs(Pageable pageable, AuditLogFilterDTO filter) {
@@ -165,6 +190,8 @@ public class AuditLogService implements IAuditLogService {
         return logs.map(this::convertToResponseDTO);
     }
 
+
+    //Returns audit logs associated with a particular user (filter)
     @Override
     @Transactional(readOnly = true)
     public Page<AuditLogResponseDTO> getAuditLogsByUserId(Long userId, Pageable pageable) {
@@ -172,6 +199,7 @@ public class AuditLogService implements IAuditLogService {
         return logs.map(this::convertToResponseDTO);
     }
 
+    //Returns audit logs associated with a particular verification (filter)
     @Override
     @Transactional(readOnly = true)
     public Page<AuditLogResponseDTO> getAuditLogsByVerificationId(Long verificationId, Pageable pageable) {
@@ -179,6 +207,7 @@ public class AuditLogService implements IAuditLogService {
         return logs.map(this::convertToResponseDTO);
     }
 
+    //Returns audit logs associated with a particular user (filter)
     @Override
     @Transactional(readOnly = true)
     public Map<String, Object> getAuditLogStatistics() {
@@ -204,6 +233,7 @@ public class AuditLogService implements IAuditLogService {
         return stats;
     }
 
+    //Deletes audit logs older than 90 days
     @Override
     @Transactional
     public long deleteAuditLogsOlderThan(LocalDateTime cutoffDate) {
@@ -213,6 +243,7 @@ public class AuditLogService implements IAuditLogService {
         return count;
     }
 
+    //Retrieves all users with audit log counts
     @Override
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getAllUsersWithLogCounts() {
@@ -252,6 +283,7 @@ public class AuditLogService implements IAuditLogService {
         return userLogData;
     }
 
+    //Boolean returns if filters are enabled for admin query
     private boolean hasFilters(AuditLogFilterDTO filter) {
         return filter.getUserId() != null ||
                 filter.getAction() != null ||
@@ -261,6 +293,7 @@ public class AuditLogService implements IAuditLogService {
                 filter.getSuccess() != null;
     }
 
+    //Converts audit log to request DTO
     private AuditLogDTO convertToDTO(AuditLogModel log) {
         AuditLogDTO dto = new AuditLogDTO();
         dto.setAuditId(log.getAuditId());
@@ -283,6 +316,7 @@ public class AuditLogService implements IAuditLogService {
         return dto;
     }
 
+    //Converts audit log to response DTO
     private AuditLogResponseDTO convertToResponseDTO(AuditLogModel log) {
         AuditLogResponseDTO dto = new AuditLogResponseDTO();
         dto.setAuditId(log.getAuditId());
@@ -305,6 +339,7 @@ public class AuditLogService implements IAuditLogService {
         return dto;
     }
 
+    //Retrieves client IP of the user agent of an audit action
     private String getClientIp(HttpServletRequest request) {
         if (request == null) {
             return "SYSTEM";
@@ -323,6 +358,7 @@ public class AuditLogService implements IAuditLogService {
         return ip != null ? ip : "UNKNOWN";
     }
 
+    //Retrieves user agent of a audit action
     private String getUserAgent(HttpServletRequest request) {
         if (request == null) {
             return "SYSTEM";

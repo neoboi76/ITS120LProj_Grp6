@@ -22,6 +22,18 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//auth service Contains business logic
+//for audit log user operations
+
 @Service
 @RequiredArgsConstructor
 public class authService implements IAuthService, UserDetailsService  {
@@ -34,6 +46,7 @@ public class authService implements IAuthService, UserDetailsService  {
     private final PasswordTokenRepository passwordTokenRepository;
 
 
+    //Registers a user
     @Override
     public RegisterResponse register(RegisterModel request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -57,6 +70,7 @@ public class authService implements IAuthService, UserDetailsService  {
         return new RegisterResponse("Account Created!", savedUser.getEmail(), savedUser.getUserId());
     }
 
+    //Authenticates a user
     @Override
     public LoginResponse login(LoginModel request) {
 
@@ -78,6 +92,7 @@ public class authService implements IAuthService, UserDetailsService  {
         );
     }
 
+    //Resets password of a user (from the settings page)
     @Override
     public ResetResponse resetPassword(ResetModel request) {
 
@@ -99,6 +114,7 @@ public class authService implements IAuthService, UserDetailsService  {
         return new ResetResponse("Password has been reset successfully.");
     }
 
+    //Resets a password (from the log in page)
     @Override
     public ResetResponse forgotPassword(ForgotModel request) {
 
@@ -120,6 +136,7 @@ public class authService implements IAuthService, UserDetailsService  {
         return new ResetResponse("Password has been reset successfully.");
     }
 
+    //Requests reset password (from the settings page)
     @Override
     public String requestReset(String email) {
         Optional<UserModel> optionalUser = userRepository.findByEmail(email);
@@ -143,6 +160,7 @@ public class authService implements IAuthService, UserDetailsService  {
         return null;
     }
 
+    //Requests forgot password (from the login page)
     @Override
     public String requestForgot(String email) {
         Optional<UserModel> optionalUser = userRepository.findByEmail(email);
@@ -166,8 +184,7 @@ public class authService implements IAuthService, UserDetailsService  {
         return null;
     }
 
-
-
+    //Updates user information
     @Override
     public SettingsResponse updateUser(SettingsModel request) {
 
@@ -185,6 +202,7 @@ public class authService implements IAuthService, UserDetailsService  {
         return new SettingsResponse("User information succesfully updated");
     }
 
+    //Retrieves a particular user
     @Override
     public SettingsModel getUser(long id) {
         UserModel user = userRepository.findById(id)
@@ -200,6 +218,7 @@ public class authService implements IAuthService, UserDetailsService  {
         );
     }
 
+    //Loads user by username. Used by security config via UserDetailsService
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserModel user = userRepository.findByEmail(email)
@@ -212,11 +231,13 @@ public class authService implements IAuthService, UserDetailsService  {
         );
     }
 
+    //Retrieves a particular user by email
     @Override
     public Long getUserIdByEmail(String email) {
         return userRepository.getUserIdByEmail(email);
     }
 
+    //Checks whether an email exists in the db
     @Override
     public boolean isEmailValid(String email) {
         return userRepository.existsByEmail(email);

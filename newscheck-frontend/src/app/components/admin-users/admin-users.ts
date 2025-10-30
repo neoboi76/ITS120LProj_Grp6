@@ -7,6 +7,17 @@ import { FooterComponent } from '../../components/footer/footer';
 import { AdminService} from '../../services/admin-service';
 import { UserResponse } from '../../models/admin-models';
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Class that deals with user management operations by the admin
+
 @Component({
     selector: 'app-admin-users',
     standalone: true,
@@ -37,10 +48,12 @@ export class AdminUsersComponent implements OnInit {
 
     constructor(private adminService: AdminService) {}
 
+    //Loads users on initialization
     ngOnInit(): void {
         this.loadUsers();
     }
 
+    //Retrieves all existing users 
     loadUsers(): void {
         this.isLoading = true;
         this.errorMessage = '';
@@ -68,11 +81,13 @@ export class AdminUsersComponent implements OnInit {
         });
     }
 
+    //Applies set filters
     applyFilters(): void {
         this.currentPage = 0;
         this.loadUsers();
     }
 
+    //Removes filters
     clearFilters(): void {
         this.emailFilter = '';
         this.roleFilter = '';
@@ -80,6 +95,7 @@ export class AdminUsersComponent implements OnInit {
         this.loadUsers();
     }
 
+    //Goes to the next page (if applicable)
     changePage(page: number): void {
         if (page >= 0 && page < this.totalPages) {
             this.currentPage = page;
@@ -87,6 +103,7 @@ export class AdminUsersComponent implements OnInit {
         }
     }
 
+    //Changes sort criteria
     changeSort(column: string): void {
         if (this.sortBy === column) {
             this.sortDirection = this.sortDirection === 'ASC' ? 'DESC' : 'ASC';
@@ -97,16 +114,19 @@ export class AdminUsersComponent implements OnInit {
         this.loadUsers();
     }
 
+    //Open delete popup warning
     openDeleteModal(user: UserResponse): void {
         this.userToDelete = user;
         this.showDeleteModal = true;
     }
 
+    //Close delete popup warning
     closeDeleteModal(): void {
         this.showDeleteModal = false;
         this.userToDelete = null;
     }
 
+    //Confirm delete operation
     confirmDelete(): void {
         if (this.userToDelete) {
             this.adminService.deleteUser(this.userToDelete.userId).subscribe({
@@ -128,6 +148,7 @@ export class AdminUsersComponent implements OnInit {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    //Returns page numbers relative to the current page
     getPageNumbers(): number[] {
         const maxVisible = 5;
         const pages: number[] = [];

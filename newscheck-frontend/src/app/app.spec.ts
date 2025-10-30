@@ -1,6 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 
+/* Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader) */
+
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({

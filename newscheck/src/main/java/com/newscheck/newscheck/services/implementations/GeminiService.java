@@ -18,19 +18,38 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Gemini service. Contains business logic
+//for Gemini 2.5 Pro API operations
+
 @Service
 @RequiredArgsConstructor
 public class GeminiService implements IGeminiService {
 
+    //References gemini api key stored in the
+    //application.properties file
     @Value("${gemini.api.key}")
     private String apiKey;
 
+    //References gemini model url stored in the
+    //application.properties file
     @Value("${gemini.model.url}")
     private String modelUrl;
 
+    //Used for building queries to and from Gemini 2.5 pro API
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    //Analyzes inputted content (whether LINK, IMAGE, or TEXT)
+    //Analyzes without search
     @Override
     public GeminiAnalysisResult analyzeContent(String content) throws Exception {
         String prompt = buildAnalysisPrompt(content);
@@ -38,6 +57,8 @@ public class GeminiService implements IGeminiService {
         return parseGeminiResponse(response);
     }
 
+    //Analyzes inputted content (whether LINK, IMAGE, or TEXT)
+    //Analyzes with search
     @Override
     public GeminiAnalysisResult analyzeContentWithSearch(String content, List<SearchResult> searchResults) throws Exception {
         String prompt = buildAnalysisPromptWithSearch(content, searchResults);
@@ -45,6 +66,8 @@ public class GeminiService implements IGeminiService {
         return parseGeminiResponse(response);
     }
 
+    //Builds Gemini 2.5 Pro API prompt with search results
+    //returned by the Google Custom Search API
     private String buildAnalysisPrompt(String content) {
 
         return """
@@ -81,6 +104,7 @@ public class GeminiService implements IGeminiService {
                 """ + content;
     }
 
+    //Builds Gemini 2.5 Pro API prompt without search results
     private String buildAnalysisPromptWithSearch(String content, List<SearchResult> searchResults) {
 
         StringBuilder prompt = new StringBuilder();
@@ -93,6 +117,7 @@ public class GeminiService implements IGeminiService {
                 REDDIT SOURCES, AND SOCIAL MEDIA SOURCES.! Use sources that come from accredited news organizations.
                 If you are going to use social media sources, make sure it comes from verified news outlets, and not
                 random Facebook, X, or Instagram posts! 
+                
                 Furthermore, you are a AI model that was trained using past data, but dealing with
                 up-to-date, recent sources. From your perspective, they are the "future." However, if you have met with
                 a claim that is about a "future" event from your perspective, but which to the perspective of the sender
@@ -157,6 +182,7 @@ public class GeminiService implements IGeminiService {
         return prompt.toString();
     }
 
+    //Makes the call to the Gemini API and sends the prompt
     private String callGeminiAPI(String prompt) throws Exception {
         String url = modelUrl + "?key=" + apiKey;
 
@@ -183,6 +209,7 @@ public class GeminiService implements IGeminiService {
         }
     }
 
+    //Parses response from Gemini API
     private GeminiAnalysisResult parseGeminiResponse(String responseBody) throws Exception {
         GeminiResponse geminiResponse = objectMapper.readValue(responseBody, GeminiResponse.class);
 
@@ -221,6 +248,7 @@ public class GeminiService implements IGeminiService {
         return result;
     }
 
+    //Extracts JSON from Gemini Response
     private String extractJSON(String text) {
         text = text.trim();
         if (text.startsWith("```json")) {

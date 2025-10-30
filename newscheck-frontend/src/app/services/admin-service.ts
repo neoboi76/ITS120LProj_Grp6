@@ -5,6 +5,17 @@ import { TokenStorageService } from './token-storage-service';
 import { AuditLogResponse, DashboardStats, PaginatedResponse, UserResponse, VerificationResponse } from '../models/admin-models';
 
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Service class for admin operations
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,6 +29,7 @@ export class AdminService {
     private tokenStorageService: TokenStorageService
   ) {}
 
+  //Sets header (inserting Jwt token)
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
       'Authorization': `Bearer ${this.tokenStorageService.getToken()}`,
@@ -25,6 +37,7 @@ export class AdminService {
     });
   }
 
+  //Returns dashboard stats from backend
   getDashboardStats(): Observable<DashboardStats> {
     return this.http.get<DashboardStats>(
       `${this.apiUrl}/dashboard/stats`,
@@ -32,6 +45,7 @@ export class AdminService {
     );
   }
 
+  //Returns all users from backend
   getAllUsers(
     page: number = 0,
     size: number = 20,
@@ -59,6 +73,7 @@ export class AdminService {
     );
   }
 
+  //Returns a particular user from backend
   getUserById(userId: number): Observable<UserResponse> {
     return this.http.get<UserResponse>(
       `${this.apiUrl}/users/${userId}`,
@@ -66,6 +81,7 @@ export class AdminService {
     );
   }
 
+  //Deletes a particular user from frontend  and backend
   deleteUser(userId: number): Observable<any> {
     return this.http.delete(
       `${this.apiUrl}/users/${userId}`,
@@ -73,6 +89,7 @@ export class AdminService {
     );
   }
 
+  //Get all verifications paginated
   getAllVerifications(
     page: number = 0,
     size: number = 20,
@@ -104,6 +121,7 @@ export class AdminService {
     );
   }
 
+  //Get a particular verification
   getVerificationById(verificationId: number): Observable<VerificationResponse> {
     return this.http.get<VerificationResponse>(
       `${this.apiUrl}/verifications/${verificationId}`,
@@ -111,6 +129,7 @@ export class AdminService {
     );
   }
 
+  //Delete a particular verification
   deleteVerification(verificationId: number): Observable<any> {
     return this.http.delete(
       `${this.apiUrl}/verifications/${verificationId}`,
@@ -118,6 +137,7 @@ export class AdminService {
     );
   }
 
+  //Returns all audit logs paginated
   getAllAuditLogs(
     page: number = 0,
     size: number = 20,
@@ -153,6 +173,7 @@ export class AdminService {
     );
   }
 
+  //Gets all audit logs for a particular user paginated
   getUserAuditLogs(
     userId: number,
     page: number = 0,
@@ -172,6 +193,7 @@ export class AdminService {
     );
   }
 
+  //Get all audit logs associated with a particular verification paginated
   getVerificationAuditLogs(
     verificationId: number,
     page: number = 0,
@@ -191,6 +213,7 @@ export class AdminService {
     );
   }
 
+  //Get audit log stats
   getAuditLogStats(): Observable<any> {
     return this.http.get(
       `${this.auditLogUrl}/stats`,
@@ -198,6 +221,7 @@ export class AdminService {
     );
   }
 
+  //Delete audit logs from the frontend that are more than 30 days old
   cleanupOldAuditLogs(daysOld: number = 90): Observable<any> {
     let params = new HttpParams().set('daysOld', daysOld.toString());
     

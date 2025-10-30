@@ -5,16 +5,29 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//forgot password service Contains business logic
+//for forgot password email request  operations
+
 @Service
 @RequiredArgsConstructor
-public class ForgotService {
+public class ForgotService {//Service class for requesting reset of password from the login page
 
     private final JavaMailSender mailSender;
 
     public void sendResetPasswordEmail(String toEmail, String token) {
-        try {
+        try { //forgot password reset link
             String resetLink = "http://localhost:4200/forgot-password?token=" + token;
 
+            //Builds email message
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(toEmail);
             message.setSubject("Reset Your Password");

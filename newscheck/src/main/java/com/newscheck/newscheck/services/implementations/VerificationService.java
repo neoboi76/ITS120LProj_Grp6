@@ -12,6 +12,7 @@ import com.newscheck.newscheck.repositories.UserRepository;
 import com.newscheck.newscheck.repositories.VerdictRepository;
 import com.newscheck.newscheck.repositories.VerificationRepository;
 import com.newscheck.newscheck.services.interfaces.*;
+import com.newscheck.newscheck.utils.SearchQueryExtractor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Verification service. Contains business logic
+//for verification operations
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +47,7 @@ public class VerificationService implements IVerificationService {
     private final IImageTextExtractorService imageTextExtractorService;
     private final IGoogleSearchService googleSearchService;
 
+    //Submits verification
     @Override
     @Transactional
     public VerificationResponseDTO submitVerification(VerificationRequestDTO request) throws Exception {
@@ -53,18 +67,18 @@ public class VerificationService implements IVerificationService {
 
         try {
             switch (request.getContentType()) {
-                case TEXT:
+                case TEXT: //text cases. Set as it is
                     contentToAnalyze = request.getContentText();
                     verification.setContentText(contentToAnalyze);
                     break;
 
-                case URL:
+                case URL://If url, utilize the urlContentExtractorService
                     contentToAnalyze = urlContentExtractorService.extractContent(request.getContentUrl());
                     verification.setContentUrl(request.getContentUrl());
                     verification.setContentText(contentToAnalyze);
                     break;
 
-                case IMAGE:
+                case IMAGE://If image, utilize the imageTextExtratorService
                     System.out.println("Processing IMAGE verification");
                     System.out.println("Base64 length: " + request.getImageBase64().length());
 
@@ -89,11 +103,12 @@ public class VerificationService implements IVerificationService {
             List<com.newscheck.newscheck.models.search.SearchResult> searchResults = new ArrayList<>();
             boolean searchSucceeded = false;
             try {
-                String searchQuery = com.newscheck.newscheck.utils.SearchQueryExtractor.extractSearchQuery(contentToAnalyze);
-                searchQuery = com.newscheck.newscheck.utils.SearchQueryExtractor.enhanceQuery(searchQuery);
+                String searchQuery = SearchQueryExtractor.extractSearchQuery(contentToAnalyze);
+                searchQuery = SearchQueryExtractor.enhanceQuery(searchQuery);
 
+                //Search results to be retrieved is 5. (Though, max is 10).
                 System.out.println("Performing search for: " + searchQuery);
-                searchResults = googleSearchService.searchNews(searchQuery, 8);
+                searchResults = googleSearchService.searchNews(searchQuery, 5);
 
                 if (!searchResults.isEmpty()) {
                     searchSucceeded = true;
@@ -107,13 +122,14 @@ public class VerificationService implements IVerificationService {
                 searchEx.printStackTrace();
             }
 
+
             GeminiAnalysisResult analysisResult;
-            if (searchSucceeded && !searchResults.isEmpty()) {
+            if (searchSucceeded && !searchResults.isEmpty()) {//Analyze with search results
                 System.out.println("Analyzing with search results");
                 analysisResult = geminiService.analyzeContentWithSearch(contentToAnalyze, searchResults);
             } else {
                 System.out.println("Analyzing without search results (fallback mode)");
-                analysisResult = geminiService.analyzeContent(contentToAnalyze);
+                analysisResult = geminiService.analyzeContent(contentToAnalyze);//Analyzing without search results
             }
 
             VerdictModel verdict = new VerdictModel();
@@ -143,6 +159,7 @@ public class VerificationService implements IVerificationService {
             verification.setVerdict(verdict);
             verification = verificationRepository.save(verification);
 
+            //Builds verification response
             return buildVerificationResponse(verification, verdict, evidences, analysisResult.getConfidenceScore());
 
         } catch (Exception e) {
@@ -160,6 +177,7 @@ public class VerificationService implements IVerificationService {
         }
     }
 
+    //Returns the verification result when analysis is done
     @Override
     @Transactional(readOnly = true)
     public VerificationResponseDTO getVerificationResult(Long verificationId) throws Exception {
@@ -172,6 +190,7 @@ public class VerificationService implements IVerificationService {
         return buildVerificationResponse(verification, verdict, evidences, verification.getScore());
     }
 
+    //Returns verifications associated with a particular user
     @Override
     @Transactional(readOnly = true)
     public List<VerificationResponseDTO> getUserVerifications(Long userId) throws Exception {
@@ -190,6 +209,7 @@ public class VerificationService implements IVerificationService {
                 .collect(Collectors.toList());
     }
 
+    //Builds verification response
     private VerificationResponseDTO buildVerificationResponse(VerificationModel verification,
                                                               VerdictModel verdict,
                                                               List<EvidenceModel> evidences,
@@ -199,15 +219,18 @@ public class VerificationService implements IVerificationService {
         response.setStatus(verification.getStatus());
         response.setSubmittedAt(verification.getSubmittedAt());
 
+        //If text, set contentText as claim
         if (verification.getContentType() == ContentType.TEXT) {
             response.setClaim(verification.getContentText());
         }
+        //If url, set contentUrl as claim
         if (verification.getContentType() == ContentType.URL) {
             response.setClaim(verification.getContentUrl());
         }
 
+        //Otherwise, for image, just leave it blank
 
-        // response.setContentType(verification.getContentType());
+        //response.setContentType(verification.getContentType());
         //response.setClaim(verification.getContentText());
         //response.setContentUrl(verification.getContentUrl());
 

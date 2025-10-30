@@ -7,10 +7,23 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Gemini 2.5 Pro API Request DTO
+//Divided into content, part, and text
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class GeminiRequest {
+
 
     private List<Content> contents;
 

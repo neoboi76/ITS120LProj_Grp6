@@ -10,9 +10,23 @@ import org.springframework.stereotype.Service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Url content extractor service. Contains business logic
+//for url content extraction operations. Uses jsoup for
+//web scraping
+
 @Service
 public class UrlContentExtractorService implements IUrlContentExtractorService {
 
+    //Extracts content from a url (article)
     @Override
     public String extractContent(String url) throws Exception {
         try {
@@ -78,6 +92,7 @@ public class UrlContentExtractorService implements IUrlContentExtractorService {
         }
     }
 
+    //Extracts title from a given article url
     @Override
     public String extractTitle(String claim) throws Exception {
 

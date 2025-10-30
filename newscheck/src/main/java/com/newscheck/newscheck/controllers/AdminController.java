@@ -15,6 +15,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Admin controller containing endpoints and operations
+//for handling admin requests
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/admin")
@@ -25,6 +37,7 @@ public class AdminController {
     private final IAdminService adminService;
 
 
+    //Retrieves all users paginated
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
@@ -72,6 +85,7 @@ public class AdminController {
         }
     }
 
+    //Retrieves all verifications paginated
     @GetMapping("/verifications")
     public ResponseEntity<?> getAllVerifications(
             @RequestParam(defaultValue = "0") int page,
@@ -109,6 +123,7 @@ public class AdminController {
         }
     }
 
+    //Retrieves a particular verification
     @GetMapping("/verifications/{verificationId}")
     public ResponseEntity<?> getVerificationById(@PathVariable Long verificationId) {
         try {
@@ -121,6 +136,7 @@ public class AdminController {
         }
     }
 
+    //Retrieves all summarized statistics (total users, verifications, audit logs, etc.)
     @GetMapping("/dashboard/stats")
     public ResponseEntity<?> getDashboardStats() {
         try {
@@ -133,6 +149,7 @@ public class AdminController {
         }
     }
 
+    //Deletes a particular user
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         try {
@@ -149,7 +166,7 @@ public class AdminController {
                     .body("Failed to delete user: " + e.getMessage());
         }
     }
-
+    //Deletes a particular verification
     @DeleteMapping("/verifications/{verificationId}")
     public ResponseEntity<?> deleteVerification(@PathVariable Long verificationId) {
         try {

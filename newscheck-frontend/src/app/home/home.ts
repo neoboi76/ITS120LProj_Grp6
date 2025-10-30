@@ -9,6 +9,18 @@ import { HistoryModel } from '../models/history-model';
 import { ContentType } from '../models/content-model';
 import { RouterLink } from '@angular/router';
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Service class for home verification operations
+
+
 @Component({
     selector: 'app-home',
     standalone: true,
@@ -31,6 +43,7 @@ export class HomeComponent implements OnInit{
         private historyService: HistoryService
     ) {}
 
+    //Retrieves recent history
     ngOnInit(): void {
     this.historyService.getHistory(this.tokenStorageService.getUsrId()).subscribe({
       next: (data) => {
@@ -52,7 +65,7 @@ export class HomeComponent implements OnInit{
     })
   }
 
-
+    //Extracts base64 string from image
     onFileSelected(event: Event): void {
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
@@ -76,6 +89,7 @@ export class HomeComponent implements OnInit{
     }
 
 
+    //Analyzes input
     async analyzeInput(): Promise<void> {
 
         console.log("SUBMITTED!");
@@ -91,7 +105,7 @@ export class HomeComponent implements OnInit{
             this.result = '';        
             this.noResult = '';        
 
-
+            //If text
            if (this.inputText) {
              const id = this.tokenStorageService.getUsrId()
 
@@ -124,6 +138,7 @@ export class HomeComponent implements OnInit{
             })
            }
 
+           //If link
            if (this.inputLink) {
             const id = this.tokenStorageService.getUsrId()
 
@@ -156,6 +171,7 @@ export class HomeComponent implements OnInit{
             })
            }
  
+           //If image
            if (this.selectedFile) {
 
             const id = this.tokenStorageService.getUsrId()

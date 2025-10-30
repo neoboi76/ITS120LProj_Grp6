@@ -5,6 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Gemini 2.5 Pro API analysis result DTO
+
 import java.util.List;
 
 @Data
@@ -17,7 +28,7 @@ public class GeminiAnalysisResult {
     private Double confidenceScore;
     private List<SourceEvidence> sources;
 
-    @Data
+    @Data //Array of sources
     @AllArgsConstructor
     @NoArgsConstructor
     public static class SourceEvidence {

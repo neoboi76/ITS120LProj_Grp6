@@ -11,6 +11,18 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Audit log repository class, extending JpaRepository, containing
+//db methods related to the audit logs table
+
 @Repository
 public interface AuditLogRepository extends JpaRepository<AuditLogModel, Long>, JpaSpecificationExecutor<AuditLogModel> {
 

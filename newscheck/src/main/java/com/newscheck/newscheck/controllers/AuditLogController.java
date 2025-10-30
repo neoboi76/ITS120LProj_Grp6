@@ -16,16 +16,28 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Audit log controller containing endpoints and operations
+//for handling audit log requests
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/admin/audit-logs")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN')") //Requires admin role
 public class AuditLogController {
 
     private final IAuditLogService auditLogService;
 
-    @GetMapping
+    @GetMapping //Retrieves all audit logs paginated
     public ResponseEntity<?> getAllAuditLogs(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
@@ -73,6 +85,7 @@ public class AuditLogController {
         }
     }
 
+    //Retrieves a list of logs for a particular user
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUserAuditLogs(
             @PathVariable Long userId,
@@ -109,6 +122,7 @@ public class AuditLogController {
         }
     }
 
+    //Retrieves a list of audit logs associated witha verification id
     @GetMapping("/verification/{verificationId}")
     public ResponseEntity<?> getVerificationAuditLogs(
             @PathVariable Long verificationId,
@@ -145,6 +159,7 @@ public class AuditLogController {
         }
     }
 
+    //Retrieves statistics related to audit logs
     @GetMapping("/stats")
     public ResponseEntity<?> getAuditLogStats() {
         try {
@@ -157,6 +172,7 @@ public class AuditLogController {
         }
     }
 
+    //Deletes Audit logs longer than 90 days
     @DeleteMapping("/cleanup")
     public ResponseEntity<?> cleanupOldAuditLogs(
             @RequestParam(defaultValue = "90") int daysOld

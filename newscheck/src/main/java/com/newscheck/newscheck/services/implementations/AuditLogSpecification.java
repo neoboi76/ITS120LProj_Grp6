@@ -8,6 +8,18 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Audit log specification service. Contains business logic
+//for audit log (which are essentially admin) operations
+
 public class AuditLogSpecification implements Specification<AuditLogModel> {
 
     private final AuditLogFilterDTO filter;

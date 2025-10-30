@@ -7,6 +7,17 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Audit log response DTO class
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

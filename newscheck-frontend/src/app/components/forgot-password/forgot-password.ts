@@ -4,6 +4,16 @@ import { AuthService } from '../../services/auth-service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Class that deals with forgot password operations (from the login page)
 @Component({
   selector: 'app-forgot-password',
   imports: [FormsModule, RouterLink, ReactiveFormsModule, NgClass],
@@ -26,6 +36,8 @@ export class ForgotPasswordComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
+
+  //Toggles password invisible or not
   showPassword1: boolean = false;
   showPassword2: boolean = false;
 
@@ -38,10 +50,12 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
 
+  //Retrieves and verifies token from the url (sent by forgotService)
   ngOnInit(): void {
 
     this.token = this.route.snapshot.queryParamMap.get('token');
     
+    //Form control
     this.resetForm = this.fb.group({ 
       email: ['', [Validators.required, Validators.minLength(6)]],
       newPassword: ['', [Validators.required, Validators.minLength(6)]]
@@ -52,6 +66,7 @@ export class ForgotPasswordComponent implements OnInit {
     return this.resetForm.controls;
   }
 
+  //Facilitates forgot (reset) password operations
   onSubmit(): void {
     this.submitted = true;
     this.errorMessage = '';

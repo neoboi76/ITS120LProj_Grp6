@@ -12,6 +12,18 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Verification repository class, extending JpaRepository, containing
+//db methods related to the verifications table
+
 @Repository
 public interface VerificationRepository extends JpaRepository<VerificationModel, Long>, JpaSpecificationExecutor<VerificationModel> {
 

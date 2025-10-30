@@ -7,6 +7,19 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+
+//Enables CORS (Cross-Origin Resource Sharing) between
+//backend and frontend (http://localhost:8080  & http://localhost:4200)
+
 @Configuration
 public class CorsConfig {
 

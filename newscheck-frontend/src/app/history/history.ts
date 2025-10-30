@@ -8,6 +8,17 @@ import { TokenStorageService } from '../services/token-storage-service';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from "@angular/router";
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Service class for history page 
+
 @Component({
   selector: 'app-history',
   imports: [NavComponent, FooterComponent, FormsModule, DatePipe, RouterLink],
@@ -27,6 +38,7 @@ export class HistoryPageComponent implements OnInit {
 
   history: HistoryModel[] = [];
 
+  //Retrieves all verifications associated with logged user
   ngOnInit(): void {
     this.historyService.getHistory(this.tokenStorageService.getUsrId()).subscribe({
       next: (data) => {
@@ -55,6 +67,7 @@ export class HistoryPageComponent implements OnInit {
 
   searchQuery = '';
 
+  //Method that returns verifications associated with inputted search query
   filteredHistory() {
     const query = this.searchQuery.toLowerCase().trim();
     if (!query) return this.history;

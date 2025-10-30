@@ -1,5 +1,18 @@
 <title>Sign in</title>
 
+
+<!-- Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+
+      Sign page
+
+  -->
+
+
 <div class="min-h-screen flex bg-white">
 
     <div class="fixed lg:hidden top-0 left-0 w-full bg-[#1f1f1f] pt-4 text-white">
@@ -23,6 +36,7 @@
                 Sign in to your account
             </h1>
 
+           <!--  Login form -->
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
             novalidate class="space-y-5">
                 <div>
@@ -106,6 +120,7 @@
                 }
 
                 <button
+                    (keydown.enter)="onSubmit()"
                     type="submit"
                     [disabled]="loginForm.invalid"
                     class="cursor-pointer w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all disabled:cursor-not-allowed font-semibold"

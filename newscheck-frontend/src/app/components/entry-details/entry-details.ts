@@ -8,6 +8,17 @@ import { CommonModule, DatePipe, NgClass } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Class that deals with entry-details operations
+
 @Component({
   selector: 'app-entry-details',
   imports: [NavComponent, FooterComponent, NgClass, DatePipe, CommonModule],
@@ -41,6 +52,8 @@ export class EntryDetailsComponent {
     private route: ActivatedRoute
   ) {}
 
+
+  //Takes id in the address bar and returns verification associated with that verificationId
   ngOnInit(): void {
 
     this.routeSub = this.route.params.subscribe(params => {

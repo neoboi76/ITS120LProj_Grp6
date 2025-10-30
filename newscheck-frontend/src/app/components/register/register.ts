@@ -6,6 +6,16 @@ import { RegisterModel } from '../../models/register-model';
 import { TokenStorageService } from '../../services/token-storage-service';
 import { NgClass } from '@angular/common';
 
+/* 
+Developed by Group 6:
+      Ken Aliling
+      Anicia Kaela Bonayao
+      Carl Norbi Felonia
+      Cedrick Miguel Kaneko
+      Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Class that deals with register operations
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -27,6 +37,8 @@ export class RegisterComponent implements OnInit{
     private tokenStorageService: TokenStorageService
   ) {}
 
+
+  //Validates form
   ngOnInit(): void {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -40,12 +52,14 @@ export class RegisterComponent implements OnInit{
     return this.registerForm.controls;
   }
 
+  //Toggles password view visible and not
   showPassword: boolean = false;
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
+  //Submit user register request to the backend
   onSubmit(): void {
     this.submitted = true;
     this.errorMessage = '';

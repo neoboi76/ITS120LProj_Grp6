@@ -3,9 +3,20 @@ package com.newscheck.newscheck.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
+    Developed by Group 6:
+        Ken Aliling
+        Anicia Kaela Bonayao
+        Carl Norbi Felonia
+        Cedrick Miguel Kaneko
+        Dino Alfred T. Timbol (Group Leader)
+ */
+
+//Search query extractor utility class.
+
 public class SearchQueryExtractor {
 
-
+    //Extract search query from contentText
     public static String extractSearchQuery(String content) {
         if (content == null || content.isEmpty()) {
             return "";
@@ -20,6 +31,7 @@ public class SearchQueryExtractor {
         return query;
     }
 
+    //Extract headline from an article
     private static String extractHeadline(String content) {
         Pattern titlePattern = Pattern.compile("(?i)(title|headline):\\s*(.+?)(?:\\n|\\.|$)");
         Matcher matcher = titlePattern.matcher(content);
@@ -42,6 +54,7 @@ public class SearchQueryExtractor {
         return content.substring(0, Math.min(150, content.length())).trim();
     }
 
+    //Cleans query (content text)
     private static String cleanQuery(String query) {
 
         query = query.replaceAll("https?://\\S+", "");
@@ -57,6 +70,7 @@ public class SearchQueryExtractor {
         return query;
     }
 
+    //Limits query length to a specified amount
     private static String limitQueryLength(String query, int maxChars) {
         if (query.length() <= maxChars) {
             return query;
@@ -70,8 +84,8 @@ public class SearchQueryExtractor {
         return query.substring(0, maxChars).trim();
     }
 
+    //Enhances query to discover more relevant results
     public static String enhanceQuery(String query) {
-        // Add "news" to help filter out non-news results
         if (!query.toLowerCase().contains("news")) {
             query = query + " news";
         }
