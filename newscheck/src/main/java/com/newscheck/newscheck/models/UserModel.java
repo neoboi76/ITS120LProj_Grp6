@@ -76,6 +76,10 @@ public class UserModel {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<AuditLogModel> auditLogs;
 
+    //Related to the password reset tokens table
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PasswordResetToken> resetTokens;
+
 
 }
 
