@@ -141,7 +141,7 @@ You will need to obtain the following API keys:
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/newscheck.git
+git clone https://github.com/neoboi76/ITS120LProj_Grp6.git
 
 # Navigate to project directory
 cd newscheck
@@ -406,7 +406,9 @@ Docker provides a containerized environment that ensures consistency across diff
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/neoboi76/ITS120LProj_Grp6.git
+git clone https://github.com/neoboi76/ITS120LProj_Grp6.git 
+
+git
 cd newscheck
 ```
 
@@ -945,10 +947,4 @@ For questions, suggestions, or collaboration opportunities:
   <em>Fighting fake news, one claim at a time.</em><br><br>
 </p>
 
----
 
-## ⭐ Star History
-
-If you find this project useful, please consider giving it a star! ⭐
-
-[![Star History Chart](https://api.star-history.com/svg?repos=neoboi76/ITS120LProj_Grp6&type=Date)](https://star-history.com/#neoboi76/ITS120LProj_Grp6&Date)
