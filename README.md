@@ -55,7 +55,7 @@ NewsCheck is an enterprise-grade fact-checking platform designed to combat misin
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Backend
 
