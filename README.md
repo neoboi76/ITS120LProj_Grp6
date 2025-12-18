@@ -22,7 +22,6 @@ An AI-powered platform that detects fake news and verifies information through r
   - [Step 4: Frontend Setup](#step-4-frontend-setup)
 - [Docker Setup](#-docker-setup)
 - [Alternative Docker Setup](#alternative-docker-setup)
-- [Project Documentation](#-project-documentation)
 - [Team](#-team)
 - [Acknowledgements](#-acknowledgements)
 
@@ -873,6 +872,26 @@ docker-compose up -d
 - You need to modify or customize the code
 - You want to build images locally
 - You're developing or debugging features
+
+---
+
+
+## 👥 Team
+
+**Group 6 - ITS120L Project**
+
+| Name                                                              | Role           | Contributions                                                                                                                |
+| ----------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **[Dino Alfred Timbol](mailto:dattimbol@mymail.mapua.edu.ph)**    | Lead Developer | Login/Registration/Password functionality, JWT implementation, Email Service implementation, Backend & Frontend architecture |
+| **[Ken Aliling](mailto:kbaliling@mymail.mapua.edu.ph)**           | Developer      | AI-driven News Fact Checker, API integration, Evidence gathering                                                             |
+| **[Anicia Kaela Bonayao](mailto:aksbonayao@mymail.mapua.edu.ph)** | Developer      | Homepage/Verification UI, Settings functionality, Frontend design                                                            |
+| **[Carl Norbi Felonia](mailto:cncfelonia@mymail.mapua.edu.ph)**   | Developer      | AI verification pipeline, Reports functionality, Backend services                                                            |
+| **[Cedrick Miguel Kaneko](mailto:cmpkaneko@mymail.mapua.edu.ph)** | Developer      | History page functionality, Database design, Admin features                                                                  |
+
+**Submitted to:** Prof. Crizepvill Dumalaog  
+**Course:** ITS120L - Application Development and Emerging Technologies Laboratory  
+**Institution:** _Mapúa University - School of Information Technology_  
+**Date:** October 2025
 
 ---
 
