@@ -9,7 +9,7 @@ An AI-powered platform that detects fake news and verifies information through r
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#-overview)
 - [Features](#-features)
@@ -22,12 +22,13 @@ An AI-powered platform that detects fake news and verifies information through r
   - [Step 4: Frontend Setup](#step-4-frontend-setup)
 - [Docker Setup](#-docker-setup)
 - [Alternative Docker Setup](#alternative-docker-setup)
+- [Project Presentation](#-project-presentation)
 - [Team](#-team)
 - [Acknowledgements](#-acknowledgements)
 
 ---
 
-## 🎯 Overview
+## Overview
 
 NewsCheck is an enterprise-grade fact-checking platform designed to combat misinformation by leveraging AI-powered analysis. The system allows users to submit news content via text, URL, or image upload, and receive instant verification results with detailed reasoning and credible source citations.
 
@@ -42,15 +43,15 @@ NewsCheck is an enterprise-grade fact-checking platform designed to combat misin
 
 ---
 
-## ✨ Features
+## Features
 
-- ✅ **AI-Powered Verification**: Utilizes Google Gemini API for advanced natural language processing
-- ✅ **Multi-Source Evidence**: Automatically gathers and analyzes evidence from credible news sources
-- ✅ **OCR Capabilities**: Extract and verify text from images using Gemini Vision
-- ✅ **Verification History**: Track all past verifications with detailed audit trails
-- ✅ **Admin Dashboard**: Comprehensive management tools for users, verifications, and audit logs
-- ✅ **Responsive Design**: Modern UI built with Angular and Tailwind CSS
-- ✅ **Secure Authentication**: JWT-based auth with token blacklisting on logout
+- **AI-Powered Verification**: Utilizes Google Gemini API for advanced natural language processing
+- **Multi-Source Evidence**: Automatically gathers and analyzes evidence from credible news sources
+- **OCR Capabilities**: Extract and verify text from images using Gemini Vision
+- **Verification History**: Track all past verifications with detailed audit trails
+- **Admin Dashboard**: Comprehensive management tools for users, verifications, and audit logs
+- **Responsive Design**: Modern UI built with Angular and Tailwind CSS
+- **Secure Authentication**: JWT-based auth with token blacklisting on logout
 
 ---
 
@@ -86,7 +87,7 @@ NewsCheck is an enterprise-grade fact-checking platform designed to combat misin
 
 ---
 
-## 📦 Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
@@ -134,7 +135,7 @@ You will need to obtain the following API keys:
 
 ---
 
-## 🚀 Local Setup (Manual)
+## Local Setup (Manual)
 
 ### Step 1: Clone the Repository
 
@@ -393,7 +394,7 @@ This email is hardcoded in the backend to automatically receive admin privileges
 
 ---
 
-## 🐳 Docker Setup
+## Docker Setup
 
 Docker provides a containerized environment that ensures consistency across different machines.
 
@@ -638,7 +639,7 @@ logging.level.org.hibernate.SQL=DEBUG
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
 ```
 
-**⚠️ Important:** Replace all placeholder values with your actual API keys and credentials:
+** Important:** Replace all placeholder values with your actual API keys and credentials:
 
 - `YOUR_SECRET_KEY_HERE_MINIMUM_256_BITS_LONG_STRING` - A secure random string (at least 32 characters)
 - `YOUR_GEMINI_API_KEY` - Your Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
@@ -851,11 +852,11 @@ docker-compose up -d
 
 #### Advantages of This Method
 
-✅ **No source code needed** - Just two configuration files  
-✅ **Faster setup** - No compilation or building required  
-✅ **Smaller disk footprint** - Only stores images and configuration  
-✅ **Always up-to-date** - Pull latest images with one command  
-✅ **Consistent deployment** - Same images across all environments
+**No source code needed** - Just two configuration files  
+**Faster setup** - No compilation or building required  
+**Smaller disk footprint** - Only stores images and configuration  
+**Always up-to-date** - Pull latest images with one command  
+**Consistent deployment** - Same images across all environments
 
 #### When to Use Each Method
 
@@ -875,8 +876,15 @@ docker-compose up -d
 
 ---
 
+## Project Presentation
 
-## 👥 Team
+For detailed project presentation, please refer to:
+
+- **[Live Demo](https://drive.google.com/file/d/1kznJnLEyI3obyxEUKtwajqelAV-oKnSg/view?usp=sharing)**
+
+---
+
+## Team
 
 **Group 6 - ITS120L Project**
 
@@ -895,15 +903,11 @@ docker-compose up -d
 
 ---
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
 We would like to express our gratitude to:
 
 - **Prof. Crizepvill Dumalaog** - For guidance throughout the project development
-- **Google Gemini Team** - For providing the AI API that powers our verification system
-- **Spring Boot Community** - For excellent documentation and support
-- **Angular Team** - For the robust frontend framework
-- **Stack Overflow Community** - For invaluable troubleshooting assistance
 - **Micronet Software Manila, Inc.** - For the project concept and business requirements
 
 ### Technologies & Libraries
@@ -921,7 +925,7 @@ Special thanks to the open-source projects that made this possible:
 
 ---
 
-## 📞 Contact
+## Contact
 
 For questions, suggestions, or collaboration opportunities:
 
