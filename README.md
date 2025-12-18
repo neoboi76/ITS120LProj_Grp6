@@ -876,35 +876,6 @@ docker-compose up -d
 
 ---
 
-## 📖 Project Documentation
-
-For detailed project documentation, please refer to:
-
-- **[Project Proposal Documentation](https://drive.google.com/file/d/1--xRv-No0K4vA9x3XDWsQgxg7Fii9dgP/view?usp=sharing)**
-- **[Live Demo](https://drive.google.com/file/d/1kznJnLEyI3obyxEUKtwajqelAV-oKnSg/view?usp=sharing)**
-- **[Figma Prototype](https://www.figma.com/proto/MNzFOimWxmuiLpt7Y8NtJG/NewsCheck_Prototype?node-id=4739-2&t=ycjhROnS4BX25MW9-1)**
-
----
-
-## 👥 Team
-
-**Group 6 - ITS120L Project**
-
-| Name                                                              | Role           | Contributions                                                                                                                |
-| ----------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| **[Dino Alfred Timbol](mailto:dattimbol@mymail.mapua.edu.ph)**    | Lead Developer | Login/Registration/Password functionality, JWT implementation, Email Service implementation, Backend & Frontend architecture |
-| **[Ken Aliling](mailto:kbaliling@mymail.mapua.edu.ph)**           | Developer      | AI-driven News Fact Checker, API integration, Evidence gathering                                                             |
-| **[Anicia Kaela Bonayao](mailto:aksbonayao@mymail.mapua.edu.ph)** | Developer      | Homepage/Verification UI, Settings functionality, Frontend design                                                            |
-| **[Carl Norbi Felonia](mailto:cncfelonia@mymail.mapua.edu.ph)**   | Developer      | AI verification pipeline, Reports functionality, Backend services                                                            |
-| **[Cedrick Miguel Kaneko](mailto:cmpkaneko@mymail.mapua.edu.ph)** | Developer      | History page functionality, Database design, Admin features                                                                  |
-
-**Submitted to:** Prof. Crizepvill Dumalaog  
-**Course:** ITS120L - Application Development and Emerging Technologies Laboratory  
-**Institution:** _Mapúa University - School of Information Technology_  
-**Date:** October 2025
-
----
-
 ## 🙏 Acknowledgements
 
 We would like to express our gratitude to:
