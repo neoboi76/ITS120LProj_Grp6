@@ -31,6 +31,7 @@ export class SettingsComponent {
   user: any;
   successMessage = '';
   errorMessage = '';
+  nameError = '';
   submitted = false;
   isEnabled = false;
   sent = false;
@@ -93,6 +94,7 @@ export class SettingsComponent {
     this.submitted = true;
     this.errorMessage = '';
     this.errorMessage = '';
+    this.nameError = '';
 
     const {firstName, lastName, gender, country, language} = this.userForm.value;
 
@@ -100,6 +102,13 @@ export class SettingsComponent {
 
     if (!this.tokenStorageService.getToken()) {
       this.errorMessage = "You must be logged in to update settings.";
+      return;
+    }
+
+    if (firstName == "" || lastName == "") {
+      this.errorMessage = "";
+      this.nameError = "";
+      this.nameError = "These fields cannot be empty";
       return;
     }
 

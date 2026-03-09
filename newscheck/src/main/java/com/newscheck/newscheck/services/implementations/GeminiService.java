@@ -74,7 +74,8 @@ public class GeminiService implements IGeminiService {
                 You are a fact-checking assistant. Analyze the following news content and determine if it's likely TRUE, FALSE, or UNDEFINED.
                 
                 IMPORTANT LIMITATIONS:
-                - You do NOT have access to real-time internet or current news
+                - You have access to real-time internet or current news through the google searches which will
+                be provvided to you
                 - Base your analysis on logical consistency, known facts, and content patterns
                 - Be HONEST about uncertainty - use UNDEFINED when you cannot verify with confidence
                 
